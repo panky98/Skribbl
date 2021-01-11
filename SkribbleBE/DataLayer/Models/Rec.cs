@@ -1,12 +1,13 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
+using System.ComponentModel.DataAnnotations.Schema;
 using System.Text;
 using System.Text.Json.Serialization;
 
 namespace DataLayer.Models
 {
-    public class Rec
+    public class Rec :IEntityWithId
     {
         [Key]
         public int Id { get; set; }
@@ -16,14 +17,19 @@ namespace DataLayer.Models
         [JsonIgnore]
         public IList<RecPoKategoriji> RecPoKategoriji { get; set; }
 
+        [JsonIgnore]
+        public IList<TokIgre> TokoviIgre { get; set; }
+
         public Rec()
         {
             this.RecPoKategoriji = new List<RecPoKategoriji>();
+            this.TokoviIgre = new List<TokIgre>();
         }
         public Rec(string naziv)
         {
             this.Naziv = naziv;
             this.RecPoKategoriji = new List<RecPoKategoriji>();
+            this.TokoviIgre = new List<TokIgre>();
         }
     }
 }

@@ -6,7 +6,7 @@ using System.Text.Json.Serialization;
 
 namespace DataLayer.Models
 {
-    public class Kategorija
+    public class Kategorija :IEntityWithId
     {
         [Key]
         public int Id { get; set; }

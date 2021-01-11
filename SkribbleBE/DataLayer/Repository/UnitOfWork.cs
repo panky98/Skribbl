@@ -13,6 +13,10 @@ namespace DataLayer.Repository
         private IKategorijaRepository kategorijaRepository;
         private IRecPoKategorijiRepository recPoKategorijiRepository;
 
+        private IPotezRepository potezRepository;
+        private ITokIgreRepository tokIgreRepository;
+        private ITokIgrePoKorisnikuRepository tokIgrePoKorisnikuRepository;
+
         public UnitOfWork(ProjekatContext projekatContext)
         {
             this._context = projekatContext;
@@ -47,6 +51,37 @@ namespace DataLayer.Repository
                 return recPoKategorijiRepository;
             }
         }
+
+        public IPotezRepository PotezRepository
+        {
+            get
+            {
+                if (potezRepository == null)
+                    potezRepository = new PotezRepository(_context);
+                return potezRepository;
+            }
+        }
+
+        public ITokIgreRepository TokIgreRepository
+        {
+            get
+            {
+                if (tokIgreRepository == null)
+                    tokIgreRepository = new TokIgreRepository(_context);
+                return tokIgreRepository;
+            }
+        }
+
+        public ITokIgrePoKorisnikuRepository TokIgrePoKorisnikuRepository
+        {
+            get
+            {
+                if (tokIgrePoKorisnikuRepository == null)
+                    tokIgrePoKorisnikuRepository = new TokIgrePoKorisnikuRepository(_context);
+                return tokIgrePoKorisnikuRepository;
+            }
+        }
+
         #endregion
 
         public void Commit()

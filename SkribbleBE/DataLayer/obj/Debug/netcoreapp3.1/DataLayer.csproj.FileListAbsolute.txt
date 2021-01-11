@@ -1,0 +1,12 @@
+C:\4.godina\Aps\SKRIBLL\Skribbl\SkribbleBE\DataLayer\bin\Debug\netcoreapp3.1\DataLayer.deps.json
+C:\4.godina\Aps\SKRIBLL\Skribbl\SkribbleBE\DataLayer\bin\Debug\netcoreapp3.1\DataLayer.runtimeconfig.json
+C:\4.godina\Aps\SKRIBLL\Skribbl\SkribbleBE\DataLayer\bin\Debug\netcoreapp3.1\DataLayer.runtimeconfig.dev.json
+C:\4.godina\Aps\SKRIBLL\Skribbl\SkribbleBE\DataLayer\bin\Debug\netcoreapp3.1\DataLayer.dll
+C:\4.godina\Aps\SKRIBLL\Skribbl\SkribbleBE\DataLayer\bin\Debug\netcoreapp3.1\DataLayer.pdb
+C:\4.godina\Aps\SKRIBLL\Skribbl\SkribbleBE\DataLayer\obj\Debug\netcoreapp3.1\DataLayer.csprojAssemblyReference.cache
+C:\4.godina\Aps\SKRIBLL\Skribbl\SkribbleBE\DataLayer\obj\Debug\netcoreapp3.1\DataLayer.AssemblyInfoInputs.cache
+C:\4.godina\Aps\SKRIBLL\Skribbl\SkribbleBE\DataLayer\obj\Debug\netcoreapp3.1\DataLayer.AssemblyInfo.cs
+C:\4.godina\Aps\SKRIBLL\Skribbl\SkribbleBE\DataLayer\obj\Debug\netcoreapp3.1\DataLayer.csproj.CoreCompileInputs.cache
+C:\4.godina\Aps\SKRIBLL\Skribbl\SkribbleBE\DataLayer\obj\Debug\netcoreapp3.1\DataLayer.dll
+C:\4.godina\Aps\SKRIBLL\Skribbl\SkribbleBE\DataLayer\obj\Debug\netcoreapp3.1\DataLayer.pdb
+C:\4.godina\Aps\SKRIBLL\Skribbl\SkribbleBE\DataLayer\obj\Debug\netcoreapp3.1\DataLayer.genruntimeconfig.cache

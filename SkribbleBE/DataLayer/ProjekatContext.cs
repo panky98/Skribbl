@@ -16,6 +16,10 @@ namespace DataLayer
         public DbSet<Kategorija> Kategorije { get; set; }
         public DbSet<Rec> Reci { get; set; }
         public DbSet<RecPoKategoriji> ReciPoKategorijama { get; set; }
+        public DbSet<Potez> Potezi { get; set; }
+        public DbSet<TokIgre> TokoviIgre { get; set; }
+        public DbSet<TokIgrePoKorisniku> TokoviIgrePoKorisniku { get; set; }
+        public DbSet<Korisnik> Korisnici { get; set; }
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {

@@ -38,6 +38,9 @@ namespace SkribbleBE
             services.AddScoped<RecService>();
             services.AddScoped<KategorijaService>();
             services.AddScoped<RecPoKategorijiService>();
+            services.AddScoped<PotezService>();
+            services.AddScoped<TokIgreService>();
+            services.AddScoped<TokIgrePoKorisnikuService>();
 
 
 

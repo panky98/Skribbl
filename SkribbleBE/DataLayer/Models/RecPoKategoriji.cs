@@ -6,7 +6,7 @@ using System.Text;
 
 namespace DataLayer.Models
 {
-    public class RecPoKategoriji
+    public class RecPoKategoriji :IEntityWithId
     {
         [Key]
         public int Id { get; set; }
