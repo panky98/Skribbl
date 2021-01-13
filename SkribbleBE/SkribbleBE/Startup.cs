@@ -1,19 +1,24 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Text;
 using System.Text.Json;
 using System.Threading.Tasks;
 using DataLayer;
+using DataLayer.Models;
 using DataLayer.Services;
+using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.HttpsPolicy;
+using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 using Microsoft.Extensions.Logging;
+using Microsoft.IdentityModel.Tokens;
 
 namespace SkribbleBE
 {
@@ -35,14 +40,41 @@ namespace SkribbleBE
                 options.UseSqlServer(Configuration.GetConnectionString("Konekcija"));
             });
 
+
+            services.AddAuthentication(options =>
+            {
+                options.DefaultAuthenticateScheme = JwtBearerDefaults.AuthenticationScheme;
+                options.DefaultChallengeScheme = JwtBearerDefaults.AuthenticationScheme;
+                options.DefaultScheme = JwtBearerDefaults.AuthenticationScheme;
+            }).AddJwtBearer(options =>
+                         {
+                             options.SaveToken = true;
+                             options.RequireHttpsMetadata = false;
+                             options.TokenValidationParameters = new TokenValidationParameters()
+                             {
+                                 //provera issuer-a u tokenu
+                                 ValidateIssuer = true,
+                                 //provera audience u tokenu
+                                 ValidateAudience = true,
+                                 //provera LifeTime, da nije isteklo vreme tokenu
+                                 ValidateLifetime=true,
+                                 //provera key-a
+                                 ValidateIssuerSigningKey=true,
+                                 ValidAudience = Configuration["Jwt:Issuer"],
+                                 ValidIssuer = Configuration["Jwt:Audience"],
+                                 //niz bajtova koji se ocekuje da se primi preko token-a, taj niz bajtova u sustini predstavlja secretkey
+                                 IssuerSigningKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(Configuration["Jwt:SecretKey"])),
+                                 ClockSkew=TimeSpan.Zero
+                             };
+                         });
+
+
             services.AddScoped<RecService>();
             services.AddScoped<KategorijaService>();
             services.AddScoped<RecPoKategorijiService>();
             services.AddScoped<PotezService>();
             services.AddScoped<TokIgreService>();
             services.AddScoped<TokIgrePoKorisnikuService>();
-
-
 
             services.AddMvc().AddJsonOptions(options =>
             {
@@ -70,8 +102,7 @@ namespace SkribbleBE
             app.UseRouting();
 
             app.UseCors("Corse");
-
-
+            app.UseAuthentication();
             app.UseAuthorization();
 
             app.UseEndpoints(endpoints =>

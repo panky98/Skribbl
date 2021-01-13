@@ -1,23 +1,23 @@
 {
   "format": 1,
   "restore": {
-    "C:\\4.godina\\Aps\\SKRIBLL\\Skribbl\\SkribbleBE\\DataLayer\\DataLayer.csproj": {}
+    "E:\\IV godina RI\\Arhitektura i projektovanje SW\\SkribbleBE_MojBranch\\Skribbl\\SkribbleBE\\DataLayer\\DataLayer.csproj": {}
   },
   "projects": {
-    "C:\\4.godina\\Aps\\SKRIBLL\\Skribbl\\SkribbleBE\\DataLayer\\DataLayer.csproj": {
+    "E:\\IV godina RI\\Arhitektura i projektovanje SW\\SkribbleBE_MojBranch\\Skribbl\\SkribbleBE\\DataLayer\\DataLayer.csproj": {
       "version": "1.0.0",
       "restore": {
-        "projectUniqueName": "C:\\4.godina\\Aps\\SKRIBLL\\Skribbl\\SkribbleBE\\DataLayer\\DataLayer.csproj",
+        "projectUniqueName": "E:\\IV godina RI\\Arhitektura i projektovanje SW\\SkribbleBE_MojBranch\\Skribbl\\SkribbleBE\\DataLayer\\DataLayer.csproj",
         "projectName": "DataLayer",
-        "projectPath": "C:\\4.godina\\Aps\\SKRIBLL\\Skribbl\\SkribbleBE\\DataLayer\\DataLayer.csproj",
-        "packagesPath": "C:\\Users\\dusan\\.nuget\\packages\\",
-        "outputPath": "C:\\4.godina\\Aps\\SKRIBLL\\Skribbl\\SkribbleBE\\DataLayer\\obj\\",
+        "projectPath": "E:\\IV godina RI\\Arhitektura i projektovanje SW\\SkribbleBE_MojBranch\\Skribbl\\SkribbleBE\\DataLayer\\DataLayer.csproj",
+        "packagesPath": "C:\\Users\\MilosPanic\\.nuget\\packages\\",
+        "outputPath": "E:\\IV godina RI\\Arhitektura i projektovanje SW\\SkribbleBE_MojBranch\\Skribbl\\SkribbleBE\\DataLayer\\obj\\",
         "projectStyle": "PackageReference",
         "fallbackFolders": [
           "C:\\Program Files\\dotnet\\sdk\\NuGetFallbackFolder"
         ],
         "configFilePaths": [
-          "C:\\Users\\dusan\\AppData\\Roaming\\NuGet\\NuGet.Config",
+          "C:\\Users\\MilosPanic\\AppData\\Roaming\\NuGet\\NuGet.Config",
           "C:\\Program Files (x86)\\NuGet\\Config\\Microsoft.VisualStudio.Offline.config"
         ],
         "originalTargetFrameworks": [
@@ -41,6 +41,14 @@
       "frameworks": {
         "netcoreapp3.1": {
           "dependencies": {
+            "Microsoft.AspNet.Identity.EntityFramework": {
+              "target": "Package",
+              "version": "[2.2.3, )"
+            },
+            "Microsoft.AspNetCore.Identity": {
+              "target": "Package",
+              "version": "[2.2.0, )"
+            },
             "Microsoft.EntityFrameworkCore": {
               "target": "Package",
               "version": "[5.0.1, )"

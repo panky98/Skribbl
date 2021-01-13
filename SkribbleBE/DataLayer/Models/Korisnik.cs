@@ -3,10 +3,13 @@ using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
 using System.Text;
 using System.Text.Json.Serialization;
+using Microsoft.AspNet.Identity.EntityFramework;
+using Microsoft.AspNetCore.Identity;
+
 
 namespace DataLayer.Models
 {
-    public class Korisnik :IEntityWithId
+    public class Korisnik : IEntityWithId
     {
 
         [Key]

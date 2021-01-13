@@ -5,11 +5,13 @@ using System.Threading.Tasks;
 using DataLayer;
 using DataLayer.Models;
 using DataLayer.Services;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 
 namespace SkribbleBE.Controllers
 {
+    [Authorize]
     [Route("[controller]")]
     [ApiController]
     public class KategorijaController : ControllerBase
