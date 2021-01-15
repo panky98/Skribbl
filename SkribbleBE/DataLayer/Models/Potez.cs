@@ -1,4 +1,5 @@
-﻿using System;
+﻿using DataLayer.DTOs;
+using System;
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
@@ -44,6 +45,18 @@ namespace DataLayer.Models
         {
             Korisnik = korisnik;
             TokIgre = tokIgre;
+        }
+
+        public void  NapraviOdDTO(PotezDTO potezDTO)
+        {
+            Id = potezDTO.Id;
+            VremePoteza = potezDTO.VremePoteza;
+            Crtanje = potezDTO.Crtanje;
+            Poruka = potezDTO.Poruka;
+            TekstPoruke = potezDTO.TekstPoruke;
+            BojaLinije = potezDTO.BojaLinije;
+            ParametarLinije = potezDTO.ParametarLinije;
+
         }
     }
 }

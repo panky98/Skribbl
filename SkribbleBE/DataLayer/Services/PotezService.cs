@@ -1,4 +1,5 @@
-﻿using DataLayer.Models;
+﻿using DataLayer.DTOs;
+using DataLayer.Models;
 using DataLayer.Repository;
 using System;
 using System.Collections.Generic;
@@ -16,43 +17,84 @@ namespace DataLayer.Services
             this.unitOfWork = new UnitOfWork(projekatContext);
         }
 
-        public IList<Potez> GetAll()
+        public IList<PotezDTO> GetAll()
         {
-            return (IList<Potez>)this.unitOfWork.PotezRepository.GetAll();
+            IList<Potez> potezi= (IList<Potez>)this.unitOfWork.PotezRepository.GetAll();
+            IList<PotezDTO> poteziDTO = new List<PotezDTO>();
+            foreach(var p in potezi)
+            {
+                poteziDTO.Add(new PotezDTO(p));
+            }
+            return poteziDTO;
         }
 
-        public IList<Potez> GetAllWithIncludes(params Expression<Func<Potez, object>>[] includes)
+        public IList<PotezDTO> GetAllWithIncludes(params Expression<Func<Potez, object>>[] includes)
         {
-            return (IList<Potez>)this.unitOfWork.PotezRepository.GetIncludes(includes);
+            IList<Potez> potezi = (IList<Potez>)this.unitOfWork.PotezRepository.GetIncludes(includes);
+            IList<PotezDTO> poteziDTO = new List<PotezDTO>();
+            foreach (var p in potezi)
+            {
+                poteziDTO.Add(new PotezDTO(p));
+            }
+            return poteziDTO;
         }
 
-        public Potez GetOneWithIncludes( int id, params Expression<Func<Potez, object>>[] includes)
+        public PotezDTO GetOneWithIncludes( int id, params Expression<Func<Potez, object>>[] includes)
         {
             
-            return (Potez)this.unitOfWork.PotezRepository.GetOneWithIncludes(id, includes);
+            Potez potez= (Potez)this.unitOfWork.PotezRepository.GetOneWithIncludes(id, includes);
+            return new PotezDTO(potez);
            
         }
 
-        public Potez GetOnePotez(int id)
+        public PotezDTO GetOnePotez(int id)
         {
-            return this.unitOfWork.PotezRepository.GetOne(id);
+            Potez potez = this.unitOfWork.PotezRepository.GetOne(id);
+            return new PotezDTO(potez);
         }
 
-        public void AddNewPotez(Potez potez)
+        public void AddNewPotez(PotezDTO potezDTO)
         {
+            Potez potez = new Potez();
+            /*potez.VremePoteza = potezDTO.VremePoteza;
+            potez.Crtanje = potezDTO.Crtanje;
+            potez.Poruka = potezDTO.Poruka;
+            potez.TekstPoruke = potezDTO.TekstPoruke;
+            potez.BojaLinije = potezDTO.BojaLinije;
+            potez.ParametarLinije = potezDTO.ParametarLinije;*/
+
+            potez.NapraviOdDTO(potezDTO);
+
+            potez.TokIgre = this.unitOfWork.TokIgreRepository.GetOneWithIncludes(potezDTO.TokIgreId,
+                p => p.RecZaPogadjanje);
+            //korisnik
+            potez.Korisnik = this.unitOfWork.KorisnikRepository.GetOne(potezDTO.KorisnikId);
+
             this.unitOfWork.PotezRepository.Add(potez);
             this.unitOfWork.Commit();
         }
 
-        public void UpdatePotez(Potez potez)
+        public void UpdatePotez(PotezDTO potezDTO)
         {
+            Potez potez = new Potez();
+            potez.NapraviOdDTO(potezDTO);
+            
+
+            potez.TokIgre = this.unitOfWork.TokIgreRepository.GetOne(potezDTO.TokIgreId);
+                
+            potez.Korisnik = this.unitOfWork.KorisnikRepository.GetOne(potezDTO.KorisnikId);
             this.unitOfWork.PotezRepository.Update(potez);
             this.unitOfWork.Commit();
         }
 
-        public void DeletePotez(Potez potez)
+        public void DeletePotez(PotezDTO potezDTO)
         {
-            this.unitOfWork.PotezRepository.Delete(potez);
+            Potez potez = new Potez();
+            potez.NapraviOdDTO(potezDTO);
+            potez.TokIgre = this.unitOfWork.TokIgreRepository.GetOneWithIncludes(potezDTO.TokIgreId,p => p.RecZaPogadjanje);
+            potez.Korisnik = this.unitOfWork.KorisnikRepository.GetOne(potezDTO.KorisnikId);
+            this.unitOfWork.Commit();
+            this.unitOfWork.PotezRepository.DeleteAsync(potez);
             this.unitOfWork.Commit();
         }
     }

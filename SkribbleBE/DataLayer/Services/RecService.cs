@@ -33,7 +33,7 @@ namespace DataLayer.Services
         }
         public void DeleteRec(Rec r)
         {
-            this.unitOfWork.RecRepository.Delete(r);
+            this.unitOfWork.RecRepository.DeleteAsync(r);
             this.unitOfWork.Commit();
         }
         public Rec getOneRec(int id)

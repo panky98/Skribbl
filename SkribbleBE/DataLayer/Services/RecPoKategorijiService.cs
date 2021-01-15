@@ -32,7 +32,7 @@ namespace DataLayer.Services
         }
         public void DeleteRecPoKategoriji(RecPoKategoriji r)
         {
-            this.unitOfWork.RecPoKategorijiRepository.Delete(r);
+            this.unitOfWork.RecPoKategorijiRepository.DeleteAsync(r);
             this.unitOfWork.Commit();
         }
         public RecPoKategoriji getOneRecPoKategoriji(int id)

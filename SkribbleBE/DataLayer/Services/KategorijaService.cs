@@ -32,7 +32,7 @@ namespace DataLayer.Services
         }
         public void DeleteKategorija(Kategorija r)
         {
-            this.unitOfWork.KategorijaRepository.Delete(r);
+            this.unitOfWork.KategorijaRepository.DeleteAsync(r);
             this.unitOfWork.Commit();
         }
         public Kategorija getOneKategorija(int id)
