@@ -1,4 +1,5 @@
-﻿using System;
+﻿using DataLayer.DTOs;
+using System;
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
@@ -33,6 +34,17 @@ namespace DataLayer.Models
         {
             Potezi = new List<Potez>();
             TokIgrePoKorisniku = new List<TokIgrePoKorisniku>();
+        }
+
+        public void NapraviOdDTO(TokIgreDTO tokIgreDTO)
+        {
+            Id = tokIgreDTO.Id;
+            PocetakIgre = tokIgreDTO.PocetakIgre;
+
+            //nema potrebe, pre se poziva ctor
+            /*
+            Potezi = new List<Potez>();
+            TokIgrePoKorisniku = new List<TokIgrePoKorisniku>();*/
         }
     }
 }

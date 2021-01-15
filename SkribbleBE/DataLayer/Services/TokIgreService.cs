@@ -1,4 +1,5 @@
-﻿using DataLayer.Models;
+﻿using DataLayer.DTOs;
+using DataLayer.Models;
 using DataLayer.Repository;
 using System;
 using System.Collections.Generic;
@@ -16,40 +17,94 @@ namespace DataLayer.Services
             this.unitOfWork = new UnitOfWork(projekatContext);
         }
 
-        public void AddNewTokIgre(TokIgre tokIgre)
+        public void AddNewTokIgre(TokIgreDTO tokIgreDTO)
         {
+            TokIgre tokIgre = new TokIgre();
+            tokIgre.NapraviOdDTO(tokIgreDTO);
+
+            tokIgre.RecZaPogadjanje = this.unitOfWork.RecRepository.GetOne(tokIgreDTO.RecZaPogadjanjeId);
+
             this.unitOfWork.TokIgreRepository.Add(tokIgre);
             this.unitOfWork.Commit();
         }
 
-        public IList<TokIgre> GetAll()
+        public IList<TokIgreDTO> GetAll()
         {
-            return (IList<TokIgre>)this.unitOfWork.TokIgreRepository.GetAll();
+            IList<TokIgre> tokoviIgre= (IList<TokIgre>)this.unitOfWork.TokIgreRepository.GetAll();
+            IList<TokIgreDTO> tokoviIgreDTO = new List<TokIgreDTO>();
+            foreach(var t in tokoviIgre)
+            {
+                tokoviIgreDTO.Add(new TokIgreDTO(t));
+            }
+            return tokoviIgreDTO;
         }
-        public IList<TokIgre> GetAllWithIncludes(params Expression<Func<TokIgre, object>>[] includes)
+        public IList<TokIgreDTO> GetAllWithIncludes(params Expression<Func<TokIgre, object>>[] includes)
         {
-            return (IList<TokIgre>)this.unitOfWork.TokIgreRepository.GetIncludes(includes);
+            IList<TokIgre> tokoviIgre = (IList<TokIgre>)this.unitOfWork.TokIgreRepository.GetIncludes(includes);
+
+            IList<TokIgreDTO> tokoviIgreDTO = new List<TokIgreDTO>();
+            foreach (var t in tokoviIgre)
+            {
+                tokoviIgreDTO.Add(new TokIgreDTO(t));
+            }
+            return tokoviIgreDTO;
         }
 
-        public TokIgre GetOneWithIncludes(int id, params Expression<Func<TokIgre, object>>[] includes)
+        public TokIgreDTO GetOneWithIncludes(int id, params Expression<Func<TokIgre, object>>[] includes)
         {
-            return (TokIgre)this.unitOfWork.TokIgreRepository.GetOneWithIncludes(id, includes);
+            TokIgre tokIgre= (TokIgre)this.unitOfWork.TokIgreRepository.GetOneWithIncludes(id, includes);
+            return new TokIgreDTO(tokIgre);
         }
-        public void UpdateTokIgre(TokIgre tokIgre)
+        public void UpdateTokIgre(TokIgreDTO tokIgreDTO)
         {
+            TokIgre tokIgre = new TokIgre();
+
+            tokIgre.NapraviOdDTO(tokIgreDTO);
+            tokIgre.RecZaPogadjanje = this.unitOfWork.RecRepository.GetOne(tokIgreDTO.RecZaPogadjanjeId);
+
             this.unitOfWork.TokIgreRepository.Update(tokIgre);
             this.unitOfWork.Commit();
         }
 
-        public void DeleteTokIgre(TokIgre tokIgre)
+        public void  DeleteTokIgreAsync(TokIgreDTO tokIgreDTO)
         {
-            this.unitOfWork.TokIgreRepository.Delete(tokIgre);
+            TokIgre tokIgre = new TokIgre();
+
+            tokIgre.NapraviOdDTO(tokIgreDTO);
+
+            tokIgre.RecZaPogadjanje = this.unitOfWork.RecRepository.GetOne(tokIgreDTO.RecZaPogadjanjeId);
+            tokIgre.RecZaPogadjanje.TokoviIgre.Remove(tokIgre);
+            this.unitOfWork.TokIgreRepository.Update(tokIgre);
+
+
+            tokIgre.Potezi = this.unitOfWork.PotezRepository.VratiPotezeTokaIgre(tokIgreDTO.Id);
+            tokIgre.TokIgrePoKorisniku = this.unitOfWork.TokIgrePoKorisnikuRepository.VratiTokIgrePoKorisnikuZaTokIgre(tokIgreDTO.Id);
+            //this.unitOfWork.Commit();
+            //prvo moramo obrisati sve poteze i tokove igre po korisniku...i jos nesto ako ima
+
+           foreach(var p in tokIgre.Potezi)
+            {
+                this.unitOfWork.PotezRepository.DeleteAsync(p);
+            }
+            //this.unitOfWork.Commit();
+
+            foreach(var t in tokIgre.TokIgrePoKorisniku)
+            {
+                this.unitOfWork.TokIgrePoKorisnikuRepository.DeleteAsync(t);
+            }
+
+            //this.unitOfWork.Commit();
+
+            
+
+            this.unitOfWork.TokIgreRepository.DeleteAsync(tokIgre);
             this.unitOfWork.Commit();
         }
 
-        public TokIgre GetOneTokIgre(int id)
+        public TokIgreDTO GetOneTokIgre(int id)
         {
-            return this.unitOfWork.TokIgreRepository.GetOne(id);
+            TokIgre tokIgre= this.unitOfWork.TokIgreRepository.GetOne(id);
+            return new TokIgreDTO(tokIgre);
         }
     }
 }

@@ -5,8 +5,7 @@ using System.Text;
 
 namespace DataLayer.Repository
 {
-    public interface IPotezRepository :IRepository<Potez>
+    public interface IKorisnikRepository :IRepository<Korisnik>
     {
-        IList<Potez> VratiPotezeTokaIgre(int idTokaIgre);
     }
 }

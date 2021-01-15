@@ -1,4 +1,5 @@
-﻿using System;
+﻿using DataLayer.DTOs;
+using System;
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
@@ -20,5 +21,17 @@ namespace DataLayer.Models
         [ForeignKey("TokIgreId")]
         //[JsonIgnore]
         public TokIgre TokIgre { get; set; }
+
+        public TokIgrePoKorisniku()
+        {
+
+        }
+
+        public void NapraviOdDTO(TokIgrePoKorisnikuDTO tokIgrePoKorisnikuDTO)
+        {
+            Id = tokIgrePoKorisnikuDTO.Id;
+        }
+
+        
     }
 }

@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using DataLayer;
+using DataLayer.DTOs;
 using DataLayer.Models;
 using DataLayer.Services;
 using Microsoft.AspNetCore.Http;
@@ -23,7 +24,7 @@ namespace SkribbleBE.Controllers
 
         [HttpPost]
         [Route("createTokIgre")]
-        public async Task<IActionResult> CreateTokIgre([FromBody] TokIgre tokIgre)
+        public async Task<IActionResult> CreateTokIgre([FromBody] TokIgreDTO tokIgre)
         {
             try
             {
@@ -46,7 +47,7 @@ namespace SkribbleBE.Controllers
             {
                 //return new JsonResult(this.tokIgreService.GetAll());
 
-                IList<TokIgre> tokoviIgre = this.tokIgreService.GetAllWithIncludes(t => t.RecZaPogadjanje, t => t.Potezi, t => t.TokIgrePoKorisniku);
+                IList<TokIgreDTO> tokoviIgre = this.tokIgreService.GetAllWithIncludes(t => t.RecZaPogadjanje, t => t.Potezi, t => t.TokIgrePoKorisniku);
                 return new JsonResult(tokoviIgre);
             }
             catch (Exception e)
@@ -62,7 +63,7 @@ namespace SkribbleBE.Controllers
             try
             {
                 //return new JsonResult(this.tokIgreService.GetOneTokIgre(idTokaIgre));
-                TokIgre tokIgre = this.tokIgreService.GetOneWithIncludes(idTokaIgre, t => t.RecZaPogadjanje);
+                TokIgreDTO tokIgre = this.tokIgreService.GetOneWithIncludes(idTokaIgre, t => t.RecZaPogadjanje);
                 return new JsonResult(tokIgre);
 
 
@@ -74,7 +75,7 @@ namespace SkribbleBE.Controllers
         }
         [HttpPut]
         [Route("updateTokIgre")]
-        public async Task<IActionResult> UpdateTokIgre([FromBody] TokIgre tokIgre)
+        public async Task<IActionResult> UpdateTokIgre([FromBody] TokIgreDTO tokIgre)
         {
             try
             {
@@ -88,11 +89,11 @@ namespace SkribbleBE.Controllers
         }
         [HttpDelete]
         [Route("deleteTokIgre")]
-        public async Task<IActionResult> DeleteTokIgre([FromBody] TokIgre tokIgre)
+        public async Task<IActionResult> DeleteTokIgre([FromBody] TokIgreDTO tokIgre)
         {
             try
             {
-                this.tokIgreService.DeleteTokIgre(tokIgre);
+                this.tokIgreService.DeleteTokIgreAsync(tokIgre);
                 return Ok();
             }
             catch (Exception e)

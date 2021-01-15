@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using DataLayer;
+using DataLayer.DTOs;
 using DataLayer.Models;
 using DataLayer.Services;
 using Microsoft.AspNetCore.Http;
@@ -29,7 +30,7 @@ namespace SkribbleBE.Controllers
             {
                 //return  new JsonResult(potezService.GetAll());
 
-                IList <Potez> potezi= potezService.GetAllWithIncludes(p => p.Korisnik, p => p.TokIgre, p=>p.TokIgre.RecZaPogadjanje);
+                IList <PotezDTO> potezi= potezService.GetAllWithIncludes(p => p.Korisnik, p => p.TokIgre, p=>p.TokIgre.RecZaPogadjanje);
 
                 return new JsonResult(potezi);
             }
@@ -46,7 +47,7 @@ namespace SkribbleBE.Controllers
             try
             {
                // return new JsonResult(this.potezService.GetOnePotez(idPoteza));
-                Potez potez = this.potezService.GetOneWithIncludes(idPoteza, p => p.Korisnik, p => p.TokIgre, p => p.TokIgre.RecZaPogadjanje);
+                PotezDTO potez = this.potezService.GetOneWithIncludes(idPoteza, p => p.Korisnik, p => p.TokIgre, p => p.TokIgre.RecZaPogadjanje);
 
                 return new JsonResult(potez);
             }
@@ -58,7 +59,7 @@ namespace SkribbleBE.Controllers
 
         [HttpPost]
         [Route("createPotez")]
-        public async Task<IActionResult> CreatePotez([FromBody] Potez potez)
+        public async Task<IActionResult> CreatePotez([FromBody] PotezDTO potez)
         {
             try
             {
@@ -73,7 +74,7 @@ namespace SkribbleBE.Controllers
         }
         [HttpDelete]
         [Route("deletePotez")]
-        public async Task<IActionResult> DeletePotez([FromBody] Potez potez)
+        public async Task<IActionResult> DeletePotez([FromBody] PotezDTO potez)
         {
             try
             {
@@ -88,7 +89,7 @@ namespace SkribbleBE.Controllers
 
         [HttpPut]
         [Route("updatePotez")]
-        public async Task<IActionResult> UpdatePotez([FromBody] Potez potez)
+        public async Task<IActionResult> UpdatePotez([FromBody] PotezDTO potez)
         {
             try
             {

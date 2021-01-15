@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using DataLayer;
+using DataLayer.DTOs;
 using DataLayer.Models;
 using DataLayer.Services;
 using Microsoft.AspNetCore.Http;
@@ -23,7 +24,7 @@ namespace SkribbleBE.Controllers
 
         [HttpPost]
         [Route("createTokIgrePoKorisniku")]
-        public async Task<IActionResult> CreateTokIgrePoKorisniku([FromBody] TokIgrePoKorisniku tokIgrePoKorisniku)
+        public async Task<IActionResult> CreateTokIgrePoKorisniku([FromBody] TokIgrePoKorisnikuDTO tokIgrePoKorisniku)
         {
             try
             {
@@ -44,7 +45,7 @@ namespace SkribbleBE.Controllers
             {
                 //return new JsonResult(this.tokIgreService.GetAll());
 
-                IList<TokIgrePoKorisniku> tokoviIgre = this.tokIgrePoKorisnikuService.GetAllWithIncludes(t=>t.Korisnik, t=>t.TokIgre, t=>t.TokIgre.RecZaPogadjanje);
+                IList<TokIgrePoKorisnikuDTO> tokoviIgre = this.tokIgrePoKorisnikuService.GetAllWithIncludes(t=>t.Korisnik, t=>t.TokIgre, t=>t.TokIgre.RecZaPogadjanje);
                 return new JsonResult(tokoviIgre);
             }
             catch (Exception e)
@@ -60,7 +61,7 @@ namespace SkribbleBE.Controllers
             try
             {
 
-                TokIgrePoKorisniku tokIgrePoKorisniku = this.tokIgrePoKorisnikuService.GetOneWithIncludes(idTokIgrePoKorisniku, t => t.Korisnik, t => t.TokIgre, t=>t.TokIgre.RecZaPogadjanje);
+                TokIgrePoKorisnikuDTO tokIgrePoKorisniku = this.tokIgrePoKorisnikuService.GetOneWithIncludes(idTokIgrePoKorisniku, t => t.Korisnik, t => t.TokIgre, t=>t.TokIgre.RecZaPogadjanje);
                 return new JsonResult(tokIgrePoKorisniku);
 
 
@@ -73,7 +74,7 @@ namespace SkribbleBE.Controllers
 
         [HttpPut]
         [Route("updateTokIgrePoKorisniku")]
-        public async Task<IActionResult> UpdateTokIgrePoKorisniku([FromBody] TokIgrePoKorisniku tokIgrePoKorisniku)
+        public async Task<IActionResult> UpdateTokIgrePoKorisniku([FromBody] TokIgrePoKorisnikuDTO tokIgrePoKorisniku)
         {
             try
             {
@@ -87,7 +88,7 @@ namespace SkribbleBE.Controllers
         }
         [HttpDelete]
         [Route("deleteTokIgrePoKorisniku")]
-        public async Task<IActionResult> DeleteTokIgrePoKorisniku([FromBody] TokIgrePoKorisniku tokIgrePoKorisniku)
+        public async Task<IActionResult> DeleteTokIgrePoKorisniku([FromBody] TokIgrePoKorisnikuDTO tokIgrePoKorisniku)
         {
             try
             {

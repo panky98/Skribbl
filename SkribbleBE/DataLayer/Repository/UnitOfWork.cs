@@ -1,4 +1,5 @@
-﻿using System;
+﻿using Microsoft.EntityFrameworkCore;
+using System;
 using System.Collections.Generic;
 using System.Text;
 
@@ -16,6 +17,8 @@ namespace DataLayer.Repository
         private IPotezRepository potezRepository;
         private ITokIgreRepository tokIgreRepository;
         private ITokIgrePoKorisnikuRepository tokIgrePoKorisnikuRepository;
+
+        private IKorisnikRepository korisnikRepository;
 
         public UnitOfWork(ProjekatContext projekatContext)
         {
@@ -82,11 +85,22 @@ namespace DataLayer.Repository
             }
         }
 
+        public IKorisnikRepository KorisnikRepository
+        {
+            get
+            {
+                if (korisnikRepository == null)
+                    korisnikRepository = new KorisnikRepository(_context);
+                return korisnikRepository;
+            }
+        }
+
         #endregion
 
         public void Commit()
         {
             this._context.SaveChanges();
+           
         }
 
         public void Rollback()

@@ -6,6 +6,7 @@ using System.Text.Json;
 using System.Threading.Tasks;
 using DataLayer;
 using DataLayer.Models;
+using DataLayer.Repository;
 using DataLayer.Services;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Builder;
@@ -36,8 +37,13 @@ namespace SkribbleBE
         {
             services.AddControllers();
 
+          
+
             services.AddDbContext<ProjekatContext>(options => {
-                options.UseSqlServer(Configuration.GetConnectionString("Konekcija"));
+                options.UseSqlServer(Configuration.GetConnectionString("Konekcija"))
+                .EnableSensitiveDataLogging();
+          
+                //.UseQueryTrackingBehavior(QueryTrackingBehavior.NoTracking);
             });
 
 
@@ -75,6 +81,7 @@ namespace SkribbleBE
             services.AddScoped<PotezService>();
             services.AddScoped<TokIgreService>();
             services.AddScoped<TokIgrePoKorisnikuService>();
+           // services.AddScoped<DataLayer.Repository.KorisnikRepository>();
 
             services.AddMvc().AddJsonOptions(options =>
             {
@@ -110,5 +117,6 @@ namespace SkribbleBE
                 endpoints.MapControllers();
             });
         }
+      
     }
 }

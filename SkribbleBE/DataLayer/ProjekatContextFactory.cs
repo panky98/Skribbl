@@ -18,6 +18,8 @@ namespace DataLayer.Models
              .AddJsonFile("appsettings.json")
              .Build();
 
+           
+
             DbContextOptionsBuilder builder = new DbContextOptionsBuilder<ProjekatContext>();
 
             var connectionString = configuration.GetConnectionString("Konekcija");
