@@ -47,5 +47,29 @@ namespace DataLayer.Repository
             }
             return returnList;
         }
+
+        public void DeleteAllByCategoryId(int idKateg)
+        {
+            IList<RecPoKategoriji> recPoKategoriji = this.reciPoKategorijama.Where(x => x.KategorijaId == idKateg).ToList();
+            if(recPoKategoriji!=null)
+            {
+                foreach(RecPoKategoriji rec in recPoKategoriji)
+                {
+                    this.reciPoKategorijama.Remove(rec);
+                }
+            }
+        }
+
+        public void DeleteAllByWordId(int idRec)
+        {
+            IList<RecPoKategoriji> recPoKategoriji = this.reciPoKategorijama.Where(x => x.RecId == idRec).ToList();
+            if (recPoKategoriji != null)
+            {
+                foreach (RecPoKategoriji rec in recPoKategoriji)
+                {
+                    this.reciPoKategorijama.Remove(rec);
+                }
+            }
+        }
     }
 }

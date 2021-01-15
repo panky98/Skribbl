@@ -10,6 +10,9 @@ namespace DataLayer.Models
     {
         [Key]
         public int Id { get; set; }
+        public int RecId { get; set; }
+        public int KategorijaId { get; set; }
+    
         [Required]
 
         [ForeignKey("RecId")]

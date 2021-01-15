@@ -9,5 +9,8 @@ namespace DataLayer.Repository
     {
         bool AddByIds(int idRec, int idKategorija);
         IList<Rec> GetAllWordsByCategoryId(int idKateg);
+        void DeleteAllByCategoryId(int idKateg);
+        void DeleteAllByWordId(int idRec);
+
     }
 }

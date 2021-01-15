@@ -1,5 +1,6 @@
 ﻿using DataLayer.Models;
 using DataLayer.Repository;
+using DTOs;
 using System;
 using System.Collections.Generic;
 using System.Text;
@@ -14,30 +15,65 @@ namespace DataLayer.Services
             this.unitOfWork = new UnitOfWork(projekatContext);
         }
 
-        public void AddNewKategorija(Kategorija k)
+        public void AddNewKategorija(KategorijaDTO k)
         {
-            this.unitOfWork.KategorijaRepository.Add(k);
+            this.unitOfWork.KategorijaRepository.Add(new Kategorija(k.Naziv));
             this.unitOfWork.Commit();
         }
 
-        public IList<Kategorija> GetAll()
+        public IList<KategorijaDTO> GetAll()
         {
-            return (List<Kategorija>)this.unitOfWork.KategorijaRepository.GetAll();
+            IList<KategorijaDTO> returnList = new List<KategorijaDTO>();
+            foreach(Kategorija k in (List<Kategorija>)this.unitOfWork.KategorijaRepository.GetAll())
+            {
+                returnList.Add(new KategorijaDTO(k.Id,k.Naziv));
+            }
+            return returnList;
         }
 
-        public void UpdateKategorija(Kategorija r)
+        public void UpdateKategorija(KategorijaDTO r)
         {
-            this.unitOfWork.KategorijaRepository.Update(r);
+            Kategorija rec = new Kategorija()
+            {
+                Id = r.Id,
+                Naziv = r.Naziv
+            };
+            this.unitOfWork.KategorijaRepository.Update(rec);
             this.unitOfWork.Commit();
         }
-        public void DeleteKategorija(Kategorija r)
+        public void DeleteKategorija(KategorijaDTO r)
         {
-            this.unitOfWork.KategorijaRepository.Delete(r);
+            Kategorija kategorija = new Kategorija()
+            {
+                Id = r.Id,
+                Naziv = r.Naziv
+            };
+
+            this.unitOfWork.RecPoKategorijiRepository.DeleteAllByCategoryId(r.Id);
+            this.unitOfWork.Commit();
+
+            this.unitOfWork.KategorijaRepository.Delete(kategorija);
+            this.unitOfWork.Commit();
+
+            //da slucajno neka rec nije ostala bez kategorije
+            IList<Rec> reci = (IList<Rec>)this.unitOfWork.RecRepository.GetAll();
+            foreach(Rec rec in reci)
+            {
+                if(rec.RecPoKategoriji==null || rec.RecPoKategoriji.Count==0)
+                {
+                    this.unitOfWork.RecRepository.Delete(rec);
+                }
+            }
+
             this.unitOfWork.Commit();
         }
-        public Kategorija getOneKategorija(int id)
+        public KategorijaDTO getOneKategorija(int id)
         {
-            return this.unitOfWork.KategorijaRepository.GetOne(id);
+            Kategorija k = this.unitOfWork.KategorijaRepository.GetOne(id);
+            if (k != null)
+                return new KategorijaDTO(k.Id, k.Naziv);
+            else
+                return null;
         }
     }
 }

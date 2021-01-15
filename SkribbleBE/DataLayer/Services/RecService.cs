@@ -1,5 +1,6 @@
 ﻿using DataLayer.Models;
 using DataLayer.Repository;
+using DTOs;
 using System;
 using System.Collections.Generic;
 using System.Text;
@@ -15,30 +16,51 @@ namespace DataLayer.Services
             this.unitOfWork = new UnitOfWork(projekatContext);
         }
 
-        public void AddNewRec(Rec r)
+        public void AddNewRec(RecDTO r)
         {
-            this.unitOfWork.RecRepository.Add(r);
+            this.unitOfWork.RecRepository.Add(new Rec(r.Naziv));
             this.unitOfWork.Commit();
         }
 
-        public IList<Rec> GetAll()
+        public IList<RecDTO> GetAll()
         {
-            return (List<Rec>)this.unitOfWork.RecRepository.GetAll();
+            IList<RecDTO> returnList = new List<RecDTO>();
+            foreach(Rec r in (List<Rec>)this.unitOfWork.RecRepository.GetAll())
+            {
+                returnList.Add(new RecDTO(r.Id,r.Naziv));
+            }
+            return returnList;
         }
 
-        public void UpdateRec(Rec r)
+        public void UpdateRec(RecDTO r)
         {
-            this.unitOfWork.RecRepository.Update(r);
+            Rec rec = new Rec
+            {
+                Id = r.Id,
+                Naziv = r.Naziv
+            };
+            this.unitOfWork.RecRepository.Update(rec);
             this.unitOfWork.Commit();
         }
-        public void DeleteRec(Rec r)
+        public void DeleteRec(RecDTO r)
         {
-            this.unitOfWork.RecRepository.Delete(r);
+            Rec rec = new Rec()
+            {
+                Id = r.Id,
+                Naziv = r.Naziv
+            };
+
+            this.unitOfWork.RecPoKategorijiRepository.DeleteAllByWordId(r.Id);
+            this.unitOfWork.RecRepository.Delete(rec);
             this.unitOfWork.Commit();
         }
-        public Rec getOneRec(int id)
+        public RecDTO getOneRec(int id)
         {
-            return this.unitOfWork.RecRepository.GetOne(id);
+            Rec r = this.unitOfWork.RecRepository.GetOne(id);
+            if (r != null)
+                return new RecDTO(r.Id, r.Naziv);
+            else
+                return null;
         }
     }
 }

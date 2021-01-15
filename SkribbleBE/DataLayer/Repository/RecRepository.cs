@@ -3,6 +3,7 @@ using Microsoft.EntityFrameworkCore;
 using System;
 using System.Collections.Generic;
 using System.Text;
+using System.Linq;
 
 namespace DataLayer.Repository
 {
@@ -13,6 +14,10 @@ namespace DataLayer.Repository
         public RecRepository(ProjekatContext _context) : base(_context)
         {
             this.reci = _context.Set<Rec>();
+        }
+        public override ICollection<Rec> GetAll()
+        {
+            return this.reci.Include(x => x.RecPoKategoriji).ToList();
         }
     }
 }

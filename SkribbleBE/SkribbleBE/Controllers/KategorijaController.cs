@@ -5,6 +5,7 @@ using System.Threading.Tasks;
 using DataLayer;
 using DataLayer.Models;
 using DataLayer.Services;
+using DTOs;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
@@ -18,6 +19,7 @@ namespace SkribbleBE.Controllers
     {
         private readonly KategorijaService kategorijaService;
 
+
         public KategorijaController(ProjekatContext projekatContext, KategorijaService kategorijaService)
         {
             this.kategorijaService = kategorijaService;
@@ -25,7 +27,7 @@ namespace SkribbleBE.Controllers
 
         [HttpPost]
         [Route("createKategorija")]
-        public async Task<IActionResult> CreateKategorija([FromBody] Kategorija r)
+        public async Task<IActionResult> CreateKategorija([FromBody] KategorijaDTO r)
         {
             kategorijaService.AddNewKategorija(r);
             return Ok();
@@ -46,7 +48,7 @@ namespace SkribbleBE.Controllers
         }
         [HttpPut]
         [Route("updateKategorija")]
-        public async Task<IActionResult> UpdateKategorija([FromBody] Kategorija r)
+        public async Task<IActionResult> UpdateKategorija([FromBody] KategorijaDTO r)
         {
             try
             {
@@ -60,7 +62,7 @@ namespace SkribbleBE.Controllers
         }
         [HttpDelete]
         [Route("deleteKategorija")]
-        public async Task<IActionResult> DeleteKategorija([FromBody] Kategorija r)
+        public async Task<IActionResult> DeleteKategorija([FromBody] KategorijaDTO r)
         {
             try
             {

@@ -5,6 +5,7 @@ using System.Threading.Tasks;
 using DataLayer;
 using DataLayer.Models;
 using DataLayer.Services;
+using DTOs;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 
@@ -21,13 +22,13 @@ namespace SkribbleBE.Controllers
             this.recPoKategorijiService = recPoKategorijiService;
         }
 
-        [HttpPost]
-        [Route("createRecPoKategoriji")]
-        public async Task<IActionResult> CreateRecPoKategoriji([FromBody] RecPoKategoriji r)
-        {
-            recPoKategorijiService.AddNewRecPoKategoriji(r);
-            return Ok();
-        }
+        //[HttpPost]
+        //[Route("createRecPoKategoriji")]
+        //public async Task<IActionResult> CreateRecPoKategoriji([FromBody] RecPoKategorijiDTO r)
+        //{
+        //    recPoKategorijiService.AddNewRecPoKategoriji(r);
+        //    return Ok();
+        //}
 
         [HttpGet]
         [Route("getAllRecPoKategoriji")]
@@ -44,7 +45,7 @@ namespace SkribbleBE.Controllers
         }
         [HttpPut]
         [Route("updateRecPoKategoriji")]
-        public async Task<IActionResult> UpdateRecPoKategoriji([FromBody] RecPoKategoriji r)
+        public async Task<IActionResult> UpdateRecPoKategoriji([FromBody] RecPoKategorijiDTO r)
         {
             try
             {
@@ -58,7 +59,7 @@ namespace SkribbleBE.Controllers
         }
         [HttpDelete]
         [Route("deleteRecPoKategoriji")]
-        public async Task<IActionResult> DeleteRecPoKategoriji([FromBody] RecPoKategoriji r)
+        public async Task<IActionResult> DeleteRecPoKategoriji([FromBody] RecPoKategorijiDTO r)
         {
             try
             {
