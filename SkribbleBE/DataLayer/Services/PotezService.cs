@@ -94,7 +94,7 @@ namespace DataLayer.Services
             potez.TokIgre = this.unitOfWork.TokIgreRepository.GetOneWithIncludes(potezDTO.TokIgreId,p => p.RecZaPogadjanje);
             potez.Korisnik = this.unitOfWork.KorisnikRepository.GetOne(potezDTO.KorisnikId);
             this.unitOfWork.Commit();
-            this.unitOfWork.PotezRepository.DeleteAsync(potez);
+            this.unitOfWork.PotezRepository.Delete(potez);
             this.unitOfWork.Commit();
         }
     }

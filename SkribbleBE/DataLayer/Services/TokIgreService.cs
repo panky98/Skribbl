@@ -84,20 +84,20 @@ namespace DataLayer.Services
 
            foreach(var p in tokIgre.Potezi)
             {
-                this.unitOfWork.PotezRepository.DeleteAsync(p);
+                this.unitOfWork.PotezRepository.Delete(p);
             }
             //this.unitOfWork.Commit();
 
             foreach(var t in tokIgre.TokIgrePoKorisniku)
             {
-                this.unitOfWork.TokIgrePoKorisnikuRepository.DeleteAsync(t);
+                this.unitOfWork.TokIgrePoKorisnikuRepository.Delete(t);
             }
 
             //this.unitOfWork.Commit();
 
             
 
-            this.unitOfWork.TokIgreRepository.DeleteAsync(tokIgre);
+            this.unitOfWork.TokIgreRepository.Delete(tokIgre);
             this.unitOfWork.Commit();
         }
 

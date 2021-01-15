@@ -23,7 +23,7 @@ namespace DataLayer.Repository
             return true;
         }
 
-        public bool DeleteAsync(T obj)
+        public bool Delete(T obj)
         {
             this._context.Set<T>().Remove(obj);
            // _context.Entry(obj).State = EntityState.Detached;

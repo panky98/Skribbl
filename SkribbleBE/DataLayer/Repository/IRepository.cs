@@ -10,7 +10,7 @@ namespace DataLayer.Repository
     {
         T GetOne(int id);
         bool Add(T obj);
-        bool DeleteAsync(T obj);
+        bool Delete(T obj);
         bool Update(T obj);
         ICollection<T> GetAll();
         IEnumerable<T> GetIncludes(params Expression<Func<T, Object>>[] includes);

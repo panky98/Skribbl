@@ -90,7 +90,7 @@ namespace DataLayer.Services
             }
 
 
-            this.unitOfWork.TokIgrePoKorisnikuRepository.DeleteAsync(tokIgrePoKorisniku);
+            this.unitOfWork.TokIgrePoKorisnikuRepository.Delete(tokIgrePoKorisniku);
             this.unitOfWork.Commit();
         }
 
