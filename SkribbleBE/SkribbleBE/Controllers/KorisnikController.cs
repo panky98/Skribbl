@@ -5,13 +5,14 @@ using System.Threading.Tasks;
 using DataLayer;
 using DataLayer.Models;
 using DataLayer.Services;
+using DTOs;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 
 namespace SkribbleBE.Controllers
 {
-    [Authorize]
+
     [Route("[controller]")]
     [ApiController]
     public class KorisnikController : ControllerBase
@@ -25,7 +26,7 @@ namespace SkribbleBE.Controllers
 
         [HttpPost]
         [Route("createKorisnik")]
-        public async Task<IActionResult> CreateKorisnik([FromBody] Korisnik k)
+        public async Task<IActionResult> CreateKorisnik([FromBody] KorisnikDTO k)
         {
             bool usernameTaken = korisnikService.findKorisnik(k.Username);
             if (usernameTaken == false)
@@ -35,7 +36,7 @@ namespace SkribbleBE.Controllers
             }
             return BadRequest("Korisnicko ime vec postoji!");
         }
-
+        [Authorize]
         [HttpGet]
         [Route("getAllKorisnik")]
         public async Task<IActionResult> GetAllKorisnik()
@@ -49,9 +50,10 @@ namespace SkribbleBE.Controllers
                 return BadRequest(e.ToString());
             }
         }
+        [Authorize]
         [HttpPut]
         [Route("updateKorisnik")]
-        public async Task<IActionResult> UpdateKorisnik([FromBody] Korisnik k)
+        public async Task<IActionResult> UpdateKorisnik([FromBody] KorisnikDTO k)
         {
             try
             {
@@ -63,9 +65,10 @@ namespace SkribbleBE.Controllers
                 return BadRequest(e.ToString());
             }
         }
+        [Authorize]
         [HttpDelete]
         [Route("deleteKorisnik")]
-        public async Task<IActionResult> DeleteKorisnik([FromBody] Korisnik k)
+        public async Task<IActionResult> DeleteKorisnik([FromBody] KorisnikDTO k)
         {
             try
             {
@@ -77,6 +80,7 @@ namespace SkribbleBE.Controllers
                 return BadRequest(e.ToString());
             }
         }
+        [Authorize]
         [HttpGet]
         [Route("getOneKorisnik/{idKorisnik}")]
         public async Task<IActionResult> GetOneKorisnik([FromRoute(Name = "idKorisnik")] int idKorisnik)

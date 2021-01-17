@@ -49,6 +49,9 @@ namespace DataLayer.Services
                 Naziv = r.Naziv
             };
 
+            this.unitOfWork.SobaRepository.DeleteAllByCategoryId(r.Id);
+            this.unitOfWork.Commit();
+
             this.unitOfWork.RecPoKategorijiRepository.DeleteAllByCategoryId(r.Id);
             this.unitOfWork.Commit();
 
@@ -64,7 +67,6 @@ namespace DataLayer.Services
                     this.unitOfWork.RecRepository.Delete(rec);
                 }
             }
-
             this.unitOfWork.Commit();
         }
         public KategorijaDTO getOneKategorija(int id)

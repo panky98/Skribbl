@@ -1,6 +1,7 @@
 ﻿using DataLayer.Models;
 using DataLayer.Repository;
 using System;
+using DTOs;
 using System.Collections.Generic;
 using System.Linq.Expressions;
 using System.Text;
@@ -16,26 +17,47 @@ namespace DataLayer.Services
         {
             this.unitOfWork = new UnitOfWork(projekatContext);
         }
-        public void AddNewKorisnik(Korisnik k)
+        public void AddNewKorisnik(KorisnikDTO k)
         {
-            this.unitOfWork.KorisnikRepository.Add(k);
+            this.unitOfWork.KorisnikRepository.Add(new Korisnik(k.Username,k.Password));
             this.unitOfWork.Commit();
         }
 
-        public IList<Korisnik> GetAll()
+        public IList<KorisnikDTO> GetAll()
         {
-            return (List<Korisnik>)this.unitOfWork.KorisnikRepository.GetAll();
+            IList<KorisnikDTO> returnList = new List<KorisnikDTO>();
+            foreach (Korisnik k in (List<Korisnik>)this.unitOfWork.KorisnikRepository.GetAll())
+            {
+                returnList.Add(new KorisnikDTO(k.Id, k.Username,k.Password));
+            }
+            return returnList;
         }
 
-        public void UpdateKorisnik(Korisnik k)
+        public void UpdateKorisnik(KorisnikDTO k)
         {
-            this.unitOfWork.KorisnikRepository.Update(k);
+            Korisnik korisnik = new Korisnik()
+            {
+                Id = k.Id,
+                Username = k.Username,
+                Password=k.Password
+            };
+            this.unitOfWork.KorisnikRepository.Update(korisnik);
             this.unitOfWork.Commit();
         }
-        public void DeleteKorisnik(Korisnik k)
+        public void DeleteKorisnik(KorisnikDTO k)
         {
-            this.unitOfWork.KorisnikRepository.Delete(k);
+            this.unitOfWork.KorisniciPoSobiRepository.DeleteAllByUserdId(k.Id);
             this.unitOfWork.Commit();
+            Korisnik korisnik = new Korisnik()
+            {
+                Id = k.Id,
+                Username = k.Username,
+                Password = k.Password
+            };
+            this.unitOfWork.KorisnikRepository.Delete(korisnik);
+            this.unitOfWork.Commit();
+
+
         }
         public Korisnik getOneKorisnik(int id)
         {

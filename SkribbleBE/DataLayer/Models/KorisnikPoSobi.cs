@@ -13,7 +13,8 @@ namespace DataLayer.Models
     {
         [Key]
         public int Id { get; set; }
-        [Required]
+        public int KorisnikId { get; set; }
+        public int SobaId { get; set; }
 
         [ForeignKey("SobaId")]
         public Soba Soba { get; set; }

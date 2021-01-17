@@ -4,14 +4,16 @@ using DataLayer;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 namespace DataLayer.Migrations
 {
     [DbContext(typeof(ProjekatContext))]
-    partial class ProjekatContextModelSnapshot : ModelSnapshot
+    [Migration("20210116123421_ime")]
+    partial class ime
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -80,7 +82,7 @@ namespace DataLayer.Migrations
 
                     b.HasIndex("SobaId");
 
-                    b.ToTable("KorisniciPoSobi");
+                    b.ToTable("KorisnikPoSobi");
                 });
 
             modelBuilder.Entity("DataLayer.Models.Potez", b =>
@@ -172,7 +174,7 @@ namespace DataLayer.Migrations
                     b.Property<int?>("KategorijaId")
                         .HasColumnType("int");
 
-                    b.Property<string>("Naziv")
+                    b.Property<string>("Username")
                         .IsRequired()
                         .HasMaxLength(20)
                         .HasColumnType("nvarchar(20)");

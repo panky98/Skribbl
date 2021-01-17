@@ -26,5 +26,37 @@ namespace DataLayer.Repository
             }
             return false;
         }
+        public void DeleteAllByRoomId(int idSoba)
+        {
+            IList<KorisnikPoSobi> korisniciPoSobiPoKorisniku = this.korisnici.Where(x => x.SobaId == idSoba).ToList();
+            if (korisniciPoSobiPoKorisniku != null)
+            {
+                foreach (KorisnikPoSobi kps in korisniciPoSobiPoKorisniku)
+                {
+                    this.korisnici.Remove(kps);
+                }
+            }
+        }
+        public void DeleteAllByUserdId(int idKorisnik)
+        {
+            IList<KorisnikPoSobi> korisniciPoSobiPoKorisniku = this.korisnici.Where(x => x.KorisnikId == idKorisnik).ToList();
+            if (korisniciPoSobiPoKorisniku != null)
+            {
+                foreach (KorisnikPoSobi kps in korisniciPoSobiPoKorisniku)
+                {
+                    this.korisnici.Remove(kps);
+                }
+            }
+        }
+        public IList<Korisnik> GetAllUsersByRoomId(int idSoba)
+        {
+            IList<KorisnikPoSobi> korisniciPoSobama = this.korisnici.Include(x => x.Korisnik).Include(x=>x.Soba).Where(x => x.SobaId == idSoba).ToList();
+            IList<Korisnik> korisnici = new List<Korisnik>();
+            foreach (KorisnikPoSobi k in korisniciPoSobama)
+            {
+                korisnici.Add(k.Korisnik);
+            }
+            return korisnici;
+        }
     }
 }

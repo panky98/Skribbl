@@ -5,6 +5,7 @@ using System.Threading.Tasks;
 using DataLayer;
 using DataLayer.Models;
 using DataLayer.Services;
+using DTOs;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
@@ -25,7 +26,7 @@ namespace SkribbleBE.Controllers
 
         [HttpPost]
         [Route("createSoba")]
-        public async Task<IActionResult> CreateSoba([FromBody] Soba s)
+        public async Task<IActionResult> CreateSoba([FromBody] SobaDTO s)
         {
                 sobaService.AddNewSoba(s);
                 return Ok();
@@ -46,7 +47,7 @@ namespace SkribbleBE.Controllers
         }
         [HttpPut]
         [Route("updateSoba")]
-        public async Task<IActionResult> UpdateSoba([FromBody] Soba s)
+        public async Task<IActionResult> UpdateSoba([FromBody] SobaDTO s)
         {
             try
             {
@@ -60,7 +61,7 @@ namespace SkribbleBE.Controllers
         }
         [HttpDelete]
         [Route("deleteSoba")]
-        public async Task<IActionResult> DeleteSoba([FromBody] Soba s)
+        public async Task<IActionResult> DeleteSoba([FromBody] SobaDTO s)
         {
             try
             {

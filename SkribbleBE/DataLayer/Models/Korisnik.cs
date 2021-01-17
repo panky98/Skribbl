@@ -35,6 +35,15 @@ namespace DataLayer.Models
         {
             Potezi = new List<Potez>();
             TokIgrePoKorisniku = new List<TokIgrePoKorisniku>();
+            KorisniciPoSobama = new List<KorisnikPoSobi>();
+        }
+        public Korisnik(string username, string password)
+        {
+            Username = username;
+            Password = password;
+            Potezi = new List<Potez>();
+            TokIgrePoKorisniku = new List<TokIgrePoKorisniku>();
+            KorisniciPoSobama = new List<KorisnikPoSobi>();
         }
     }
 }

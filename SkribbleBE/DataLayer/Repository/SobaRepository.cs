@@ -2,6 +2,7 @@
 using Microsoft.EntityFrameworkCore;
 using System;
 using System.Collections.Generic;
+using System.Linq;
 using System.Text;
 
 namespace DataLayer.Repository
@@ -13,5 +14,18 @@ namespace DataLayer.Repository
         {
             this.sobe = _context.Set<Soba>();
         }
+
+        public void DeleteAllByCategoryId(int idKateg)
+        {
+            IList<Soba> deleteList = this.sobe.Where(x => x.KategorijaId == idKateg).ToList();
+            if (deleteList != null)
+            {
+                foreach (Soba soba in deleteList)
+                {
+                    this.sobe.Remove(soba);
+                }
+            }
+        }
+       
     }
 }

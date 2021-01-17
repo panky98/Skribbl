@@ -20,6 +20,8 @@ namespace DataLayer
         public DbSet<TokIgre> TokoviIgre { get; set; }
         public DbSet<TokIgrePoKorisniku> TokoviIgrePoKorisniku { get; set; }
         public DbSet<Korisnik> Korisnici { get; set; }
+        public DbSet<Soba> Soba { get; set; }
+        public DbSet<KorisnikPoSobi> KorisniciPoSobi { get; set; }
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {

@@ -14,10 +14,11 @@ namespace DataLayer.Models
     {
         [Key]
         public int Id { get; set; }
+        public int KategorijaId { get; set; }
 
         [Required(ErrorMessage = "Naziv sobe je obavezan")]
         [MinLength(5, ErrorMessage = "Minimalna duzina naziva sobe je 5"), MaxLength(20, ErrorMessage = "Maksimalna duzina naziva sobe je 20")]
-        public string Username { get; set; }
+        public string Naziv { get; set; }
         [ForeignKey("KategorijaId")]
         public Kategorija Kategorija { get; set; }
         [JsonIgnore]
@@ -27,10 +28,18 @@ namespace DataLayer.Models
         public Soba()
         {
             TokoviIgre = new List<TokIgre>();
+            KorisniciPoSobama = new List<KorisnikPoSobi>();
         }
-        public Soba(Kategorija kategorija)
+        public Soba(string naziv)
+        {
+            Naziv = naziv;
+            TokoviIgre = new List<TokIgre>();
+            KorisniciPoSobama = new List<KorisnikPoSobi>();
+        }
+        public Soba(string naziv,Kategorija kategorija)
         {
             TokoviIgre = new List<TokIgre>();
+            KorisniciPoSobama = new List<KorisnikPoSobi>();
             Kategorija = kategorija;
         }
 
