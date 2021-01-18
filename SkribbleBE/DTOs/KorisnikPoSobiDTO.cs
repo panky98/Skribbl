@@ -8,6 +8,9 @@ namespace DTOs
     {
         public int Id { get; set; }
         public int Poeni { get; set; }
+
+        public int KorisnikId { get; set; }
+        public int SobaId { get; set; }
         public KorisnikDTO Korisnik { get; set; }
         public SobaDTO Soba { get; set; }
         public KorisnikPoSobiDTO()

@@ -50,13 +50,10 @@ namespace DataLayer.Services
             };
 
             this.unitOfWork.SobaRepository.DeleteAllByCategoryId(r.Id);
-            this.unitOfWork.Commit();
 
             this.unitOfWork.RecPoKategorijiRepository.DeleteAllByCategoryId(r.Id);
-            this.unitOfWork.Commit();
 
             this.unitOfWork.KategorijaRepository.Delete(kategorija);
-            this.unitOfWork.Commit();
 
             //da slucajno neka rec nije ostala bez kategorije
             IList<Rec> reci = (IList<Rec>)this.unitOfWork.RecRepository.GetAll();

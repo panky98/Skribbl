@@ -19,8 +19,9 @@ namespace DTOs
             TokoviIgre = new List<TokIgreDTO>();
             KorisniciPoSobama = new List<KorisnikPoSobiDTO>();
         }
-        public SobaDTO(string naziv)
+        public SobaDTO(int id,string naziv)
         {
+            Id = id;
             Naziv = naziv;
             TokoviIgre = new List<TokIgreDTO>();
             KorisniciPoSobama = new List<KorisnikPoSobiDTO>();

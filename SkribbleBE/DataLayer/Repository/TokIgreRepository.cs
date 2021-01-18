@@ -2,6 +2,7 @@
 using Microsoft.EntityFrameworkCore;
 using System;
 using System.Collections.Generic;
+using System.Linq;
 using System.Text;
 
 namespace DataLayer.Repository
@@ -15,6 +16,10 @@ namespace DataLayer.Repository
             :base(_context)
         {
             this.tokoviIgre = _context.Set<TokIgre>();
+        }
+        public IList<TokIgre> GetTokIgreByWordId(int idRec)
+        {
+            return this.tokoviIgre.Where(x => x.RecZaPogadjanje.Id == idRec).ToList();
         }
     }
 }

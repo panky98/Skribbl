@@ -72,9 +72,9 @@ namespace DataLayer.Services
 
             tokIgre.NapraviOdDTO(tokIgreDTO);
 
-            tokIgre.RecZaPogadjanje = this.unitOfWork.RecRepository.GetOne(tokIgreDTO.RecZaPogadjanjeId);
-            tokIgre.RecZaPogadjanje.TokoviIgre.Remove(tokIgre);
-            this.unitOfWork.TokIgreRepository.Update(tokIgre);
+            //tokIgre.RecZaPogadjanje = this.unitOfWork.RecRepository.GetOne(tokIgreDTO.RecZaPogadjanjeId);
+            //tokIgre.RecZaPogadjanje.TokoviIgre.Remove(tokIgre);
+            //this.unitOfWork.TokIgreRepository.Update(tokIgre);
 
 
             tokIgre.Potezi = this.unitOfWork.PotezRepository.VratiPotezeTokaIgre(tokIgreDTO.Id);

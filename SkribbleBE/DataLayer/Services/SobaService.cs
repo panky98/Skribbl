@@ -27,10 +27,39 @@ namespace DataLayer.Services
             this.unitOfWork.SobaRepository.Add(soba);
             this.unitOfWork.Commit();
         }
+        public IList<SobaDTO> GetAllWithIncludes(params Expression<Func<Soba, object>>[] includes)
+        {
+            IList<Soba> sobe = (IList<Soba>)this.unitOfWork.SobaRepository.GetIncludes(includes);
+
+            IList<SobaDTO> sobeDTO = new List<SobaDTO>();
+            foreach (var s in sobe)
+            {
+                sobeDTO.Add(new SobaDTO()
+                {
+                    Id = s.Id,
+                    Naziv = s.Naziv,
+                    Kategorija = new KategorijaDTO()
+                    {
+                        Id = s.Kategorija.Id,
+                        Naziv = s.Kategorija.Naziv
+                    }
+
+                });
+            }
+            return sobeDTO;
+        }
 
         public IList<SobaDTO> GetAll()
         {
-            return (List<SobaDTO>)this.unitOfWork.SobaRepository.GetAll();
+            IList<SobaDTO> returnList = new List<SobaDTO>();
+            foreach (Soba s in (List<Soba>)this.unitOfWork.SobaRepository.GetAll())
+            {
+                SobaDTO sobaDTO = new SobaDTO(s.Id, s.Naziv);
+                Kategorija k= this.unitOfWork.KategorijaRepository.GetOne(s.KategorijaId);
+                sobaDTO.Kategorija = new KategorijaDTO(k.Id, k.Naziv);
+                returnList.Add(sobaDTO);
+            }
+            return returnList;
         }
 
         public void UpdateSoba(SobaDTO s)
@@ -72,17 +101,10 @@ namespace DataLayer.Services
             Soba s = this.unitOfWork.SobaRepository.GetOne(id);
             if(s!=null)
             {
-                SobaDTO soba = new SobaDTO()
-                {
-                    Id = s.Id,
-                    Naziv = s.Naziv,
-                    Kategorija = new KategorijaDTO()
-                    {
-                        Id = s.Kategorija.Id,
-                        Naziv = s.Kategorija.Naziv
-                    }
-                };
-                return soba;
+                SobaDTO sobaDTO = new SobaDTO(s.Id, s.Naziv);
+                Kategorija k = this.unitOfWork.KategorijaRepository.GetOne(s.KategorijaId);
+                sobaDTO.Kategorija = new KategorijaDTO(k.Id, k.Naziv);
+                return sobaDTO;
             }
             return null;
         }

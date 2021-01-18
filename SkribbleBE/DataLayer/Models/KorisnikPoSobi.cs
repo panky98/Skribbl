@@ -30,7 +30,7 @@ namespace DataLayer.Models
         public KorisnikPoSobi(Korisnik korisnik,Soba soba, int poeni=0)
         {
             Korisnik = korisnik;
-            Soba = Soba;
+            Soba = soba;
             Poeni = poeni;
         }
     }
