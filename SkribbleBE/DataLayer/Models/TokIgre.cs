@@ -16,8 +16,8 @@ namespace DataLayer.Models
         
         public DateTime PocetakIgre { get; set; }
 
-       // [ForeignKey("SobaId")]
-       // public Soba Soba { get; set; }
+        [ForeignKey("SobaId")]
+       public Soba Soba { get; set; }
 
         [ForeignKey("RecZaPogadjanjeId")]
         //[JsonIgnore]

@@ -8,6 +8,7 @@ namespace DataLayer.Repository
     public interface ISobaRepository : IRepository<Soba>
     {
         void DeleteAllByCategoryId(int idKateg);
+        IList<Soba> GetAllRoomByCategoryId(int idKateg);
 
     }
 }

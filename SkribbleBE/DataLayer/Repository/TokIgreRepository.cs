@@ -21,5 +21,9 @@ namespace DataLayer.Repository
         {
             return this.tokoviIgre.Where(x => x.RecZaPogadjanje.Id == idRec).ToList();
         }
+        public IList<TokIgre> GetTokIgreByRoomId(int idSoba)
+        {
+            return this.tokoviIgre.Where(x => x.Soba.Id == idSoba).ToList();
+        }
     }
 }

@@ -65,7 +65,7 @@ namespace SkribbleBE.Controllers
                 return BadRequest(e.ToString());
             }
         }
-        [Authorize]
+        /*[Authorize]
         [HttpDelete]
         [Route("deleteKorisnik")]
         public async Task<IActionResult> DeleteKorisnik([FromBody] KorisnikDTO k)
@@ -79,7 +79,7 @@ namespace SkribbleBE.Controllers
             {
                 return BadRequest(e.ToString());
             }
-        }
+        }*/
         [Authorize]
         [HttpGet]
         [Route("getOneKorisnik/{idKorisnik}")]

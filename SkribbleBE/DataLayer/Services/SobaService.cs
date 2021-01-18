@@ -11,10 +11,12 @@ namespace DataLayer.Services
     public class SobaService
     {
         private UnitOfWork unitOfWork;
+        private TokIgreService TokIgreService;
 
         public SobaService(ProjekatContext projekatContext)
         {
             this.unitOfWork = new UnitOfWork(projekatContext);
+            TokIgreService = new TokIgreService(projekatContext);
         }
         public void AddNewSoba(SobaDTO s)
         {
@@ -31,9 +33,11 @@ namespace DataLayer.Services
         {
             IList<Soba> sobe = (IList<Soba>)this.unitOfWork.SobaRepository.GetIncludes(includes);
 
+
             IList<SobaDTO> sobeDTO = new List<SobaDTO>();
             foreach (var s in sobe)
             {
+                IList<TokIgre> tokoviIgre = this.unitOfWork.TokIgreRepository.GetTokIgreByRoomId(s.Id);
                 sobeDTO.Add(new SobaDTO()
                 {
                     Id = s.Id,
@@ -77,22 +81,38 @@ namespace DataLayer.Services
             this.unitOfWork.SobaRepository.Update(soba);
             this.unitOfWork.Commit();
         }
-        public void DeleteSoba(SobaDTO s)
+        public void DeleteSoba(SobaDTO s,Soba param=null)
         {
+
             this.unitOfWork.KorisniciPoSobiRepository.DeleteAllByRoomId(s.Id);
-            this.unitOfWork.Commit();
-
-            Soba soba = new Soba()
+            IList<TokIgre> tokoviIgre = this.unitOfWork.TokIgreRepository.GetTokIgreByRoomId(s.Id);
+            foreach(TokIgre t in tokoviIgre)
             {
-                Id = s.Id,
-                Naziv = s.Naziv,
-                Kategorija = new Kategorija()
+                DTOs.TokIgreDTO tokIgreDTO = new DTOs.TokIgreDTO()
                 {
-                    Id = s.Kategorija.Id,
-                    Naziv = s.Kategorija.Naziv
-                }
-            };
-
+                    Id = t.Id
+                };
+                TokIgreService.DeleteTokIgreAsync(tokIgreDTO,t);
+            }
+            Soba soba = new Soba();
+            if (param == null)
+            {
+                 soba = new Soba()
+                {
+                    Id = s.Id,
+                    Naziv = s.Naziv,
+                    Kategorija = new Kategorija()
+                    {
+                        Id = s.Kategorija.Id,
+                        Naziv = s.Kategorija.Naziv
+                    }
+                };
+            }
+            else
+            {
+                soba = param;
+            }
+            
             this.unitOfWork.SobaRepository.Delete(soba);
             this.unitOfWork.Commit();
         }
