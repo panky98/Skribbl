@@ -81,7 +81,10 @@ namespace SkribbleBE
             services.AddScoped<PotezService>();
             services.AddScoped<TokIgreService>();
             services.AddScoped<TokIgrePoKorisnikuService>();
-           // services.AddScoped<DataLayer.Repository.KorisnikRepository>();
+            services.AddScoped<KorisnikService>();
+            services.AddScoped<SobaService>();
+            services.AddScoped<KorisniciPoSobiService>();
+            // services.AddScoped<DataLayer.Repository.KorisnikRepository>();
 
             services.AddMvc().AddJsonOptions(options =>
             {

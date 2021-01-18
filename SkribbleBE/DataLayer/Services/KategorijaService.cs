@@ -10,9 +10,11 @@ namespace DataLayer.Services
     public class KategorijaService
     {
         private UnitOfWork unitOfWork;
+        private SobaService SobaService;
         public KategorijaService(ProjekatContext projekatContext)
         {
             this.unitOfWork = new UnitOfWork(projekatContext);
+            SobaService = new SobaService(projekatContext);
         }
 
         public void AddNewKategorija(KategorijaDTO k)
@@ -48,12 +50,21 @@ namespace DataLayer.Services
                 Id = r.Id,
                 Naziv = r.Naziv
             };
+            IList<Soba> sobe = this.unitOfWork.SobaRepository.GetAllRoomByCategoryId(r.Id);
+            for (int i = 0; i < sobe.Count; i++)
+            {
+                SobaDTO sobaDTO = new SobaDTO()
+                {
+                    Id = sobe[i].Id
+                };
+                SobaService.DeleteSoba(sobaDTO, sobe[i]);
+            }
+
+            this.unitOfWork.SobaRepository.DeleteAllByCategoryId(r.Id);
 
             this.unitOfWork.RecPoKategorijiRepository.DeleteAllByCategoryId(r.Id);
-            this.unitOfWork.Commit();
 
             this.unitOfWork.KategorijaRepository.Delete(kategorija);
-            this.unitOfWork.Commit();
 
             //da slucajno neka rec nije ostala bez kategorije
             IList<Rec> reci = (IList<Rec>)this.unitOfWork.RecRepository.GetAll();
@@ -64,7 +75,6 @@ namespace DataLayer.Services
                     this.unitOfWork.RecRepository.Delete(rec);
                 }
             }
-
             this.unitOfWork.Commit();
         }
         public KategorijaDTO getOneKategorija(int id)

@@ -6,7 +6,7 @@ using System.Text.Json.Serialization;
 
 namespace DataLayer.Models
 {
-    public class Kategorija :IEntityWithId
+    public class Kategorija : IEntityWithId
     {
         [Key]
         public int Id { get; set; }
@@ -15,14 +15,18 @@ namespace DataLayer.Models
         public string Naziv { get; set; }
         [JsonIgnore]
         public IList<RecPoKategoriji> ReciPoKategorijama { get; set; }
+        [JsonIgnore]
+        public IList<Soba> SobePoKategoriji { get; set; }
         public Kategorija()
         {
             this.ReciPoKategorijama = new List<RecPoKategoriji>();
+            this.SobePoKategoriji = new List<Soba>();
         }
         public Kategorija(string naziv)
         {
             this.Naziv = naziv;
             this.ReciPoKategorijama = new List<RecPoKategoriji>();
+            this.SobePoKategoriji = new List<Soba>();
         }
     }
 }

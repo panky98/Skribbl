@@ -4,14 +4,16 @@ using DataLayer;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 namespace DataLayer.Migrations
 {
     [DbContext(typeof(ProjekatContext))]
-    partial class ProjekatContextModelSnapshot : ModelSnapshot
+    [Migration("20210116142338_ime2")]
+    partial class ime2
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -65,7 +67,7 @@ namespace DataLayer.Migrations
                         .HasColumnType("int")
                         .UseIdentityColumn();
 
-                    b.Property<int>("KorisnikId")
+                    b.Property<int?>("KorisnikId")
                         .HasColumnType("int");
 
                     b.Property<int>("Poeni")
@@ -169,7 +171,7 @@ namespace DataLayer.Migrations
                         .HasColumnType("int")
                         .UseIdentityColumn();
 
-                    b.Property<int>("KategorijaId")
+                    b.Property<int?>("KategorijaId")
                         .HasColumnType("int");
 
                     b.Property<string>("Naziv")
@@ -235,9 +237,7 @@ namespace DataLayer.Migrations
                 {
                     b.HasOne("DataLayer.Models.Korisnik", "Korisnik")
                         .WithMany("KorisniciPoSobama")
-                        .HasForeignKey("KorisnikId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
+                        .HasForeignKey("KorisnikId");
 
                     b.HasOne("DataLayer.Models.Soba", "Soba")
                         .WithMany("KorisniciPoSobama")
@@ -288,9 +288,7 @@ namespace DataLayer.Migrations
                 {
                     b.HasOne("DataLayer.Models.Kategorija", "Kategorija")
                         .WithMany("SobePoKategoriji")
-                        .HasForeignKey("KategorijaId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
+                        .HasForeignKey("KategorijaId");
 
                     b.Navigation("Kategorija");
                 });
@@ -301,13 +299,11 @@ namespace DataLayer.Migrations
                         .WithMany("TokoviIgre")
                         .HasForeignKey("RecZaPogadjanjeId");
 
-                    b.HasOne("DataLayer.Models.Soba", "Soba")
+                    b.HasOne("DataLayer.Models.Soba", null)
                         .WithMany("TokoviIgre")
                         .HasForeignKey("SobaId");
 
                     b.Navigation("RecZaPogadjanje");
-
-                    b.Navigation("Soba");
                 });
 
             modelBuilder.Entity("DataLayer.Models.TokIgrePoKorisniku", b =>

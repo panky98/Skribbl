@@ -2,6 +2,7 @@
 using DataLayer.Repository;
 using DTOs;
 using System;
+using System.Collections;
 using System.Collections.Generic;
 using System.Text;
 
@@ -10,10 +11,13 @@ namespace DataLayer.Services
     public class RecService
     {
         private UnitOfWork unitOfWork;
+        private TokIgreService TokIgreService;
 
         public RecService(ProjekatContext projekatContext)
         {
             this.unitOfWork = new UnitOfWork(projekatContext);
+            TokIgreService = new TokIgreService(projekatContext);
+
         }
 
         public void AddNewRec(RecDTO r)
@@ -49,7 +53,15 @@ namespace DataLayer.Services
                 Id = r.Id,
                 Naziv = r.Naziv
             };
-
+            IList<TokIgre> tokoviIgre= this.unitOfWork.TokIgreRepository.GetTokIgreByWordId(r.Id);
+            for(int i=0;i<tokoviIgre.Count;i++)
+            {
+                DTOs.TokIgreDTO tokIgreDTO = new DTOs.TokIgreDTO()
+                {
+                    Id = tokoviIgre[i].Id
+                };
+                TokIgreService.DeleteTokIgreAsync(tokIgreDTO,tokoviIgre[i]);
+            }
             this.unitOfWork.RecPoKategorijiRepository.DeleteAllByWordId(r.Id);
             this.unitOfWork.RecRepository.Delete(rec);
             this.unitOfWork.Commit();

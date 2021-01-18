@@ -66,15 +66,23 @@ namespace DataLayer.Services
             this.unitOfWork.Commit();
         }
 
-        public void  DeleteTokIgreAsync(TokIgreDTO tokIgreDTO)
+        public void  DeleteTokIgreAsync(TokIgreDTO tokIgreDTO,TokIgre param=null)
         {
-            TokIgre tokIgre = new TokIgre();
+            TokIgre tokIgre;
+            if (param == null)
+            {
+                tokIgre = new TokIgre();
 
-            tokIgre.NapraviOdDTO(tokIgreDTO);
+                tokIgre.NapraviOdDTO(tokIgreDTO);
+            }
+            else
+            {
+                tokIgre = param;
+            }
 
-            tokIgre.RecZaPogadjanje = this.unitOfWork.RecRepository.GetOne(tokIgreDTO.RecZaPogadjanjeId);
-            tokIgre.RecZaPogadjanje.TokoviIgre.Remove(tokIgre);
-            this.unitOfWork.TokIgreRepository.Update(tokIgre);
+            //tokIgre.RecZaPogadjanje = this.unitOfWork.RecRepository.GetOne(tokIgreDTO.RecZaPogadjanjeId);
+            //tokIgre.RecZaPogadjanje.TokoviIgre.Remove(tokIgre);
+            //this.unitOfWork.TokIgreRepository.Update(tokIgre);
 
 
             tokIgre.Potezi = this.unitOfWork.PotezRepository.VratiPotezeTokaIgre(tokIgreDTO.Id);

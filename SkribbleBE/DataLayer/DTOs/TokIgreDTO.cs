@@ -12,7 +12,7 @@ namespace DataLayer.DTOs
         public DateTime PocetakIgre { get; set; }
 
       
-        // public int SobaId { get; set; }
+        public int SobaId { get; set; }
 
         public int RecZaPogadjanjeId { get; set; }
 
@@ -23,6 +23,7 @@ namespace DataLayer.DTOs
 
         public TokIgreDTO(TokIgre tokIgre)
         {
+            SobaId = tokIgre.Soba.Id;
             Id = tokIgre.Id;
             PocetakIgre = tokIgre.PocetakIgre;
             RecZaPogadjanjeId = tokIgre.RecZaPogadjanje.Id;

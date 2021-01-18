@@ -5,7 +5,8 @@ using System.Text;
 
 namespace DataLayer.Repository
 {
-    public interface IKorisnikRepository :IRepository<Korisnik>
+    public interface IKorisnikRepository : IRepository<Korisnik>
     {
+        bool FindByUsername(string username);
     }
 }

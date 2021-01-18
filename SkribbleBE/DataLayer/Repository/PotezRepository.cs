@@ -20,7 +20,7 @@ namespace DataLayer.Repository
 
         public IList<Potez> VratiPotezeTokaIgre(int idTokaIgre)
         {
-            IList<Potez> potezi= this.potezi.Include(p => p.TokIgre).Include(p => p.Korisnik)
+            IList<Potez> potezi= this.potezi.Include(p => p.Korisnik)
                     .Where(p => p.TokIgre.Id == idTokaIgre).ToList();
             return potezi;
         }

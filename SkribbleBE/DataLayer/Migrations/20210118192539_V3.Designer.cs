@@ -4,20 +4,22 @@ using DataLayer;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 namespace DataLayer.Migrations
 {
     [DbContext(typeof(ProjekatContext))]
-    partial class ProjekatContextModelSnapshot : ModelSnapshot
+    [Migration("20210118192539_V3")]
+    partial class V3
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
                 .UseIdentityColumns()
                 .HasAnnotation("Relational:MaxIdentifierLength", 128)
-                .HasAnnotation("ProductVersion", "5.0.2");
+                .HasAnnotation("ProductVersion", "5.0.1");
 
             modelBuilder.Entity("DataLayer.Models.Kategorija", b =>
                 {
@@ -301,13 +303,11 @@ namespace DataLayer.Migrations
                         .WithMany("TokoviIgre")
                         .HasForeignKey("RecZaPogadjanjeId");
 
-                    b.HasOne("DataLayer.Models.Soba", "Soba")
+                    b.HasOne("DataLayer.Models.Soba", null)
                         .WithMany("TokoviIgre")
                         .HasForeignKey("SobaId");
 
                     b.Navigation("RecZaPogadjanje");
-
-                    b.Navigation("Soba");
                 });
 
             modelBuilder.Entity("DataLayer.Models.TokIgrePoKorisniku", b =>
