@@ -60,8 +60,7 @@ namespace DataLayer.Services
                 {
                     Id = tokoviIgre[i].Id
                 };
-                tokoviIgre[i] = null;
-                TokIgreService.DeleteTokIgreAsync(tokIgreDTO);
+                TokIgreService.DeleteTokIgreAsync(tokIgreDTO,tokoviIgre[i]);
             }
             this.unitOfWork.RecPoKategorijiRepository.DeleteAllByWordId(r.Id);
             this.unitOfWork.RecRepository.Delete(rec);
