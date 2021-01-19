@@ -27,7 +27,8 @@ namespace DataLayer.DTOs
                 SobaId = tokIgre.Soba.Id;
             Id = tokIgre.Id;
             PocetakIgre = tokIgre.PocetakIgre;
-            RecZaPogadjanjeId = tokIgre.RecZaPogadjanje.Id;
+            if(tokIgre.RecZaPogadjanje!=null)
+                RecZaPogadjanjeId = tokIgre.RecZaPogadjanje.Id;
         }
     }
 }
