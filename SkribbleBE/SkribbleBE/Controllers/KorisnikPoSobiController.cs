@@ -5,7 +5,7 @@ using System.Threading.Tasks;
 using DataLayer;
 using DataLayer.Models;
 using DataLayer.Services;
-using DTOs;
+using DataLayer.DTOs;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 

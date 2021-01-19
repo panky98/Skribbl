@@ -23,6 +23,7 @@ namespace DataLayer.Services
             tokIgre.NapraviOdDTO(tokIgreDTO);
 
             tokIgre.RecZaPogadjanje = this.unitOfWork.RecRepository.GetOne(tokIgreDTO.RecZaPogadjanjeId);
+            tokIgre.Soba = this.unitOfWork.SobaRepository.GetOne(tokIgreDTO.SobaId);
 
             this.unitOfWork.TokIgreRepository.Add(tokIgre);
             this.unitOfWork.Commit();
@@ -61,6 +62,7 @@ namespace DataLayer.Services
 
             tokIgre.NapraviOdDTO(tokIgreDTO);
             tokIgre.RecZaPogadjanje = this.unitOfWork.RecRepository.GetOne(tokIgreDTO.RecZaPogadjanjeId);
+            tokIgre.Soba = this.unitOfWork.SobaRepository.GetOne(tokIgreDTO.SobaId);
 
             this.unitOfWork.TokIgreRepository.Update(tokIgre);
             this.unitOfWork.Commit();

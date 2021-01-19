@@ -7,7 +7,7 @@ using DataLayer;
 using DataLayer.Models;
 using DataLayer.Repository;
 using DataLayer.Services;
-using DTOs;
+using DataLayer.DTOs;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 

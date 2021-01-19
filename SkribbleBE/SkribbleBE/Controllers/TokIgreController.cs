@@ -47,7 +47,7 @@ namespace SkribbleBE.Controllers
             {
                 //return new JsonResult(this.tokIgreService.GetAll());
 
-                IList<TokIgreDTO> tokoviIgre = this.tokIgreService.GetAllWithIncludes(t => t.RecZaPogadjanje, t => t.Potezi, t => t.TokIgrePoKorisniku);
+                IList<TokIgreDTO> tokoviIgre = this.tokIgreService.GetAllWithIncludes(t => t.RecZaPogadjanje, t => t.Potezi, t => t.TokIgrePoKorisniku, t=>t.Soba);
                 return new JsonResult(tokoviIgre);
             }
             catch (Exception e)
@@ -63,7 +63,7 @@ namespace SkribbleBE.Controllers
             try
             {
                 //return new JsonResult(this.tokIgreService.GetOneTokIgre(idTokaIgre));
-                TokIgreDTO tokIgre = this.tokIgreService.GetOneWithIncludes(idTokaIgre, t => t.RecZaPogadjanje);
+                TokIgreDTO tokIgre = this.tokIgreService.GetOneWithIncludes(idTokaIgre, t => t.RecZaPogadjanje, t => t.Potezi, t => t.TokIgrePoKorisniku, t => t.Soba);
                 return new JsonResult(tokIgre);
 
 

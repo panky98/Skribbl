@@ -1,6 +1,6 @@
 ﻿using DataLayer.Models;
 using DataLayer.Repository;
-using DTOs;
+using DataLayer.DTOs;
 using System;
 using System.Collections.Generic;
 using System.Text;
@@ -11,10 +11,12 @@ namespace DataLayer.Services
     {
         private UnitOfWork unitOfWork;
         private SobaService SobaService;
+        private TokIgreService TokIgreService;
         public KategorijaService(ProjekatContext projekatContext)
         {
             this.unitOfWork = new UnitOfWork(projekatContext);
             SobaService = new SobaService(projekatContext);
+            TokIgreService = new TokIgreService(projekatContext);
         }
 
         public void AddNewKategorija(KategorijaDTO k)
@@ -60,18 +62,34 @@ namespace DataLayer.Services
                 SobaService.DeleteSoba(sobaDTO, sobe[i]);
             }
 
-            this.unitOfWork.SobaRepository.DeleteAllByCategoryId(r.Id);
+            
 
             this.unitOfWork.RecPoKategorijiRepository.DeleteAllByCategoryId(r.Id);
 
             this.unitOfWork.KategorijaRepository.Delete(kategorija);
 
+          
+
             //da slucajno neka rec nije ostala bez kategorije
             IList<Rec> reci = (IList<Rec>)this.unitOfWork.RecRepository.GetAll();
             foreach(Rec rec in reci)
             {
-                if(rec.RecPoKategoriji==null || rec.RecPoKategoriji.Count==0)
+                
+
+                if (rec.RecPoKategoriji==null || rec.RecPoKategoriji.Count==0)
                 {
+                    //obrisi pre brisanja reci tokove igre koji koriste tu rec
+                    IList<TokIgre> tokoviIgre = this.unitOfWork.TokIgreRepository.GetTokIgreByWordId(rec.Id);
+
+                    for(int i=0; i<=tokoviIgre.Count-1; i++)
+                    {
+                        TokIgreDTO tokIgreDTO = new TokIgreDTO()
+                        {
+                            Id = tokoviIgre[i].Id
+                        };
+                        this.TokIgreService.DeleteTokIgreAsync(tokIgreDTO, tokoviIgre[i]);
+                    }
+
                     this.unitOfWork.RecRepository.Delete(rec);
                 }
             }

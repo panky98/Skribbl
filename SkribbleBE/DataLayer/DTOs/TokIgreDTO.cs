@@ -23,7 +23,8 @@ namespace DataLayer.DTOs
 
         public TokIgreDTO(TokIgre tokIgre)
         {
-            SobaId = tokIgre.Soba.Id;
+            if(tokIgre.Soba!=null)
+                SobaId = tokIgre.Soba.Id;
             Id = tokIgre.Id;
             PocetakIgre = tokIgre.PocetakIgre;
             RecZaPogadjanjeId = tokIgre.RecZaPogadjanje.Id;
