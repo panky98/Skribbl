@@ -6,6 +6,8 @@ using System.Collections.Generic;
 using System.Linq.Expressions;
 using System.Text;
 using Confluent.Kafka;
+using DataLayer.HostedServices;
+using System.Threading;
 
 namespace DataLayer.Services
 {
@@ -13,13 +15,14 @@ namespace DataLayer.Services
     {
         private UnitOfWork unitOfWork;
         private TokIgreService TokIgreService;
+        private Consumer cons;
 
         public SobaService(ProjekatContext projekatContext)
         {
             this.unitOfWork = new UnitOfWork(projekatContext);
             TokIgreService = new TokIgreService(projekatContext);
         }
-        public async void AddNewSoba(SobaDTO s)
+        public void AddNewSoba(SobaDTO s)
         {
             IProducer<Null, string> _producer;
             var config = new ProducerConfig()
@@ -27,7 +30,7 @@ namespace DataLayer.Services
                 BootstrapServers = "localhost:9092"
             };
             _producer = new ProducerBuilder<Null, string>(config).Build();
-            await _producer.ProduceAsync(topic: "DuleTopic3", new Message<Null, string>()
+            _producer.Produce(topic: "DuleTopic3", new Message<Null, string>()
             {
                 Value = "proba"
             });
@@ -39,6 +42,22 @@ namespace DataLayer.Services
             };
             this.unitOfWork.SobaRepository.Add(soba);
             this.unitOfWork.Commit();
+
+            new Thread(() =>
+            {
+                while (true)
+                {
+                    IConsumer<Null, string> _consumer;
+                    var config = new ConsumerConfig()
+                    {
+                        BootstrapServers = "localhost:9092",
+                        GroupId= "test-consumer-group"
+                    };
+                    _consumer = new ConsumerBuilder<Null, string>(config).Build();
+                    _consumer.Subscribe("DuleTopic3");
+                    var rez= _consumer.Consume();
+                }
+            }).Start();
         }
         public IList<SobaDTO> GetAllWithIncludes(params Expression<Func<Soba, object>>[] includes)
         {

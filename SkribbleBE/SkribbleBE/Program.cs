@@ -15,15 +15,6 @@ namespace SkribbleBE
         public static void Main(string[] args)
         {
             CreateHostBuilder(args).Build().Run();
-            IConsumer<Null, string> _consumer;
-            var config = new ConsumerConfig()
-            {
-                BootstrapServers = "localhost:9092"
-            };
-            _consumer = new ConsumerBuilder<Null, string>(config).Build();
-            _consumer.Subscribe("DuleTopic3");
-             _consumer.Consume();
-            
         }
 
         public static IHostBuilder CreateHostBuilder(string[] args) =>
