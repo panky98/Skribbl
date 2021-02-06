@@ -5,6 +5,7 @@ using System;
 using System.Collections.Generic;
 using System.Linq.Expressions;
 using System.Text;
+using Confluent.Kafka;
 
 namespace DataLayer.Services
 {
@@ -18,8 +19,18 @@ namespace DataLayer.Services
             this.unitOfWork = new UnitOfWork(projekatContext);
             TokIgreService = new TokIgreService(projekatContext);
         }
-        public void AddNewSoba(SobaDTO s)
+        public async void AddNewSoba(SobaDTO s)
         {
+            IProducer<Null, string> _producer;
+            var config = new ProducerConfig()
+            {
+                BootstrapServers = "localhost:9092"
+            };
+            _producer = new ProducerBuilder<Null, string>(config).Build();
+            await _producer.ProduceAsync(topic: "DuleTopic3", new Message<Null, string>()
+            {
+                Value = "proba"
+            });
             Soba soba = new Soba()
             {
                 Id = s.Id,
@@ -118,6 +129,8 @@ namespace DataLayer.Services
         }
         public SobaDTO getOneSoba(int id)
         {
+
+
             Soba s = this.unitOfWork.SobaRepository.GetOne(id);
             if(s!=null)
             {
