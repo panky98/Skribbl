@@ -23,19 +23,19 @@ namespace SkribbleBE.Controllers
         }
 
 
-       /* [HttpGet]
-        [Route("getAllRecPoKategoriji")]
-        public async Task<IActionResult> GetAllRecPoKategoriji()
-        {
-            try
-            {
-                return new JsonResult(this.recPoKategorijiService.GetAll());
-            }
-            catch (Exception e)
-            {
-                return BadRequest(e.ToString());
-            }
-        }*/
+        //[HttpGet]
+        //[Route("getAllRecPoKategoriji")]
+        //public async Task<IActionResult> GetAllRecPoKategoriji()
+        //{
+        //    try
+        //    {
+        //        return new JsonResult(this.recPoKategorijiService.GetAll());
+        //    }
+        //    catch (Exception e)
+        //    {
+        //        return BadRequest(e.ToString());
+        //    }
+        //}
         [HttpPut]
         [Route("updateKorisnikPoSobi")]
         public async Task<IActionResult> UpdateRecPoKategoriji([FromBody] KorisnikPoSobiDTO k)

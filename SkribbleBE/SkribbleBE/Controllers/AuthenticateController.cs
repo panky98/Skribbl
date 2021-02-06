@@ -71,7 +71,7 @@ namespace SkribbleBE.Controllers
             audience: _config["Jwt:Audience"],
             claims: claims,
             //duzina trajanja tokena
-            expires: DateTime.Now.AddMinutes(30),
+            expires: DateTime.Now.AddMinutes(180),
             //kljuc
             signingCredentials: credentials
             );

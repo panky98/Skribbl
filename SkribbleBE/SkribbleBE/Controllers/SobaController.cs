@@ -28,8 +28,16 @@ namespace SkribbleBE.Controllers
         [Route("createSoba")]
         public async Task<IActionResult> CreateSoba([FromBody] SobaDTO s)
         {
+            try
+            {
                 sobaService.AddNewSoba(s);
                 return Ok();
+            }
+            catch(Exception exp)
+            {
+                return BadRequest(exp.ToString());
+            }
+
         }
 
         [HttpGet]
