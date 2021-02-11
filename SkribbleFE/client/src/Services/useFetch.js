@@ -10,7 +10,10 @@ export default function useFetch(url) {
   useEffect(() => {
     async function init() {
       try {
-        const response = await fetch(baseUrl + url);
+        const response = await fetch(baseUrl + url,{
+          method:"GET",
+          headers:{"Content-Type":"application/json","Authorization":"Bearer "+localStorage.getItem("loginToken")}
+        });
         if (response.ok) {
           const json = await response.json();
           setData(json);

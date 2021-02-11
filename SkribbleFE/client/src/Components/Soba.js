@@ -17,7 +17,7 @@ function Soba()
 
     useEffect(() => {
         const newConnection = new HubConnectionBuilder()
-            .withUrl('https://localhost:44310/potezhub')
+            .withUrl('https://localhost:44310/potezhub',{ accessTokenFactory: () => localStorage.getItem("loginToken")})
             .withAutomaticReconnect()
             .build();
 

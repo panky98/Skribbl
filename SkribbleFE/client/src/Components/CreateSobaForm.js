@@ -34,12 +34,12 @@ function CreateSobaForm()
         setShowSpinner(true);
         fetch("https://localhost:44310/Soba/createSoba",{
             method:"POST",
-            headers:{"Content-Type":"application/json"},
+            headers:{"Content-Type":"application/json","Authorization":"Bearer "+localStorage.getItem("loginToken")},
             body: JSON.stringify({"naziv":newNaziv,"kategorija":{"id":parseInt(selectedKategorijaId)}})
         }).then(p=>{
             if(p.ok){
-                setShowSpinner(true);
-                window.location.reload(false);
+                setShowSpinner(false);
+                window.location.reload();
             }
         }).catch(exc=>{
             console.log("EXCP:" +exc);
