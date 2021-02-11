@@ -63,6 +63,7 @@ namespace SkribbleBE.Controllers
             {
                    new Claim(JwtRegisteredClaimNames.Sub, userInfo.Username),
                    new Claim(JwtRegisteredClaimNames.Jti, Guid.NewGuid().ToString()),
+                   new Claim(JwtRegisteredClaimNames.NameId,userInfo.Id.ToString())
             };
             var token = new JwtSecurityToken(
             //drugi stepen zastite issuer

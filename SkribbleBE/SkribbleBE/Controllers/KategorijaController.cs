@@ -12,7 +12,6 @@ using Microsoft.AspNetCore.Mvc;
 
 namespace SkribbleBE.Controllers
 {
-    [Authorize]
     [Route("[controller]")]
     [ApiController]
     public class KategorijaController : ControllerBase

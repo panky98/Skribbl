@@ -16,7 +16,7 @@ function NavBar() {
           <li>
           <Link to="/Sobe">
                 Rooms
-            </Link>
+          </Link>
           </li>  
         </ul>
       </nav>
