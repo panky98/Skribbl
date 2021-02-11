@@ -1,13 +1,16 @@
 import React, { useState,useEffect,useRef } from 'react';
 import { HubConnectionBuilder } from '@microsoft/signalr';
+import {useParams} from "react-router-dom"
 
-
-function Soba(props)
+function Soba()
 {    
     const [ connection, setConnection ] = useState(null);
     const [ chat, setChat ] = useState([]);
     const latestChat = useRef(null);
     const [ newPotez, setNewPotez ] = useState([]);
+    
+    const {sobaId}=useParams();
+    console.log(sobaId);
 
     latestChat.current = chat;
 
@@ -24,13 +27,18 @@ function Soba(props)
     useEffect(() => {
         if (connection) {
             connection.start()
-                .then(result => {
+                .then(async (result) => {
                     console.log('Connected!');
                     connection.on('ReceiveMessage', message => {
                         const updatedChat = [...latestChat.current];
                         updatedChat.push(message);
                         setChat(updatedChat);
                     });
+                    await connection.send("AddToGroup",sobaId).then(result=>{
+                        console.log("RESULT "+result);
+                    }).catch(excp=>{
+                        console.log("Exception: "+excp);
+                    })
                 })
                 .catch(e => console.log('Connection failed: ', e));
         }
@@ -41,7 +49,10 @@ function Soba(props)
 
         if (connection.connectionStarted) {
             try {
-                await connection.send('SendMessage',"Soba1",chatMessage);
+                const updatedChat = [...latestChat.current];
+                updatedChat.push(message);
+                setChat(updatedChat);
+                await connection.send('SendMessage',sobaId,chatMessage);
             }
             catch(e) {
                 console.log(e);
@@ -51,6 +62,8 @@ function Soba(props)
             alert('No connection to server yet.');
         }
     }
+
+
     return(
         <div>
             <h1>Potezi:</h1>
@@ -62,17 +75,9 @@ function Soba(props)
             <h1>Enter potez:</h1>
             <input type="text" onChange={(event)=>setNewPotez(event.currentTarget.value)}/>
             <button onClick={async ()=>{await sendMessage("proba",newPotez);}}>Send</button>
-            <button onClick={async ()=>{await ConnectToTheGroup("Soba1");}}>Connect to the Group</button>
             <button onClick={()=>{console.log(chat);}}>Log</button>
         </div>
     );
-    async function ConnectToTheGroup(groupName){
-        await connection.invoke("AddToGroup","Soba1").then(result=>{
-            console.log("RESULT "+result);
-        }).catch(excp=>{
-            console.log("Exception: "+excp);
-        })
-    }
 }
 
 export default Soba;

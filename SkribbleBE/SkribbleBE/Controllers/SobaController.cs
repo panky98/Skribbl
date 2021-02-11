@@ -13,7 +13,6 @@ using System.Threading;
 
 namespace SkribbleBE.Controllers
 {
-    [Authorize]
     [Route("[controller]")]
     [ApiController]
     public class SobaController : ControllerBase

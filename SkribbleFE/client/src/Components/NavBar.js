@@ -10,12 +10,14 @@ function NavBar() {
         <ul>
           <li class="navbar-brand">
             <Link to="/">
-                Fly Away
+                Skribbl
             </Link>
-            <Link to="/Soba">
-                Enter room
+          </li>    
+          <li>
+          <Link to="/Sobe">
+                Rooms
             </Link>
-          </li>      
+          </li>  
         </ul>
       </nav>
       </div>

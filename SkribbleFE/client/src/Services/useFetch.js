@@ -1,6 +1,6 @@
 import { useState, useEffect } from "react";
 
-const baseUrl = "https://localhost:44399/";
+const baseUrl = "https://localhost:44310/";
 
 export default function useFetch(url) {
   const [data, setData] = useState(null);

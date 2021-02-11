@@ -16,15 +16,14 @@ namespace DataLayer.SignalR
         }
         public async Task SendMessage(string groupName,string message)
         {
-            await Clients.Group(groupName).SendAsync("ReceiveMessage", message);
+            await Clients.OthersInGroup(groupName).SendAsync("ReceiveMessage", message);
         }
         public async Task AddToGroup(string groupName)
         {
             try
             {
                 await Groups.AddToGroupAsync(Context.ConnectionId, groupName);
-
-                await Clients.Group(groupName).SendAsync("ReceiveMessage", $"{Context.ConnectionId} has joined the group {groupName}.");
+                await Clients.OthersInGroup(groupName).SendAsync("ReceiveMessage", $"{Context.ConnectionId} has joined the group {groupName}.");
             }
             catch(Exception e)
             {
@@ -36,7 +35,7 @@ namespace DataLayer.SignalR
         {
             await Groups.RemoveFromGroupAsync(Context.ConnectionId, groupName);
 
-            await Clients.Group(groupName).SendAsync("ReceiveMessage", $"{Context.ConnectionId} has left the group {groupName}.");
+            await Clients.OthersInGroup(groupName).SendAsync("ReceiveMessage", $"{Context.ConnectionId} has left the group {groupName}.");
         }
     }
 }
