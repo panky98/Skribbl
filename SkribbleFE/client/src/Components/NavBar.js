@@ -17,7 +17,13 @@ function NavBar() {
           <Link to="/Sobe">
                 Rooms
             </Link>
-          </li>  
+           
+          </li> 
+          <li>
+          <Link to="/LogIn">
+                LogIn
+            </Link>
+            </li> 
         </ul>
       </nav>
       </div>

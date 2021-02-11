@@ -6,7 +6,8 @@ import NavBar from "./Components/NavBar"
 import Error from "./Components/Error"
 import Sobe from "./Components/Sobe"
 import Soba from "./Components/Soba"
-
+import LogIn from './Components/LogIn.js';
+import SignUp from './Components/SignUp.js';
 
 function App() {
   return (
@@ -20,6 +21,8 @@ function App() {
         <Sobe/>
       </Route>
       <Route exact path="/Soba/:sobaId" component={Soba}></Route>
+      <Route exact path="/LogIn" component={LogIn}></Route>
+      <Route exact path="/SignUp" component={SignUp}></Route>
       <Route  path="*">
         <Error />
       </Route>

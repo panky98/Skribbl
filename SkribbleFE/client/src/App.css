@@ -36,3 +36,202 @@
     transform: rotate(360deg);
   }
 }
+.divLogin{
+  width: 250px;
+  height: 400px;
+  padding: 30px;
+  
+  font-size: 20px;
+  font-family: Arial, Helvetica, sans-serif;
+  color: white;
+  text-align: left;
+  font-weight: bold;
+  margin: 0;
+}
+.divLogin p{
+  color: white;
+  font-family: Arial, Helvetica, sans-serif;
+  font-size: 15px;
+}
+.inputLoginn{
+  border: 2px solid white;
+  border-top: none;
+  border-left: none;
+  border-right: none;
+  width: 250px;
+  -webkit-background-fill-color: rgb(242,93,89) !important;
+  background-color: rgb(242,93,89) !important;
+  
+  -webkit-text-fill-color: white !important;
+  
+  height: 25px;
+  
+}
+.inputLoginn:-internal-autofill-selected{
+  -webkit-background-fill-color: rgb(242,93,89) !important;
+}
+
+.inputSignup{
+  border: 2px solid white;
+  border-top: none;
+  border-left: none;
+  border-right: none;
+  width: 250px;
+  -webkit-background-fill-color: rgb(41,44,61) !important;
+  color:white;
+  
+  -webkit-text-fill-color: white !important;
+  background-color: rgb(41,44,61) !important;
+  height: 25px;
+}
+
+
+
+
+#buttonLogin{
+  height: 30px;
+  width: 250px;
+  background-color: rgb(41,44,61);
+  color:white;
+  font-size: 15px;
+  border:none;
+  border-radius: 0;
+  
+  font-weight: 0;
+  font-family: Arial, Helvetica, sans-serif;
+}
+#buttonSingUp{
+  height: 30px;
+  width: 250px;
+  
+  border-radius: 0;
+  background-color: rgb(242,93,89);
+  color:white;
+  font-size: 15px;
+  border: none;
+  font-family: Arial, Helvetica, sans-serif;
+  font-weight: 0;
+}
+.divSignup{
+  width: 250px;
+  height: 400px;
+  padding: 30px;
+  
+  
+  font-size: 17px;
+  font-family: fantasy;
+  color: rgb(54,65,71);
+  text-align: left;
+}
+
+.divLogout{
+  width: 400px;
+  height: 300px;
+
+  margin:100px auto 0px auto;
+  font-size: 25px;
+  font-family: fantasy;
+  color: rgb(54,65,71);
+  text-align: center;
+}
+.buttonInLogout{
+  width: 180px;
+  height: 45px;
+  margin: 10px;
+  color: white;
+  border-radius: 5px;
+  border: none;
+  background-color: rgb(123, 48, 48);
+  font-size: 25px;
+  font-family: fantasy;
+}
+.error{
+  height: 10px;
+  font-family: Arial, Helvetica, sans-serif;
+  color: red;
+  font-size: 12px;
+}
+/**************************/
+.proba{
+  width: 310px;
+  height: 340px;
+  background-color: rgb(242,93,89);
+  padding: 30px;
+  padding-top: 130px;
+  animation: mymove 1s infinite;
+  animation-fill-mode: forwards;
+  animation-iteration-count: 1;
+  position: relative;
+  right: 620px;
+  text-align: center;
+  color: white;
+  font-size: 40px;
+  font-family: fantasy;
+}
+
+@keyframes mymove {
+  0% {
+    transform: translate(0, 0);    
+  }
+  100% {
+    transform: translate(310px, 0);
+    background-color:rgb(41,44,61);
+  }
+}
+.proba2{
+  width: 310px;
+  height: 340px;
+  background-color: rgb(242,93,89);
+  padding: 30px;
+  padding-top: 130px;
+  
+  animation: mymove2 1s infinite;
+  animation-fill-mode: forwards;
+  animation-iteration-count: 1;
+  position: relative;
+  
+  left: -310px;
+  text-align: center;
+  color: white;
+  font-size: 40px;
+  font-family: fantasy;
+}
+
+@keyframes mymove2 {
+  0% {
+    transform: translate(0, 0);    
+  }
+  100% {
+    transform: translate(-310px, 0);
+  }
+}
+
+.effect{
+  display: flex;
+  
+  width: 620px;
+  height: 500px;
+  
+  margin: 0 auto;
+  padding: 20px;
+}
+/*.effect div{
+  display: inline-block;
+}*/
+.effect1{
+  width: 310px;
+  height: 500px;
+  background-color: rgb(242,93,84);
+ 
+  
+}
+.effect2{
+  
+  width: 310px;
+  height: 500px;
+ background-color: rgb(41,44,61);
+  
+}
+.aaa{
+width: 310px;
+}
