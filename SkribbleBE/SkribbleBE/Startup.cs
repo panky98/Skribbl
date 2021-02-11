@@ -8,6 +8,7 @@ using DataLayer;
 using DataLayer.Models;
 using DataLayer.Repository;
 using DataLayer.Services;
+using DataLayer.SignalR;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
@@ -94,9 +95,14 @@ namespace SkribbleBE
 
             services.AddCors(options => {
                 options.AddPolicy("Corse", builder => {
-                    builder.AllowAnyHeader().AllowAnyOrigin().AllowAnyMethod();
+                    builder.AllowAnyHeader()
+                    .AllowAnyMethod()
+                    .WithOrigins("http://localhost:3000")
+                    .AllowCredentials();
                 });
             });
+
+            services.AddSignalR();
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
@@ -112,12 +118,14 @@ namespace SkribbleBE
             app.UseRouting();
 
             app.UseCors("Corse");
+
             app.UseAuthentication();
             app.UseAuthorization();
 
             app.UseEndpoints(endpoints =>
             {
                 endpoints.MapControllers();
+                endpoints.MapHub<PotezHub>("/potezhub");
             });
         }
       
