@@ -17,7 +17,10 @@ export default function useFetch(url) {
         if (response.ok) {
           const json = await response.json();
           setData(json);
-        } else {
+        }else if(response.status==401){
+          window.location.replace("/LogIn");
+        } 
+        else {
           throw response;
         }
       } catch (e) {
