@@ -6,6 +6,7 @@ using DataLayer;
 using DataLayer.DTOs;
 using DataLayer.Models;
 using DataLayer.Services;
+using DataLayer.SignalR;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 
@@ -16,10 +17,12 @@ namespace SkribbleBE.Controllers
     public class TokIgreController : ControllerBase
     {
         private readonly TokIgreService tokIgreService;
+        private readonly CentralCoordinator centralCoordinator;
 
-        public TokIgreController(ProjekatContext projekatContext, TokIgreService tokIgreService)
+        public TokIgreController(ProjekatContext projekatContext, TokIgreService tokIgreService,CentralCoordinator centralCoordinator)
         {
             this.tokIgreService = tokIgreService;
+            this.centralCoordinator = centralCoordinator;
         }
 
         [HttpPost]
@@ -28,14 +31,20 @@ namespace SkribbleBE.Controllers
         {
             try
             {
-                tokIgreService.AddNewTokIgre(tokIgre);
-                return Ok();
+                int id=tokIgreService.AddNewTokIgre(tokIgre);
+                return Ok(id);
             }
             catch(Exception e)
             {
                 return BadRequest(e.ToString());
             }
-            
+        }
+        [HttpPost]
+        [Route("startTokIgre/{groupName}")]
+        public async Task StartTokIgre([FromRoute(Name ="groupName")] string groupName)
+        {
+            this.centralCoordinator.GroupName = groupName;
+            await this.centralCoordinator.StartAsync(System.Threading.CancellationToken.None);
         }
 
 

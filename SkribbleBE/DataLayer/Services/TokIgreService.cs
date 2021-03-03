@@ -17,7 +17,7 @@ namespace DataLayer.Services
             this.unitOfWork = new UnitOfWork(projekatContext);
         }
 
-        public void AddNewTokIgre(TokIgreDTO tokIgreDTO)
+        public int AddNewTokIgre(TokIgreDTO tokIgreDTO)
         {
             TokIgre tokIgre = new TokIgre();
             tokIgre.NapraviOdDTO(tokIgreDTO);
@@ -27,6 +27,8 @@ namespace DataLayer.Services
 
             this.unitOfWork.TokIgreRepository.Add(tokIgre);
             this.unitOfWork.Commit();
+
+            return tokIgre.Id;
         }
 
         public IList<TokIgreDTO> GetAll()

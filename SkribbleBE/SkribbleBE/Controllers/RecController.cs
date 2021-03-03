@@ -55,6 +55,21 @@ namespace SkribbleBE.Controllers
                 return BadRequest(e.ToString());
             }
         }
+
+        [HttpGet]
+        [Route("getThreeWordsFromCategory/{idKateg}")]
+        public async Task<IActionResult> GetThreeWordsFromCategory([FromRoute(Name="idKateg")] int idKateg)
+        {
+            try
+            {
+                return new JsonResult(this.recService.getThreeRecFromKategorija(idKateg));
+            }
+            catch (Exception e)
+            {
+                return BadRequest(e.ToString());
+            }
+        }
+
         [HttpPut]
         [Route("updateRec")]
         public async Task<IActionResult> UpdateRec([FromBody]RecDTO r)

@@ -103,6 +103,8 @@ namespace SkribbleBE
             services.AddScoped<KorisnikService>();
             services.AddScoped<SobaService>();
             services.AddScoped<KorisniciPoSobiService>();
+            services.AddScoped<CentralCoordinator>();
+            
             // services.AddScoped<DataLayer.Repository.KorisnikRepository>();
 
             services.AddMvc().AddJsonOptions(options =>

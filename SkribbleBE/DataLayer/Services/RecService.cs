@@ -74,5 +74,23 @@ namespace DataLayer.Services
             else
                 return null;
         }
+
+        public IList<RecDTO> getThreeRecFromKategorija(int idKategorija)
+        {
+            IList<RecDTO> returnList = new List<RecDTO>();
+
+            IList<Rec> reci=unitOfWork.RecPoKategorijiRepository.GetAllWordsByCategoryId(idKategorija);
+            if(reci.Count>=3)
+            {
+                for(int i=0;i<3;i++)
+                {
+                    Random r = new Random();
+                    int index = r.Next(0, reci.Count);
+                    returnList.Add(new RecDTO(reci[index].Id, reci[index].Naziv));
+                }
+            }
+
+            return returnList;
+        }
     }
 }
