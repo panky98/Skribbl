@@ -44,15 +44,22 @@ namespace DataLayer.SignalR
                     counter = "1";
                     redis.Set<int>("groupGuessed:" + groupName,c);
                 }
+                else
+                {
+                    redis.IncrementValue("groupGuessed:" + groupName);
+                    counter = (Convert.ToInt32(counter) + 1).ToString();
+                }
 
                 if (Convert.ToInt32(counter) == (Convert.ToInt32(redis.Get<string>("groupCounter:" + groupName)) - 1))
                 {
                     //svi pogodili prelazak na sl hosta
                     redis.DequeueItemFromList("groupLeft:" + groupName);
-                    string newHostConnectionId = redis.GetItemFromList("groupLeft:" + groupName, 0);
-                    if(newHostConnectionId!=null)
+                    string newHostConnectionId = redis.GetItemFromList("groupLeft:" + groupName, (int)(redis.GetListCount("groupLeft:" + groupName)-1));
+                    if (newHostConnectionId!=null)
                     {
                         await Clients.Client(newHostConnectionId).SendAsync("ReceiveMessage", "HostMessage");
+                        await Clients.Client(newHostConnectionId).SendAsync("YourTurn");
+                        await Clients.GroupExcept(groupName,newHostConnectionId).SendAsync("SwitchedTurn",newHostConnectionId+"'s turn");
                     }
                     else
                     {
@@ -60,16 +67,19 @@ namespace DataLayer.SignalR
                     }
 
                 }
-                else
-                {
-                    redis.IncrementValue("groupGuessed:" + groupName);
-                }
             }
             else
             {
                 await Clients.OthersInGroup(groupName).SendAsync("ReceiveMessage", ime.Value + ": " + message);
             }
         }
+
+        public async Task SendPotez(string groupName, string message)
+        {
+            await Clients.OthersInGroup(groupName).SendAsync("ReceivePotez", message);
+            //TODO add persistance of move!
+        }
+
         public async Task AddToGroup(string groupName)
         {
             try
@@ -87,16 +97,20 @@ namespace DataLayer.SignalR
                     await Clients.Caller.SendAsync("ReceiveMessage", "HostMessage");
                     redis.Set<int>("groupCounter:" + groupName, 1);
                     redis.EnqueueItemOnList("groupMembers:" + groupName, Context.ConnectionId);
+                    redis.EnqueueItemOnList("groupMembersEmails:" + groupName,ime.Value);
                     redis.EnqueueItemOnList("groupLeft:" + groupName, Context.ConnectionId);
                 }
                 else 
                 {
                     redis.IncrementValue("groupCounter:" + groupName);
                     redis.EnqueueItemOnList("groupMembers:" + groupName, Context.ConnectionId);
+                    redis.EnqueueItemOnList("groupMembersEmails:" + groupName, ime.Value);
                     redis.EnqueueItemOnList("groupLeft:" + groupName, Context.ConnectionId);
                 }
 
-                await Clients.OthersInGroup(groupName).SendAsync("ReceiveMessage", $"{ime.Value} has joined the group {groupName}.");
+                IList<string> currentUsers = redis.GetAllItemsFromList("groupMembersEmails:" + groupName);
+                await Clients.Caller.SendAsync("OnConnectUsers", currentUsers);
+                await Clients.OthersInGroup(groupName).SendAsync("UserIn", $"{ime.Value} has joined the group {groupName}.");
             }
             catch(Exception e)
             {
@@ -106,11 +120,17 @@ namespace DataLayer.SignalR
 
         public async Task RemoveFromGroup(string groupName, bool isHost)
         {
+            var identity = (ClaimsIdentity)Context.User.Identity;
+            IEnumerable<Claim> claims = identity.Claims;
+            Claim ime = Enumerable.ElementAt<Claim>(claims, 0);
+
+
             await Groups.RemoveFromGroupAsync(Context.ConnectionId, groupName);
 
             //izlazak iz grupe
             redis.DecrementValue("groupCounter:" + groupName);
             redis.RemoveItemFromList("groupMembers:" + groupName, Context.ConnectionId);
+            redis.RemoveItemFromList("groupMembersEmails:" + groupName, ime.Value);
             redis.RemoveItemFromList("groupLeft:" + groupName, Context.ConnectionId);
 
             string counter = redis.Get<string>("groupCounter:" + groupName);
@@ -119,7 +139,7 @@ namespace DataLayer.SignalR
                 string value=redis.GetItemFromList("groupMembers:" + groupName, 0);
                 await Clients.Client(value).SendAsync("ReceiveMessage", "HostMessage");
             }
-            await Clients.OthersInGroup(groupName).SendAsync("ReceiveMessage", $"{Context.ConnectionId} has left the group {groupName}.");
+            await Clients.OthersInGroup(groupName).SendAsync("UserOut", $"{ime.Value} has left the group {groupName}.");
         }
 
         public async Task SaveNewTokIgreId(string groupName, int newTokIgreId, string rec)
@@ -127,12 +147,7 @@ namespace DataLayer.SignalR
             redis.Set<int>("groupTokIgre:" + groupName, newTokIgreId);
             redis.Set<string>("groupWord:" + groupName, rec);
             redis.Set<int>("groupTimer:" + groupName, 30);
+            redis.Remove("groupGuessed:"+groupName);
         }
-
-        public static void DoWork(object data)
-        {
-            ((CentralCoordinator)data).StartTimer();
-        }
-
     }
 }

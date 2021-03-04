@@ -18,6 +18,9 @@ function Soba()
     const [showChosenWord,setShowChosenWord]=useState();
     const chosenWordRef=useRef();
     const chosenWordIdRef=useRef();
+    const [usersInRoom,setUsersInRoom]=useState(["You"]);
+    const usersInRoomRef=useRef();
+    const [countUsersInRoom,setCountUsersInRoom]=useState(1);
 
 
 
@@ -25,6 +28,7 @@ function Soba()
     const {sobaId}=useParams();
 
     latestChat.current = chat;
+    usersInRoomRef.current=usersInRoom;
 
 
     useEffect(() => {
@@ -51,19 +55,66 @@ function Soba()
                         }
                         setChat(updatedChat);
                     });
+                    connection.on('OnConnectUsers', message => {  
+                        //pribavljanje na pocetku korisnika koji su trenutno u sobi
+                        usersInRoomRef.current=message;
+                        setUsersInRoom(usersInRoomRef.current);
+                        setCountUsersInRoom(usersInRoomRef.current.length);
+                    });
+                    connection.on('UserIn', message => {
+                        //korisnik se prikljucio sobi
+                        const updatedChat = [...latestChat.current];
+                        updatedChat.push(message);
+                        setChat(updatedChat);
+                        const updatedListOfUsers=[...usersInRoomRef.current];
+                        updatedListOfUsers.push(message.split(" ")[0]);
+                        setUsersInRoom(updatedListOfUsers);
+                        setCountUsersInRoom(updatedListOfUsers.length);
+                    });
+                    connection.on('UserOut', message => {
+                        //korisnik napustio sobu
+                        const updatedChat = [...latestChat.current];
+                        updatedChat.push(message);
+                        setChat(updatedChat);
+
+                        const updatedListOfUsers=[...usersInRoomRef.current];
+                        updatedListOfUsers.splice(updatedListOfUsers.indexOf(message.split(" ")[0]),1);
+                        setUsersInRoom(updatedListOfUsers);
+                        setCountUsersInRoom(updatedListOfUsers.length);
+                    });
                     connection.on('GussedWord', message => {
+                        //pogodjena rec
                         const updatedChat = [...latestChat.current];
                         updatedChat.push(message);
                         alert("You have guessed the word! Congratulations");
                         setChat(updatedChat);
                     });
                     connection.on('FinishedGame', message => {
+                        //kraj igre, prosle sve runde
                         alert("Game has finished!");
                     });
                     connection.on('Timer', message => {
+                        //primanje tajmera u rundi
                         console.log(message);
                         setRemainingTime(message);
                     });
+                    connection.on('ReceivePotez', message => {
+                        //TODO obrada kad se primi iscrtani parametar od hosta
+                        //da se iscrta od strane svih ostalih koji pogadjaju
+                    });
+                    connection.on('YourTurn', message => {
+                        //obavestenje igracu koji je sada na redu da objasnjava rec
+                        alert("Your turn, press start and chose WORD!")
+                    });
+                    connection.on('SwitchedTurn', message => {
+                        //obavestenje svim ostalima ko je sada na potezu!
+                        const updatedChat = [...latestChat.current];
+                        updatedChat.push(message);
+                        setChat(updatedChat);
+                        setAmHost(false);
+                        setShowChosenWord(false);
+                    });
+
                     await connection.send("AddToGroup",sobaId).then(result=>{
                         console.log("RESULT "+result);
                     }).catch(excp=>{
@@ -129,7 +180,13 @@ function Soba()
             <button onClick={async ()=>{await sendMessage("proba",newPotez);}}>Send</button>
             <button onClick={()=>{console.log(amHost);}}>Log</button><br/>
             {amHost && <div><button onClick={()=>startGame()}>Start</button></div>}
-            <label style={{color:"red"}}>Remaining time {remainingTime}s</label>
+            <label style={{color:"red"}}>Remaining time {remainingTime}s</label><br/>
+            <label>Users in room: {countUsersInRoom}/4</label>
+            <ul>
+                {usersInRoom.map(el=>{
+                    return <li>{el}</li>
+                })}
+            </ul>
         </div>
     );
 

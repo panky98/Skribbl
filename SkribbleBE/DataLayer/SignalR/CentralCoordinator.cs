@@ -46,10 +46,12 @@ namespace DataLayer.SignalR
                     //svi pogodili prelazak na sl hosta ili isteklo vreme
                     ((System.Timers.Timer)sender).Stop();
                     redisClinet.DequeueItemFromList("groupLeft:" + groupName);
-                    string newHostConnectionId = redisClinet.GetItemFromList("groupLeft:" + groupName, 0);
+                    string newHostConnectionId = redisClinet.GetItemFromList("groupLeft:" + groupName, (int)(redisClinet.GetListCount("groupLeft:" + groupName) - 1));
                     if (newHostConnectionId != null)
                     {
                         await hub.Clients.Client(newHostConnectionId).SendAsync("ReceiveMessage", "HostMessage");
+                        await hub.Clients.Client(newHostConnectionId).SendAsync("YourTurn");
+                        await hub.Clients.GroupExcept(groupName, newHostConnectionId).SendAsync("SwitchedTurn", newHostConnectionId + "'s turn");
                     }
                     else
                     {
@@ -58,7 +60,6 @@ namespace DataLayer.SignalR
                 }
                 else if((counter != null && Convert.ToInt32(counter) == Convert.ToInt32(redisClinet.Get<string>("groupCounter:" + groupName)) - 1))
                 {
-                    redisClinet.Remove("groupGuessed:" + groupName);
                     ((System.Timers.Timer)sender).Stop();
                     await this.StopAsync(CancellationToken.None);
                 }
