@@ -11,6 +11,15 @@ function Soba()
     const [ amHost, setAmHost ] = useState(false);
     const latestHost = useRef(false);
     const [remainingTime,setRemainingTime]=useState(30);
+    const [showWordList, setShowWordList]=useState(false);
+    const [wordList, setWordList]=useState([]);
+    const [chosenWordId,setChosenWordId]=useState();
+    const [chosenWord,setChosenWord]=useState();
+    const [showChosenWord,setShowChosenWord]=useState();
+    const chosenWordRef=useRef();
+    const chosenWordIdRef=useRef();
+
+
 
     
     const {sobaId}=useParams();
@@ -100,6 +109,15 @@ function Soba()
 
     return(
         <div>
+            <div>
+                {showWordList && <div><select onChange={(ev)=>{chosenWordIdRef.current=ev.currentTarget.value.split(" ")[0];setChosenWordId(chosenWordIdRef.current);setShowWordList(false);setShowChosenWord(true);chosenWordRef.current=ev.currentTarget.value.split(" ")[1];setChosenWord(chosenWordRef.current);continueStartGame();}}>
+                                    {wordList.map(el=>{
+                                        return <option value={el.id+" "+el.naziv}>{el.naziv}</option>
+                                    })}
+                                    </select>
+                                </div>}
+                {showChosenWord &&<h1>{chosenWord}</h1>}
+            </div>
             <h1>Potezi:</h1>
             <ul>
                 {chat.map((el=>{
@@ -126,26 +144,32 @@ function Soba()
             if(p.ok)
             {
                 p.json().then(data=>{
-                  fetch("https://localhost:44310/TokIgre/createTokIgre",{
-                      method:"POST",
-                      headers:{"Content-Type":"application/json"},
-                      body:JSON.stringify({"pocetakIgre":"2020-12-12T00:00:00","recZaPogadjanjeId":data[0].id,"sobaId":parseInt(sobaId.slice(4,sobaId.length))})
-                  }).then(p=>{
-                      if(p.ok)
-                      {
-                          p.json().then(async tokIgreId=>{
-                              //sacuvati trenutni idToka igre u redisu
-                              await connection.send("SaveNewTokIgreId",sobaId,tokIgreId,data[0].naziv).then(result=>{
-                                console.log("RESULT "+result);
-                            }).catch(excp=>{
-                                console.log("Exception: "+excp);
-                            });
-                            await fetch("https://localhost:44310/TokIgre/startTokIgre/"+sobaId,{
-                                method:"POST"
-                            }); 
-                          })
-                      }
-                  })
+                    setWordList(data);
+                    setShowWordList(true);
+                })
+            }
+        })
+    }
+
+    function continueStartGame()
+    {
+        fetch("https://localhost:44310/TokIgre/createTokIgre",{
+            method:"POST",
+            headers:{"Content-Type":"application/json"},
+            body:JSON.stringify({"pocetakIgre":"2020-12-12T00:00:00","recZaPogadjanjeId":parseInt(chosenWordIdRef.current),"sobaId":parseInt(sobaId.slice(4,sobaId.length))})
+        }).then(p=>{
+            if(p.ok)
+            {
+                p.json().then(async tokIgreId=>{
+                    //sacuvati trenutni idToka igre u redisu
+                    await connection.send("SaveNewTokIgreId",sobaId,tokIgreId,chosenWordRef.current).then(result=>{
+                      console.log("RESULT "+result);
+                  }).catch(excp=>{
+                      console.log("Exception: "+excp);
+                  });
+                  await fetch("https://localhost:44310/TokIgre/startTokIgre/"+sobaId,{
+                      method:"POST"
+                  }); 
                 })
             }
         })
