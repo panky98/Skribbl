@@ -43,7 +43,7 @@ namespace DataLayer.SignalR
 
                 if (redisClinet.Get<string>("groupTimer:" + groupName) == "0")
                 {
-                    //svi pogodili prelazak na sl hosta ili isteklo vreme
+                    //isteklo vreme
                     ((System.Timers.Timer)sender).Stop();
                     redisClinet.DequeueItemFromList("groupLeft:" + groupName);
                     string newHostConnectionId = redisClinet.GetItemFromList("groupLeft:" + groupName, (int)(redisClinet.GetListCount("groupLeft:" + groupName) - 1));
@@ -51,7 +51,10 @@ namespace DataLayer.SignalR
                     {
                         await hub.Clients.Client(newHostConnectionId).SendAsync("ReceiveMessage", "HostMessage");
                         await hub.Clients.Client(newHostConnectionId).SendAsync("YourTurn");
-                        await hub.Clients.GroupExcept(groupName, newHostConnectionId).SendAsync("SwitchedTurn", newHostConnectionId + "'s turn");
+                        await hub.Clients.GroupExcept(groupName, newHostConnectionId).SendAsync("SwitchedTurn", redisClinet.GetValueFromHash("groupHashConidUsername:" + groupName, newHostConnectionId) + "'s turn");
+                        
+                        //cuvanje novog prezentera u redisu
+                        redisClinet.Set<string>("groupPresenter:" + groupName, redisClinet.GetValueFromHash("groupHashConidUsername:" + groupName, redisClinet.GetValueFromHash("groupHashConidUsername:" + groupName, newHostConnectionId)));
                     }
                     else
                     {
@@ -60,6 +63,7 @@ namespace DataLayer.SignalR
                 }
                 else if((counter != null && Convert.ToInt32(counter) == Convert.ToInt32(redisClinet.Get<string>("groupCounter:" + groupName)) - 1))
                 {
+                    //svi pogodili
                     ((System.Timers.Timer)sender).Stop();
                     await this.StopAsync(CancellationToken.None);
                 }

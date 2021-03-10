@@ -36,6 +36,13 @@ namespace DataLayer.SignalR
             {
                 await Clients.OthersInGroup(groupName).SendAsync("ReceiveMessage", ime.Value + "has gussed the word!");
                 await Clients.Caller.SendAsync("GussedWord", "You have gussed the word!");
+                
+                //dodavanje poena
+                int poeniNovi = 50 * Convert.ToInt32(redis.Get<int>("groupTimer:" + groupName)) / 30;
+                int poeniStari=Convert.ToInt32(redis.GetValueFromHash("groupHashPoints:" + groupName, ime.Value))+poeniNovi;
+                redis.SetEntryInHash("groupHashPoints:" + groupName, ime.Value, poeniStari.ToString());
+                //obavestenje o izmeni poena
+                await Clients.Group(groupName).SendAsync("UpdatePoints", ime.Value + " " + poeniStari);
 
                 var counter = redis.Get<string>("groupGuessed:" + groupName);
                 if(counter==null)
@@ -59,7 +66,14 @@ namespace DataLayer.SignalR
                     {
                         await Clients.Client(newHostConnectionId).SendAsync("ReceiveMessage", "HostMessage");
                         await Clients.Client(newHostConnectionId).SendAsync("YourTurn");
-                        await Clients.GroupExcept(groupName,newHostConnectionId).SendAsync("SwitchedTurn",newHostConnectionId+"'s turn");
+                        await Clients.GroupExcept(groupName,newHostConnectionId).SendAsync("SwitchedTurn",redis.GetValueFromHash("groupHashConidUsername:" + groupName,newHostConnectionId) +"'s turn");
+
+                        int poeniPrezenteru = 25 * Convert.ToInt32(redis.Get<int>("groupTimer:" + groupName)) / 30;
+                        int stariPoeniPrezentera= Convert.ToInt32(redis.GetValueFromHash("groupHashPoints:" + groupName, redis.Get<string>("groupPresenter:" + groupName))) + poeniPrezenteru;
+                        redis.SetEntryInHash("groupHashPoints:" + groupName, redis.Get<string>("groupPresenter:" + groupName), stariPoeniPrezentera.ToString());
+
+                        await Clients.Group(groupName).SendAsync("UpdatePoints", redis.Get<string>("groupPresenter:" + groupName) + " " + stariPoeniPrezentera);
+                        redis.Set<string>("groupPresenter:" + groupName,redis.GetValueFromHash("groupHashConidUsername:" + groupName, redis.GetValueFromHash("groupHashConidUsername:" + groupName, newHostConnectionId)));
                     }
                     else
                     {
@@ -99,6 +113,9 @@ namespace DataLayer.SignalR
                     redis.EnqueueItemOnList("groupMembers:" + groupName, Context.ConnectionId);
                     redis.EnqueueItemOnList("groupMembersEmails:" + groupName,ime.Value);
                     redis.EnqueueItemOnList("groupLeft:" + groupName, Context.ConnectionId);
+                    redis.SetEntryInHash("groupHashConidUsername:" + groupName, Context.ConnectionId, ime.Value);
+                    redis.SetEntryInHash("groupHashPoints:" + groupName, ime.Value, "0");
+                    redis.Set<string>("groupPresenter:" + groupName, ime.Value);
                 }
                 else 
                 {
@@ -106,6 +123,8 @@ namespace DataLayer.SignalR
                     redis.EnqueueItemOnList("groupMembers:" + groupName, Context.ConnectionId);
                     redis.EnqueueItemOnList("groupMembersEmails:" + groupName, ime.Value);
                     redis.EnqueueItemOnList("groupLeft:" + groupName, Context.ConnectionId);
+                    redis.SetEntryInHash("groupHashConidUsername:" + groupName, Context.ConnectionId, ime.Value);
+                    redis.SetEntryInHash("groupHashPoints:" + groupName, ime.Value, "0");
                 }
 
                 IList<string> currentUsers = redis.GetAllItemsFromList("groupMembersEmails:" + groupName);
@@ -132,11 +151,15 @@ namespace DataLayer.SignalR
             redis.RemoveItemFromList("groupMembers:" + groupName, Context.ConnectionId);
             redis.RemoveItemFromList("groupMembersEmails:" + groupName, ime.Value);
             redis.RemoveItemFromList("groupLeft:" + groupName, Context.ConnectionId);
+            redis.RemoveEntryFromHash("groupHashConidUsername:" + groupName, Context.ConnectionId);
+            redis.RemoveEntryFromHash("groupHashPoints:" + groupName, ime.Value);
+
 
             string counter = redis.Get<string>("groupCounter:" + groupName);
             if (counter != "0" && isHost)
             {
-                string value=redis.GetItemFromList("groupMembers:" + groupName, 0);
+                string value=redis.GetItemFromList("groupMembers:" + groupName, (int)(redis.GetListCount("groupMembers:" + groupName) - 1));
+                redis.Set<string>("groupPresenter:" + groupName, redis.GetValueFromHash("groupHashConidUsername:" + groupName,value));
                 await Clients.Client(value).SendAsync("ReceiveMessage", "HostMessage");
             }
             await Clients.OthersInGroup(groupName).SendAsync("UserOut", $"{ime.Value} has left the group {groupName}.");
@@ -146,6 +169,7 @@ namespace DataLayer.SignalR
         {
             redis.Set<int>("groupTokIgre:" + groupName, newTokIgreId);
             redis.Set<string>("groupWord:" + groupName, rec);
+            redis.EnqueueItemOnList("groupListWords:" + groupName, rec);
             redis.Set<int>("groupTimer:" + groupName, 30);
             redis.Remove("groupGuessed:"+groupName);
         }

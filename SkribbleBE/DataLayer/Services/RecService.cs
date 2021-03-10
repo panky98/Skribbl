@@ -5,6 +5,8 @@ using System;
 using System.Collections;
 using System.Collections.Generic;
 using System.Text;
+using ServiceStack.Redis;
+using DataLayer.SignalR;
 
 namespace DataLayer.Services
 {
@@ -12,6 +14,7 @@ namespace DataLayer.Services
     {
         private UnitOfWork unitOfWork;
         private TokIgreService TokIgreService;
+        readonly RedisClient redis = new RedisClient(Config.SingleHost);
 
         public RecService(ProjekatContext projekatContext)
         {
@@ -75,18 +78,46 @@ namespace DataLayer.Services
                 return null;
         }
 
-        public IList<RecDTO> getThreeRecFromKategorija(int idKategorija)
+        public IList<RecDTO> getThreeRecFromKategorija(int idKategorija,string groupName)
         {
             IList<RecDTO> returnList = new List<RecDTO>();
 
             IList<Rec> reci=unitOfWork.RecPoKategorijiRepository.GetAllWordsByCategoryId(idKategorija);
+            IList<string> prezentovaneReci = redis.GetAllItemsFromList("groupListWords:" + groupName);
+
             if(reci.Count>=3)
             {
                 for(int i=0;i<3;i++)
                 {
                     Random r = new Random();
                     int index = r.Next(0, reci.Count);
-                    returnList.Add(new RecDTO(reci[index].Id, reci[index].Naziv));
+
+                    bool finded = false;
+                    if(prezentovaneReci!=null)
+                    {
+                        for(int j=0;j<prezentovaneReci.Count;j++)
+                        {
+                            if(prezentovaneReci[j]==reci[index].Naziv)
+                            {
+                                finded = true;
+                                break;
+                            }
+                        }
+                    }
+
+                    for(int j=0;j<returnList.Count;j++)
+                    {
+                        if(returnList[j].Naziv==reci[index].Naziv)
+                        {
+                            finded = true;
+                            break;
+                        }
+                    }
+
+                    if (!finded)
+                        returnList.Add(new RecDTO(reci[index].Id, reci[index].Naziv));
+                    else
+                        i--;
                 }
             }
 

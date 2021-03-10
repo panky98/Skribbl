@@ -21,6 +21,9 @@ function Soba()
     const [usersInRoom,setUsersInRoom]=useState(["You"]);
     const usersInRoomRef=useRef();
     const [countUsersInRoom,setCountUsersInRoom]=useState(1);
+    const [usersInRoomPoints,setUsersInRoomPoints]=useState([]);
+    const usersInRoomPointsRef=useState();
+
 
 
 
@@ -60,6 +63,15 @@ function Soba()
                         usersInRoomRef.current=message;
                         setUsersInRoom(usersInRoomRef.current);
                         setCountUsersInRoom(usersInRoomRef.current.length);
+
+                        const niz=[];
+                        message.forEach((el)=>{
+                            niz.push(0);
+                        });
+                        
+                        usersInRoomPointsRef.current=niz;
+                        setUsersInRoomPoints(usersInRoomPointsRef.current);
+
                     });
                     connection.on('UserIn', message => {
                         //korisnik se prikljucio sobi
@@ -70,6 +82,11 @@ function Soba()
                         updatedListOfUsers.push(message.split(" ")[0]);
                         setUsersInRoom(updatedListOfUsers);
                         setCountUsersInRoom(updatedListOfUsers.length);
+                        
+                        const usersInRoomPointsUpdate=[...usersInRoomPointsRef.current];
+                        usersInRoomPointsUpdate.push(0);
+                        setUsersInRoomPoints(usersInRoomPointsUpdate);
+                        usersInRoomPointsRef.current=usersInRoomPointsUpdate;
                     });
                     connection.on('UserOut', message => {
                         //korisnik napustio sobu
@@ -78,9 +95,15 @@ function Soba()
                         setChat(updatedChat);
 
                         const updatedListOfUsers=[...usersInRoomRef.current];
-                        updatedListOfUsers.splice(updatedListOfUsers.indexOf(message.split(" ")[0]),1);
+                        let indeks=updatedListOfUsers.indexOf(message.split(" ")[0]);
+                        updatedListOfUsers.splice(indeks,1);
                         setUsersInRoom(updatedListOfUsers);
                         setCountUsersInRoom(updatedListOfUsers.length);
+
+                        const usersInRoomPointsUpdate=[...usersInRoomPointsRef.current];
+                        usersInRoomPointsUpdate.splice(indeks,1);
+                        setUsersInRoomPoints(usersInRoomPointsUpdate);
+                        usersInRoomPointsRef.current=usersInRoomPointsUpdate;
                     });
                     connection.on('GussedWord', message => {
                         //pogodjena rec
@@ -113,6 +136,15 @@ function Soba()
                         setChat(updatedChat);
                         setAmHost(false);
                         setShowChosenWord(false);
+                    });
+                    connection.on('UpdatePoints', message => {
+                        const updateListOfPoint=[...usersInRoomPointsRef.current];
+                        let indeks=usersInRoomRef.current.indexOf(message.split(" ")[0]);
+                        updateListOfPoint[indeks]=message.split(" ")[1];
+
+                        console.log("UpdateListOfPoint: "+updateListOfPoint);
+                        setUsersInRoomPoints(updateListOfPoint);
+                        usersInRoomPointsRef.current=updateListOfPoint;
                     });
 
                     await connection.send("AddToGroup",sobaId).then(result=>{
@@ -183,8 +215,8 @@ function Soba()
             <label style={{color:"red"}}>Remaining time {remainingTime}s</label><br/>
             <label>Users in room: {countUsersInRoom}/4</label>
             <ul>
-                {usersInRoom.map(el=>{
-                    return <li>{el}</li>
+                {usersInRoom.map((el,indeks)=>{
+                    return <li>{el} {usersInRoomPoints[indeks]}p</li>
                 })}
             </ul>
         </div>
@@ -195,7 +227,7 @@ function Soba()
     {
         latestHost.current=false;
         setAmHost(false);
-        fetch("https://localhost:44310/Rec/getThreeWordsFromCategory/9",{
+        fetch("https://localhost:44310/Rec/getThreeWordsFromCategory/9/"+sobaId,{
             method:"GET"
         }).then(p=>{
             if(p.ok)
