@@ -1,6 +1,8 @@
 import React, { useState,useEffect,useRef } from 'react';
 import { HubConnectionBuilder } from '@microsoft/signalr';
 import {useParams} from "react-router-dom"
+import {ChromePicker} from 'react-color';
+import hexRgb from 'hex-rgb';
 
 function Soba()
 {    
@@ -24,6 +26,12 @@ function Soba()
     const [usersInRoomPoints,setUsersInRoomPoints]=useState([]);
     const usersInRoomPointsRef=useState();
 
+    //
+    const canvasRef=useRef(null);
+    const contextRef=useRef(null);
+    const [isDrawing, setIsDrawing]=useState(false);
+    const [color, setColor]=useState('#ffffff');
+    const firstDrawing=useRef(true);
 
 
 
@@ -124,6 +132,42 @@ function Soba()
                     connection.on('ReceivePotez', message => {
                         //TODO obrada kad se primi iscrtani parametar od hosta
                         //da se iscrta od strane svih ostalih koji pogadjaju
+                        //const color=message.substr(0, message.indexOf(' '));
+                       
+
+                        if(message==='stop')
+                        {
+                            console.log("Stigo stop");
+                            firstDrawing.current=true;
+                            console.log("PRE")
+                            contextRef.current.closePath();
+                            console.log("POSLE");
+                            console.log(firstDrawing.current + " je sad")
+                        }
+                        else
+                        {
+                            const info = message.split(" ");
+                            const color=info[0];
+                            const offsetX=info[1];
+                            const offsetY=info[2];
+                            console.log(color);
+                            contextRef.current.strokeStyle=color;
+                            //contextRef.current.strokeStyle="black";
+                            if(firstDrawing.current===true)
+                            {
+                                console.log("Prvo crtanje " + offsetX + " " + offsetY);
+                                contextRef.current.beginPath();
+                                contextRef.current.moveTo(offsetX, offsetY);
+                                firstDrawing.current=false;
+                            }
+                            else
+                            {
+                                console.log("Drugo crtanje " + offsetX + " " + offsetY);
+                                contextRef.current.lineTo(offsetX, offsetY);
+                                contextRef.current.stroke();
+                            }
+                        }
+
                     });
                     connection.on('YourTurn', message => {
                         //obavestenje igracu koji je sada na redu da objasnjava rec
@@ -170,6 +214,86 @@ function Soba()
           };    
     },[connection]);
 
+    useEffect(()=>{
+        
+        const canvas=canvasRef.current;
+
+        
+        canvas.width=window.innerWidth * 2;
+        canvas.height=window.innerHeight * 2;
+
+
+        canvas.style.width=`${window.innerWidth}px`;
+        canvas.style.height=`${window.innerHeight}px`;
+
+        //canvas.style.width=`${600}px`;
+        //canvas.style.height=`${600}px`;
+
+        const context=canvas.getContext("2d");
+
+        context.scale(2,2);
+        context.lineCap="round";
+        context.strokeStyle="black";
+        //context.strokeStyle=hexToRGB(color);
+        context.lineWidth=5;
+        contextRef.current=context;
+    }, [])
+
+    const startDrawing = ({nativeEvent})=>{
+        //const {offsetX, offsetY} = nativeEvent;
+        const offsetX=nativeEvent.layerX;
+        const offsetY=nativeEvent.layerY;
+        contextRef.current.beginPath();
+        contextRef.current.moveTo(offsetX, offsetY);
+        setIsDrawing(true);
+    }
+
+    const finishDrawing =async  ()=>{
+        contextRef.current.closePath();
+        setIsDrawing(false);
+
+        if(connection.connectionStarted){
+            try{
+                await connection.send('SendPotez', sobaId,'stop');
+                
+            }catch(e){
+                console.log(e);
+            }
+        }
+    }
+
+     const draw = async ({nativeEvent})=>{
+        if(!isDrawing)
+            return;
+
+        //const {offsetX, offsetY} =nativeEvent;
+        const offsetX=nativeEvent.layerX;
+        const offsetY=nativeEvent.layerY;
+        if(offsetX >600 || offsetY >600)
+            return;
+        contextRef.current.lineTo(offsetX, offsetY);
+        contextRef.current.stroke();
+
+        if(connection.connectionStarted){
+            try{
+                await connection.send('SendPotez', sobaId,`${color} ${offsetX} ${offsetY}`);
+                //console.log("Poslao sam" + `${color} ${offsetX} ${offsetY}`)
+            }catch(e){
+                console.log(e);
+            }
+        }
+    }
+
+    const hexToRGB =(hex)=>{
+        const rgbObj=hexRgb(color);
+        return `rgb(${rgbObj.red},${rgbObj.green},${rgbObj.blue} )`
+      }
+
+    const handleChangeColor = (updatedColor)=>{
+        setColor(updatedColor.hex);
+        contextRef.current.strokeStyle=hexToRGB(color);
+    }
+
     const sendMessage = async (user, message) => {
         const chatMessage = message;
 
@@ -207,6 +331,7 @@ function Soba()
                     return <li>{el}</li>
                 }))}
             </ul>
+            
             <h1>Enter message:</h1>
             <input type="text" onChange={(event)=>setNewPotez(event.currentTarget.value)}/>
             <button onClick={async ()=>{await sendMessage("proba",newPotez);}}>Send</button>
@@ -219,6 +344,24 @@ function Soba()
                     return <li>{el} {usersInRoomPoints[indeks]}p</li>
                 })}
             </ul>
+            <div>
+                <ChromePicker
+                color={color}
+                disableAlpha={true}
+                onChange={(updatedColor)=>handleChangeColor(updatedColor)}
+                />
+            </div>
+            <div className="kontejnerZaCrtanje">
+                <canvas
+                className="canvasZaCrtanje"
+                onMouseDown={startDrawing}
+                onMouseUp={finishDrawing}
+                onMouseMove={draw}
+                width={`${600}px`}
+                height={`${600}px`}
+                ref={canvasRef}
+                />
+            </div>
         </div>
     );
 

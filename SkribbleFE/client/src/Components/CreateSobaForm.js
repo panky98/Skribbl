@@ -1,6 +1,7 @@
 
 import React, { useState,useEffect,useRef } from 'react';
 import useFetch from "../Services/useFetch"
+import CreateKategorijaForm from './CreateKategorijaForm';
 import Spinner from "./Spinner"
 
 
@@ -11,6 +12,23 @@ function CreateSobaForm()
     const [newNaziv,setNewNaziv]=useState("");
     const [selectedKategorijaId,setSelectedKategorijaId]=useState(-1);
     const {data:kategorije, loading, error}=useFetch("Kategorija/getAllKategorija");
+
+    const [dugmeKategorija, setDugmeKategorija]=useState('Napravi novu kategoriju');
+    const [showKategorijaForm, setShowKategorijaForm]=useState(false);
+
+    const onClickNovaKategorija =(ev)=>
+    {
+        if(dugmeKategorija==='Zatvori')
+        {
+            setDugmeKategorija('Napravi novu kategoriju');
+            setShowKategorijaForm(true);
+        }
+        else
+        {
+            setDugmeKategorija('Zatvori');
+            setShowKategorijaForm(false);
+        }
+    }
 
     if(error) throw error;
     if(loading) return <Spinner/>
@@ -24,11 +42,15 @@ function CreateSobaForm()
                     return <option value={el.id}>{el.naziv}</option>
                 })}
             </select>
-            <button disabled={selectedKategorijaId!=-1?false:true} onClick={()=>{CreateKategorija();}}>Create</button>
+            <button disabled={selectedKategorijaId!=-1?false:true} onClick={()=>{CreateSoba();}}>Create</button>
+
+            <button onClick={()=>onClickNovaKategorija()}>{dugmeKategorija}</button>
+            {showKategorijaForm && <CreateKategorijaForm/>}
         </div>
     )
 
-    function CreateKategorija()
+    
+    function CreateSoba()
     {
         console.log(newNaziv+" "+selectedKategorijaId);
         setShowSpinner(true);
