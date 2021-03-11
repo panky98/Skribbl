@@ -233,8 +233,8 @@ function Soba()
 
         context.scale(2,2);
         context.lineCap="round";
-        context.strokeStyle="black";
-        //context.strokeStyle=hexToRGB(color);
+        //context.strokeStyle="black";
+        context.strokeStyle=hexToRGB(color);
         context.lineWidth=5;
         contextRef.current=context;
     }, [])

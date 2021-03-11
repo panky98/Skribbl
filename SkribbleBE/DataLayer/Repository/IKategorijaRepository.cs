@@ -7,6 +7,6 @@ namespace DataLayer.Repository
 {
     public interface IKategorijaRepository : IRepository<Kategorija>
     {
-
+        Kategorija getKategorijaByName(string name);
     }
 }

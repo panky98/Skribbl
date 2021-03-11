@@ -86,5 +86,19 @@ namespace SkribbleBE.Controllers
                 return BadRequest(e.ToString());
             }
         }
+
+        [HttpGet]
+        [Route("getKategorijaByName/{name}")]
+        public async Task<IActionResult> GetKategorijaByName([FromRoute(Name ="name")]string name)
+        {
+            try
+            {
+                return new JsonResult(this.kategorijaService.getKategorijaByName(name));
+            }
+            catch(Exception e)
+            {
+                return BadRequest(e.ToString());
+            }
+        }
     }
 }

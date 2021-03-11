@@ -103,5 +103,13 @@ namespace DataLayer.Services
             else
                 return null;
         }
+        public KategorijaDTO getKategorijaByName(string name)
+        {
+            Kategorija k = this.unitOfWork.KategorijaRepository.getKategorijaByName(name);
+            if (k != null)
+                return new KategorijaDTO(k.Id, k.Naziv);
+            else
+                return null;
+        }
     }
 }

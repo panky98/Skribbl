@@ -8,6 +8,7 @@ import Sobe from "./Components/Sobe"
 import Soba from "./Components/Soba"
 import LogIn from './Components/LogIn.js';
 import SignUp from './Components/SignUp.js';
+import Kategorije from './Components/Kategorije';
 
 function App() {
   return (
@@ -23,6 +24,7 @@ function App() {
       <Route exact path="/Soba/:sobaId" component={Soba}></Route>
       <Route exact path="/LogIn" component={LogIn}></Route>
       <Route exact path="/SignUp" component={SignUp}></Route>
+      <Route exact path="/Kategorije" component={Kategorije}></Route>
       <Route  path="*">
         <Error />
       </Route>

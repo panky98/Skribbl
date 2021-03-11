@@ -20,6 +20,12 @@ function NavBar() {
            
           </li> 
           <li>
+          <Link to="/Kategorije">
+          Kategorije
+            </Link>
+           
+          </li> 
+          <li>
           <Link to="/LogIn">
                 LogIn
             </Link>
