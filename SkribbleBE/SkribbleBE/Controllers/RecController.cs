@@ -57,12 +57,12 @@ namespace SkribbleBE.Controllers
         }
 
         [HttpGet]
-        [Route("getThreeWordsFromCategory/{idKateg}")]
-        public async Task<IActionResult> GetThreeWordsFromCategory([FromRoute(Name="idKateg")] int idKateg)
+        [Route("getThreeWordsFromCategory/{idKateg}/{groupName}")]
+        public async Task<IActionResult> GetThreeWordsFromCategory([FromRoute(Name="idKateg")] int idKateg, [FromRoute(Name = "groupName")] string groupName)
         {
             try
             {
-                return new JsonResult(this.recService.getThreeRecFromKategorija(idKateg));
+                return new JsonResult(this.recService.getThreeRecFromKategorija(idKateg,groupName));
             }
             catch (Exception e)
             {
