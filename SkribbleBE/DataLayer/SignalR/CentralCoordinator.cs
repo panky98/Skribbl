@@ -1,4 +1,6 @@
-﻿using Microsoft.AspNetCore.SignalR;
+﻿using DataLayer.DTOs;
+using DataLayer.Services;
+using Microsoft.AspNetCore.SignalR;
 using Microsoft.Extensions.Hosting;
 using ServiceStack.Redis;
 using System;
@@ -14,6 +16,8 @@ namespace DataLayer.SignalR
     {
         private System.Timers.Timer timer;
         private readonly IHubContext<PotezHub> hub;
+        private readonly KorisnikService _korisnikService;
+        private readonly KorisniciPoSobiService _korisniciPoSobiService;
         readonly RedisClient redisClinet = new RedisClient(Config.SingleHost);
         private string groupName;
 
@@ -28,10 +32,12 @@ namespace DataLayer.SignalR
             }
         }
 
-        public CentralCoordinator(IHubContext<PotezHub> hub)
+        public CentralCoordinator(IHubContext<PotezHub> hub, KorisnikService kS, KorisniciPoSobiService kPS)
         {
             this.hub = hub;
             this.timer = new System.Timers.Timer(1000);
+            _korisnikService = kS;
+            _korisniciPoSobiService = kPS;
         }
 
         public void StartTimer()
@@ -58,6 +64,25 @@ namespace DataLayer.SignalR
                     }
                     else
                     {
+                        //persistance of points
+                        IDictionary<string, string> parovi = redisClinet.GetAllEntriesFromHash("groupHashPoints:" + groupName);
+                        foreach (string kljuc in parovi.Keys)
+                        {
+                            int id = _korisnikService.findIdByUsername(kljuc);
+                            KorisnikPoSobiDTO obj = new KorisnikPoSobiDTO()
+                            {
+                                Poeni = Convert.ToInt32(parovi[kljuc]),
+                                Korisnik = new KorisnikDTO()
+                                {
+                                    Id = id
+                                },
+                                Soba = new SobaDTO()
+                                {
+                                    Id = Convert.ToInt32(groupName.Substring(4))
+                                }
+                            };
+                            _korisniciPoSobiService.AddNewKorisniciPoSobi(obj);
+                        }
                         await hub.Clients.Group(groupName).SendAsync("FinishedGame");
                     }
                 }
@@ -85,10 +110,10 @@ namespace DataLayer.SignalR
             return base.StopAsync(cancellationToken);            
         }
 
-        //public void Dispose()
-        //{
-        //    //timer.Dispose();
-        //}
+        public override void Dispose()
+        {
+            
+        }
 
         protected override Task ExecuteAsync(CancellationToken stoppingToken)
         {

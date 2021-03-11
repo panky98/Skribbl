@@ -1,4 +1,5 @@
-﻿using DataLayer.Services;
+﻿using DataLayer.DTOs;
+using DataLayer.Services;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.SignalR;
 using ServiceStack.Redis;
@@ -6,24 +7,23 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Security.Claims;
-using System.Text;
-using System.Threading;
 using System.Threading.Tasks;
-using System.Timers;
 
 namespace DataLayer.SignalR
 {
     [Authorize]
     public class PotezHub : Hub
     {
-        private readonly ProjekatContext _context;
         private readonly PotezService _potezService;
+        private readonly KorisnikService _korisnikService;
+        private readonly KorisniciPoSobiService _korisniciPoSobiService;
         readonly RedisClient redis = new RedisClient(Config.SingleHost);
 
-        public PotezHub(ProjekatContext pc,PotezService potezService)
+        public PotezHub(PotezService potezService,KorisnikService kS,KorisniciPoSobiService kPS)
         {
-            _context = pc;
             _potezService=potezService;
+            _korisnikService = kS;
+            _korisniciPoSobiService = kPS;
         }
         public async Task SendMessage(string groupName,string message)
         {
@@ -77,6 +77,26 @@ namespace DataLayer.SignalR
                     }
                     else
                     {
+                        //persistance of points
+                        IDictionary<string,string> parovi=redis.GetAllEntriesFromHash("groupHashPoints:" + groupName);
+                        foreach(string kljuc in parovi.Keys)
+                        {
+                            int id=_korisnikService.findIdByUsername(kljuc);
+                            KorisnikPoSobiDTO obj = new KorisnikPoSobiDTO()
+                            {
+                                Poeni = Convert.ToInt32(parovi[kljuc]),
+                                Korisnik = new KorisnikDTO()
+                                {
+                                    Id=id
+                                },
+                                Soba = new SobaDTO()
+                                { 
+                                    Id=Convert.ToInt32(groupName.Substring(4))
+                                }
+                            };
+                            _korisniciPoSobiService.AddNewKorisniciPoSobi(obj);
+                        }    
+
                         await Clients.Groups(groupName).SendAsync("FinishedGame");
                     }
 
@@ -173,5 +193,13 @@ namespace DataLayer.SignalR
             redis.Set<int>("groupTimer:" + groupName, 30);
             redis.Remove("groupGuessed:"+groupName);
         }
+
+        protected override void Dispose(bool disposing)
+        {
+            //da se izbegne brisanje objekata koji su injektovani preko DI
+            //jer se unisti ceo njihov life ciklus, konkretno za context baze podataka
+            //za njih sam DependencyInjection vodi racuna i ne treba da ih brise Hub nakon izvrsenja metode svaki put
+        }
+
     }
 }

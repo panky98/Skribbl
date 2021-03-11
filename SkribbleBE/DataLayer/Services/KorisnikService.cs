@@ -67,5 +67,10 @@ namespace DataLayer.Services
         {
             return this.unitOfWork.KorisnikRepository.FindByUsername(username);
         }
+
+        public int findIdByUsername(string username)
+        {
+            return this.unitOfWork.KorisnikRepository.FindIdByUsername(username);
+        }
     }
 }

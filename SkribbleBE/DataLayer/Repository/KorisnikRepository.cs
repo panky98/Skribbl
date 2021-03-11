@@ -22,5 +22,14 @@ namespace DataLayer.Repository
                 return true;
             return false;
         }
+
+        public int FindIdByUsername(string username)
+        {
+            Korisnik k = korisnici.Where(x => x.Username == username).FirstOrDefault();
+            if (k != null)
+                return k.Id;
+            else
+                return -1;
+        }
     }
 }
