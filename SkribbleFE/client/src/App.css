@@ -38,6 +38,7 @@
 }
 
 .lds-container {
+  
   width: 100%;
   z-index: 500000;
   top: 0;
@@ -76,7 +77,7 @@
   width: 250px;
   height: 400px;
   padding: 30px;
-
+  border-radius: 25px;
   font-size: 20px;
   font-family: Arial, Helvetica, sans-serif;
   color: white;
@@ -121,34 +122,35 @@
 }
 
 #buttonLogin {
-  height: 30px;
+  height: 32px;
   width: 250px;
   background-color: rgb(41, 44, 61);
   color: white;
   font-size: 15px;
+  
   border: none;
   border-radius: 0;
-
   font-weight: 0;
   font-family: Arial, Helvetica, sans-serif;
 }
 #buttonSingUp {
   height: 30px;
   width: 250px;
-
   border-radius: 0;
   background-color: rgb(242, 93, 89);
   color: white;
   font-size: 15px;
   border: none;
+  margin-top: 40px;
   font-family: Arial, Helvetica, sans-serif;
   font-weight: 0;
 }
 .divSignup {
+  border-radius: 25px;
   width: 250px;
   height: 400px;
   padding: 30px;
-
+  padding-top: 150px;
   font-size: 17px;
   font-family: fantasy;
   color: rgb(54, 65, 71);
@@ -184,6 +186,7 @@
 }
 /**************************/
 .proba {
+  border-radius: 25px;
   width: 310px;
   height: 340px;
   background-color: rgb(242, 93, 89);
@@ -210,6 +213,7 @@
   }
 }
 .proba2 {
+  border-radius: 25px;
   width: 310px;
   height: 340px;
   background-color: rgb(242, 93, 89);
@@ -231,6 +235,7 @@
 @keyframes mymove2 {
   0% {
     transform: translate(0, 0);
+    background-color: rgb(41, 44, 61);
   }
   100% {
     transform: translate(-310px, 0);
@@ -239,7 +244,7 @@
 
 .effect {
   display: flex;
-
+  border-radius: 25px;
   width: 620px;
   height: 500px;
 
@@ -250,11 +255,13 @@
   display: inline-block;
 }*/
 .effect1 {
+  border-radius: 25px;
   width: 310px;
   height: 500px;
   background-color: rgb(242, 93, 84);
 }
 .effect2 {
+  border-radius: 25px;
   width: 310px;
   height: 500px;
   background-color: rgb(41, 44, 61);
@@ -262,7 +269,8 @@
 .aaa {
   width: 310px;
 }
-
+#text{
+}
 .kontejnerZaCrtanje {
   width: 600px;
   height: 600px;

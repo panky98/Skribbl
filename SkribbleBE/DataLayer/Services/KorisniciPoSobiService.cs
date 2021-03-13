@@ -5,16 +5,19 @@ using System;
 using System.Collections.Generic;
 using System.Linq.Expressions;
 using System.Text;
+using System.Linq;
 
 namespace DataLayer.Services
 {
     public class KorisniciPoSobiService
     {
         private UnitOfWork unitOfWork;
+        private KorisnikService KorisnikService;
 
         public KorisniciPoSobiService(ProjekatContext projekatContext)
         {
             this.unitOfWork = new UnitOfWork(projekatContext);
+            KorisnikService = new KorisnikService(projekatContext);
         }
         public void AddNewKorisniciPoSobi(KorisnikPoSobiDTO k)
         {
@@ -185,6 +188,30 @@ namespace DataLayer.Services
             }
             return returnList;
         }
-       
+        public IList<KorisnikDTO> GetTopTenUsers()
+        {
+            IList<KorisnikDTO> returnList = new List<KorisnikDTO>();
+            IDictionary<string, int> leaderboard = new Dictionary<string, int>();
+
+            foreach (KorisnikPoSobi k in this.unitOfWork.KorisniciPoSobiRepository.GetAllRooms())
+            {
+                if (!leaderboard.ContainsKey(k.Korisnik.Username))
+                {
+                    leaderboard.Add(k.Korisnik.Username, 0);
+                }
+                leaderboard[k.Korisnik.Username] +=k.Poeni;
+                
+            }
+            foreach(KeyValuePair<string,int> User in leaderboard)
+            {
+                int userId=KorisnikService.findIdByUsername(User.Key);
+                int numberOfGames = this.unitOfWork.KorisniciPoSobiRepository.GetNumberOfGames(userId);
+                returnList.Add(new KorisnikDTO(User.Value, User.Key, numberOfGames.ToString()));
+                
+            }
+            returnList= returnList.OrderByDescending(x => x.Id).Take(10).ToList();
+            return returnList;
+        }
+
     }
 }

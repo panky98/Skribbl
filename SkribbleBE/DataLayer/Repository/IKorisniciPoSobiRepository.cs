@@ -11,5 +11,7 @@ namespace DataLayer.Repository
         void DeleteAllByRoomId(int idSoba);
         void DeleteAllByUserdId(int idKorisnik);
         IList<Korisnik> GetAllUsersByRoomId(int idSoba);
+        IList<KorisnikPoSobi> GetAllRooms();
+        int GetNumberOfGames(int idKorisnik);
     }
 }

@@ -50,13 +50,22 @@ namespace DataLayer.Repository
         }
         public IList<Korisnik> GetAllUsersByRoomId(int idSoba)
         {
-            IList<KorisnikPoSobi> korisniciPoSobama = this.korisnici.Include(x => x.Korisnik).Include(x=>x.Soba).Where(x => x.SobaId == idSoba).ToList();
+            IList<KorisnikPoSobi> korisniciPoSobama = this.korisnici.Include(x => x.Korisnik).Include(x=>x.Soba).Where(x => x.SobaId == idSoba).OrderByDescending(x=>x.Poeni).ToList();
             IList<Korisnik> korisnici = new List<Korisnik>();
             foreach (KorisnikPoSobi k in korisniciPoSobama)
             {
                 korisnici.Add(k.Korisnik);
             }
             return korisnici;
+        }
+        public IList<KorisnikPoSobi> GetAllRooms()
+        {
+            return this.korisnici.Include(x => x.Korisnik).OrderByDescending(x => x.Poeni).ToList();
+
+        }
+        public int GetNumberOfGames(int idKorisnik)
+        {
+            return this.korisnici.Where(x => x.KorisnikId == idKorisnik).Count();
         }
     }
 }

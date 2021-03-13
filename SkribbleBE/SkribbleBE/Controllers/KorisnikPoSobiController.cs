@@ -104,5 +104,18 @@ namespace SkribbleBE.Controllers
                 return BadRequest(e.ToString());
             }
         }
+        [HttpGet]
+        [Route("getLeaderboard")]
+        public async Task<IActionResult> GetLeaderboard()
+        {
+            try
+            {
+                return new JsonResult(this.korisniciPoSobiService.GetTopTenUsers());
+            }
+            catch (Exception e)
+            {
+                return BadRequest(e.ToString());
+            }
+        }
     }
 }
