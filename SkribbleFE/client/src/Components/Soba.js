@@ -129,6 +129,31 @@ function Soba()
                         console.log(message);
                         setRemainingTime(message);
                     });
+                    connection.on('SaveReplay', message => {
+                        //poruka o cuvanju replaya, sam tekst poruke je id toka igre za koji se pita da li se cuva:
+                        if (window.confirm('Are you want to save replay from previous round of game?')) {
+                            fetch("https://localhost:44310/TokIgrePoKorisniku/createTokIgrePoKorisniku",{
+                                method:"POST",
+                                headers:{"Content-Type":"application/json",
+                                         "Authorization":"Bearer "+localStorage.getItem("loginToken")
+                                        },
+                                body:JSON.stringify({"tokIgre":parseInt(message),"Korisnik":parseInt(-1)})
+                            }).then(p=>{
+                                if(p.ok){
+                                    alert("Replay succesfly saved");
+                                }
+                                else
+                                {
+                                    console.log("Replay isn't saved : "+p.status);
+
+                                }
+                            }).catch(exc=>{
+                                console.log("Replay isn't saved : "+exc);
+                            })
+                          } else {
+                            // Do nothing!
+                          }
+                    });
                     connection.on('ReceivePotez', message => {
                         //TODO obrada kad se primi iscrtani parametar od hosta
                         //da se iscrta od strane svih ostalih koji pogadjaju
