@@ -10,7 +10,7 @@ namespace DataLayer.DTOs
         
         public int Id { get; set; }
 
-        public long VremePoteza { get; set; }
+        public DateTime VremePoteza { get; set; }
 
         public bool Crtanje { get; set; }
         

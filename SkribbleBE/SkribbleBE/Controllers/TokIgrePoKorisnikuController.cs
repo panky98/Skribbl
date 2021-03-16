@@ -1,19 +1,16 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Security.Claims;
 using System.Threading.Tasks;
 using DataLayer;
 using DataLayer.DTOs;
 using DataLayer.Models;
 using DataLayer.Services;
-using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 
 namespace SkribbleBE.Controllers
 {
-    [Authorize]
     [Route("[controller]")]
     [ApiController]
     public class TokIgrePoKorisnikuController : ControllerBase
@@ -31,12 +28,6 @@ namespace SkribbleBE.Controllers
         {
             try
             {
-                if(tokIgrePoKorisniku.Korisnik==-1)
-                {
-                    IEnumerable<Claim> claims = User.Claims;
-                    Claim idClaim = Enumerable.ElementAt<Claim>(claims, 2);
-                    tokIgrePoKorisniku.Korisnik=Convert.ToInt32(idClaim.Value);
-                }
                 tokIgrePoKorisnikuService.AddNewTokIgrePoKorisniku(tokIgrePoKorisniku);
                 return Ok();
             }

@@ -96,7 +96,7 @@ namespace DataLayer.Migrations
                     b.Property<bool>("Crtanje")
                         .HasColumnType("bit");
 
-                    b.Property<int>("KorisnikId")
+                    b.Property<int?>("KorisnikId")
                         .HasColumnType("int");
 
                     b.Property<string>("ParametarLinije")
@@ -108,11 +108,11 @@ namespace DataLayer.Migrations
                     b.Property<string>("TekstPoruke")
                         .HasColumnType("nvarchar(max)");
 
-                    b.Property<int>("TokIgreId")
+                    b.Property<int?>("TokIgreId")
                         .HasColumnType("int");
 
-                    b.Property<long>("VremePoteza")
-                        .HasColumnType("bigint");
+                    b.Property<DateTime>("VremePoteza")
+                        .HasColumnType("datetime2");
 
                     b.HasKey("Id");
 
@@ -254,15 +254,11 @@ namespace DataLayer.Migrations
                 {
                     b.HasOne("DataLayer.Models.Korisnik", "Korisnik")
                         .WithMany("Potezi")
-                        .HasForeignKey("KorisnikId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
+                        .HasForeignKey("KorisnikId");
 
                     b.HasOne("DataLayer.Models.TokIgre", "TokIgre")
                         .WithMany("Potezi")
-                        .HasForeignKey("TokIgreId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
+                        .HasForeignKey("TokIgreId");
 
                     b.Navigation("Korisnik");
 

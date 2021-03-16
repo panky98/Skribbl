@@ -13,7 +13,7 @@ namespace DataLayer.Models
         [Key]
         public int Id { get; set; }
 
-        public long VremePoteza { get; set; }
+        public DateTime VremePoteza { get; set; }
 
         [Required]
         public bool Crtanje { get; set; }
@@ -27,9 +27,6 @@ namespace DataLayer.Models
 
         public string ParametarLinije { get; set; }
 
-        public int KorisnikId { get; set; }
-        public int TokIgreId { get; set; }
-        
         [ForeignKey("KorisnikId")]
         //[JsonIgnore]
         public Korisnik Korisnik { get; set; }
@@ -53,12 +50,13 @@ namespace DataLayer.Models
         public void  NapraviOdDTO(PotezDTO potezDTO)
         {
             Id = potezDTO.Id;
+            VremePoteza = potezDTO.VremePoteza;
             Crtanje = potezDTO.Crtanje;
             Poruka = potezDTO.Poruka;
             TekstPoruke = potezDTO.TekstPoruke;
             BojaLinije = potezDTO.BojaLinije;
             ParametarLinije = potezDTO.ParametarLinije;
-            VremePoteza = potezDTO.VremePoteza;
+
         }
     }
 }

@@ -30,18 +30,10 @@ namespace DataLayer.SignalR
             var identity = (ClaimsIdentity)Context.User.Identity;
             IEnumerable<Claim> claims = identity.Claims;
             Claim ime = Enumerable.ElementAt<Claim>(claims, 0);
-            Claim idClaim = Enumerable.ElementAt<Claim>(claims, 2);
-            DateTimeOffset dtOffset = new DateTimeOffset(DateTime.Now);
 
             var recZaPogadjanje = redis.Get<object>("groupWord:" + groupName);
             if(recZaPogadjanje!=null && (string)recZaPogadjanje==message)
             {
-                if(redis.Get<string>("groupTokIgre:"+groupName)!=null)
-                {
-                    redis.EnqueueItemOnList("groupMessages:" + groupName, dtOffset.ToUnixTimeMilliseconds().ToString()+"-"+ idClaim.Value+"-"+ime.Value + "has gussed the word!");
-                }
-
-
                 await Clients.OthersInGroup(groupName).SendAsync("ReceiveMessage", ime.Value + "has gussed the word!");
                 await Clients.Caller.SendAsync("GussedWord", "You have gussed the word!");
                 
@@ -68,62 +60,6 @@ namespace DataLayer.SignalR
                 if (Convert.ToInt32(counter) == (Convert.ToInt32(redis.Get<string>("groupCounter:" + groupName)) - 1))
                 {
                     //svi pogodili prelazak na sl hosta
-
-                    //persistance of moves
-                    IList<string> poruke = redis.GetAllItemsFromList("groupMessages:" + groupName);
-                    IList<string> potezi = redis.GetAllItemsFromList("groupMoves:" + groupName);
-
-                    if (poruke != null)
-                    {
-                        foreach (string poruka in poruke)
-                        {
-                            string[] splitStrings = poruka.Split("-");
-                            string tekst = "";
-                            for (int i = 2; i < splitStrings.Length; i++)
-                            {
-                                if (i == 2)
-                                    tekst += splitStrings[i];
-                                else
-                                    tekst += "-" + splitStrings[i];
-                            }
-
-                            PotezDTO potezPersistance = new PotezDTO()
-                            {
-                                KorisnikId = Convert.ToInt32(splitStrings[1]),
-                                TokIgreId = Convert.ToInt32(redis.Get<string>("groupTokIgre:" + groupName)),
-                                Poruka = true,
-                                TekstPoruke = tekst,
-                                VremePoteza = Convert.ToInt64(splitStrings[0]),
-                                Crtanje = false
-                            };
-                            _potezService.AddNewPotez(potezPersistance);
-                        }
-                        redis.Remove("groupMessages:" + groupName);
-                    }
-
-                    if (potezi != null)
-                    {
-                        foreach (string potez in potezi)
-                        {
-                            string[] splitStrings = potez.Split("-");
-                            PotezDTO potezPersistance = new PotezDTO()
-                            {
-                                KorisnikId = Convert.ToInt32(splitStrings[1]),
-                                TokIgreId = Convert.ToInt32(redis.Get<string>("groupTokIgre:" + groupName)),
-                                Poruka = false,
-                                Crtanje = true,
-                                VremePoteza = Convert.ToInt64(splitStrings[0]),
-                                ParametarLinije = splitStrings[2]
-                            };
-                            _potezService.AddNewPotez(potezPersistance);
-                        }
-                        redis.Remove("groupMoves:" + groupName);
-                    }
-
-                    //slanje svima poruke da li hoce da sacuvaju replay
-                    await Clients.Group(groupName).SendAsync("SaveReplay", redis.Get<string>("groupTokIgre:" + groupName));   
-                    redis.Remove("groupTokIgre:" + groupName);
-
                     redis.DequeueItemFromList("groupLeft:" + groupName);
                     string newHostConnectionId = redis.GetItemFromList("groupLeft:" + groupName, (int)(redis.GetListCount("groupLeft:" + groupName)-1));
                     if (newHostConnectionId!=null)
@@ -159,7 +95,8 @@ namespace DataLayer.SignalR
                                 }
                             };
                             _korisniciPoSobiService.AddNewKorisniciPoSobi(obj);
-                        }
+                        }    
+
                         await Clients.Groups(groupName).SendAsync("FinishedGame");
                     }
 
@@ -167,29 +104,14 @@ namespace DataLayer.SignalR
             }
             else
             {
-                if (redis.Get<string>("groupTokIgre:" + groupName) != null)
-                {
-                    redis.EnqueueItemOnList("groupMessages:" + groupName, dtOffset.ToUnixTimeMilliseconds().ToString() + "-" + idClaim.Value + "-" + ime.Value + ": " + message);
-                }
                 await Clients.OthersInGroup(groupName).SendAsync("ReceiveMessage", ime.Value + ": " + message);
             }
         }
 
         public async Task SendPotez(string groupName, string message)
         {
-            var identity = (ClaimsIdentity)Context.User.Identity;
-            IEnumerable<Claim> claims = identity.Claims;
-            Claim ime = Enumerable.ElementAt<Claim>(claims, 0);
-            Claim idClaim = Enumerable.ElementAt<Claim>(claims, 2);
-            DateTimeOffset dtOffset = new DateTimeOffset(DateTime.Now);
-
-
             await Clients.OthersInGroup(groupName).SendAsync("ReceivePotez", message);
             //TODO add persistance of move!
-            if (redis.Get<string>("groupTokIgre:" + groupName) != null)
-            {
-                redis.EnqueueItemOnList("groupMoves:" + groupName, dtOffset.ToUnixTimeMilliseconds().ToString() + "-"+ idClaim.Value+"-"+message);
-            }
         }
 
         public async Task AddToGroup(string groupName)
