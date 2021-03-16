@@ -39,6 +39,7 @@ namespace DataLayer.Services
             {
                 tokoviIgreDTO.Add(new TokIgreDTO(t));
             }
+            this.unitOfWork.Commit();
             return tokoviIgreDTO;
         }
         public IList<TokIgreDTO> GetAllWithIncludes(params Expression<Func<TokIgre, object>>[] includes)
@@ -89,8 +90,8 @@ namespace DataLayer.Services
             //this.unitOfWork.TokIgreRepository.Update(tokIgre);
 
 
-            tokIgre.Potezi = this.unitOfWork.PotezRepository.VratiPotezeTokaIgre(tokIgreDTO.Id);
-            tokIgre.TokIgrePoKorisniku = this.unitOfWork.TokIgrePoKorisnikuRepository.VratiTokIgrePoKorisnikuZaTokIgre(tokIgreDTO.Id);
+            tokIgre.Potezi = this.unitOfWork.PotezRepository.VratiPotezeTokaIgre(tokIgre.Id);
+            tokIgre.TokIgrePoKorisniku = this.unitOfWork.TokIgrePoKorisnikuRepository.VratiTokIgrePoKorisnikuZaTokIgre(tokIgre.Id);
             //this.unitOfWork.Commit();
             //prvo moramo obrisati sve poteze i tokove igre po korisniku...i jos nesto ako ima
 
@@ -117,6 +118,19 @@ namespace DataLayer.Services
         {
             TokIgre tokIgre= this.unitOfWork.TokIgreRepository.GetOne(id);
             return new TokIgreDTO(tokIgre);
+        }
+
+        public void DeleteAllUnusedTokIgre()
+        {
+            ICollection<TokIgre> allTokIgre = this.unitOfWork.TokIgreRepository.GetAll();
+            foreach(TokIgre t in allTokIgre)
+            {
+                IList<TokIgrePoKorisniku> tempList=this.unitOfWork.TokIgrePoKorisnikuRepository.VratiTokIgrePoKorisnikuZaTokIgre(t.Id);
+                if(tempList==null || tempList.Count==0)
+                {
+                    this.DeleteTokIgreAsync(null, t);
+                }
+            }
         }
     }
 }

@@ -104,6 +104,7 @@ namespace SkribbleBE
             services.AddScoped<SobaService>();
             services.AddScoped<KorisniciPoSobiService>();
             services.AddScoped<CentralCoordinator>();
+            services.AddHostedService<CleanupService>();
             
             // services.AddScoped<DataLayer.Repository.KorisnikRepository>();
 

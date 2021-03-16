@@ -99,5 +99,13 @@ namespace DataLayer.Services
             TokIgrePoKorisniku tokIgrePoKorisniku= this.unitOfWork.TokIgrePoKorisnikuRepository.GetOne(id);
             return new TokIgrePoKorisnikuDTO(tokIgrePoKorisniku);
         }
+
+        public int GetCountByTokIgreId(int tokIgreId)
+        {
+            IList<TokIgrePoKorisniku> retList = this.unitOfWork.TokIgrePoKorisnikuRepository.VratiTokIgrePoKorisnikuZaTokIgre(tokIgreId);
+            int val = retList.Count;
+            this.unitOfWork.Commit();
+            return val;
+        }
     }
 }
