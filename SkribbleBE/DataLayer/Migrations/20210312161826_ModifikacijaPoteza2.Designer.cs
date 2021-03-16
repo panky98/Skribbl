@@ -4,14 +4,16 @@ using DataLayer;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 namespace DataLayer.Migrations
 {
     [DbContext(typeof(ProjekatContext))]
-    partial class ProjekatContextModelSnapshot : ModelSnapshot
+    [Migration("20210312161826_ModifikacijaPoteza2")]
+    partial class ModifikacijaPoteza2
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -111,8 +113,8 @@ namespace DataLayer.Migrations
                     b.Property<int>("TokIgreId")
                         .HasColumnType("int");
 
-                    b.Property<long>("VremePoteza")
-                        .HasColumnType("bigint");
+                    b.Property<int>("VremePoteza")
+                        .HasColumnType("int");
 
                     b.HasKey("Id");
 

@@ -65,8 +65,7 @@ namespace DataLayer.Services
 
             potez.NapraviOdDTO(potezDTO);
 
-            potez.TokIgre = this.unitOfWork.TokIgreRepository.GetOneWithIncludes(potezDTO.TokIgreId,
-                p => p.RecZaPogadjanje);
+            potez.TokIgre = this.unitOfWork.TokIgreRepository.GetOne(potezDTO.TokIgreId);
             //korisnik
             potez.Korisnik = this.unitOfWork.KorisnikRepository.GetOne(potezDTO.KorisnikId);
 
