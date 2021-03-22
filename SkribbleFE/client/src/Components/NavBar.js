@@ -1,15 +1,17 @@
 import React from 'react'
 
 import { Link, NavLink } from "react-router-dom";
-
+const activeStyle = {
+  color: "purple",
+};
 function NavBar() {
     return (
 
-      <div>
-      <nav class="navbar navbar-light bg-light">
-        <ul>
-          <li class="navbar-brand">
-            <Link to="/">
+      <header>
+      <nav >
+        <ul >
+          <li>
+            <Link activeStyle={activeStyle} to="/">
                 Skribbl
             </Link>
           </li>    
@@ -20,19 +22,35 @@ function NavBar() {
            
           </li> 
           <li>
-          <Link to="/Kategorije">
+          <Link activeStyle={activeStyle} to="/Kategorije">
           Kategorije
             </Link>
            
           </li> 
-          <li>
-          <Link to="/LogIn">
-                LogIn
+          {window.localStorage.loginToken==null ? <li>
+            
+            <Link activeStyle={activeStyle} to="/LogIn">
+                  LogIn
+              </Link>
+              </li>:
+
+               <li >
+            
+              <Link activeStyle={activeStyle} to="/LogOut" >
+                    Logout
+                </Link>
+                </li> 
+              
+              }
+              <li>
+         
+          <Link activeStyle={activeStyle} to="/Leaderboard">
+                Leaderboard
             </Link>
             </li> 
         </ul>
       </nav>
-      </div>
+      </header>
     )
 }
 

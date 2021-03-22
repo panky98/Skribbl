@@ -17,7 +17,7 @@ function LogIn() {
             <div className="effect">
                 <div className="effect1">
                 <div className="divLogin">
-                Welcome
+                Welcome,
         
                 <p>glad to see you!</p>
         <br/><br/><br/><br/>
