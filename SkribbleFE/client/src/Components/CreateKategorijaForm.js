@@ -86,18 +86,21 @@ function CreateKategorijaForm() {
     return (
         <form>
             {showSpinner && <Spinner/>}
-            <input type="text" placeholder="Naziv nove kategorije"
+            <br/>
+            <input className="form-control" type="text" placeholder="Naziv nove kategorije"
              value={kategorija} onChange={(ev)=>setKategorija(ev.target.value)}/>
-            {alertKategorija && <p style={{color:"red", display:"inline"}}>*Unesite kategoriju!</p>}
-            <div>
-                <label>Unesite novu rec</label>
-                <input type="text" value={novaRec} onChange={(ev)=>setNovaRec(ev.target.value)}/>
-                <button onClick={(ev)=>dodajNovuRec(ev)}>Dodaj novu rec</button>
-            </div>
 
-            <textarea value={sveReci} readOnly/>
+             <br/>
+            {alertKategorija && <p style={{color:"red", display:"inline"}}>*Unesite kategoriju!</p>}
+            
+            <div><label>Unesite novu rec</label> </div>
+            <input className="form-control" type="text" value={novaRec} onChange={(ev)=>setNovaRec(ev.target.value)}/>
+            <div><button className="btn btn-secondary" onClick={(ev)=>dodajNovuRec(ev)}>Dodaj novu rec</button></div>
+            
+
+            <textarea className="form-control" rows="5"  value={sveReci} readOnly/>
             {alertReci && <p style={{color:"red", display:"inline"}}>*Unesite rec za kategoriju {kategorija}!</p>}
-            <div><button onClick={(ev)=>napraviKategoriju(ev)}>Napravi</button></div>
+            <div><button className="btn btn-secondary" onClick={(ev)=>napraviKategoriju(ev)}>Napravi</button></div>
         </form>
     )
 }

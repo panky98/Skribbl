@@ -1,6 +1,7 @@
 import React, {useState} from 'react'
 import useFetch from '../Services/useFetch.js';
 import CreateKategorijaForm from './CreateKategorijaForm.js';
+import ReciDateKategorije from './ReciDateKategorije.js';
 import ReciPoKategoriji from './ReciPoKategoriji.js';
 import Spinner from './Spinner.js';
 
@@ -31,16 +32,24 @@ function Kategorije() {
 
     return (
         <div>
-            <button onClick={()=>onClickNovaKategorija()}>{dugmeKategorija}</button>
+            <button className="btn btn-secondary" onClick={()=>onClickNovaKategorija()}>{dugmeKategorija}</button>
             {showKategorijaForm && <CreateKategorijaForm/>}
-            {kategorije.map(k=>{
-                return(
-                    <div key={k.id}>
-                        <h3>{k.naziv}</h3>
-                        <ReciPoKategoriji id={k.id}/>
-                    </div>
-                )
-            })}
+            <div className="card-columns">
+            
+            <div className="col-sm-6">
+            {/*<div className="card">*/}
+                {kategorije.map(k=>{
+                    return(
+                        <div className="card"  key={k.id}>
+                            <h3 className="card-title">{k.naziv}</h3>
+                            {/*<ReciPoKategoriji id={k.id}/> -->*/}
+                            <ReciDateKategorije kategorijaId={k.id}/>
+                        </div>
+                    )
+                })}
+            </div>
+            </div>
+            
         </div>
     )
 }
