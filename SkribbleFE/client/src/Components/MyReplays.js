@@ -5,7 +5,7 @@ import {ChromePicker} from 'react-color';
 import hexRgb from 'hex-rgb';
 import useFetch from "../Services/useFetch";
 import Spinner from "./Spinner";
-function Soba()
+function MyReplays()
 {    
     const [ connection, setConnection ] = useState(null);
     const [ chat, setChat ] = useState([]);
@@ -28,20 +28,18 @@ function Soba()
     const usersInRoomPointsRef=useState();
     const {sobaId}=useParams();
 
-    const {data:trenutnaSoba, loading, error}=useFetch("Soba/getOneSoba/"+sobaId.slice(4));
+    const {data:trenutnaSoba, loading, error}=useFetch("Soba/getOneSoba/"+11);
     console.log(trenutnaSoba);
-
-    //
+    const {data:tokIgre, loading2, error2}=useFetch("TokIgrePoKorisniku/getOneTokIgrePoKorisniku/"+1);
+    const {data:potezi, loading3, error3}=useFetch("Potez/getAllPotez");
+    console.log(tokIgre);
+    console.log(potezi);
     const canvasRef=useRef(null);
     const contextRef=useRef(null);
     const [isDrawing, setIsDrawing]=useState(false);
     const [color, setColor]=useState('#ffffff');
     const firstDrawing=useRef(true);
-
-
     
-    
-    console.log(sobaId);
     latestChat.current = chat;
     usersInRoomRef.current=usersInRoom;
 
@@ -159,6 +157,9 @@ function Soba()
                           }
                     });
                     connection.on('ReceivePotez', message => {
+                        //TODO obrada kad se primi iscrtani parametar od hosta
+                        //da se iscrta od strane svih ostalih koji pogadjaju
+                        //const color=message.substr(0, message.indexOf(' '));
                        
 
                         if(message==='stop')
@@ -358,25 +359,11 @@ function Soba()
                 }))}
             </ul>
             
-            <h1>Enter message:</h1>
-            <input type="text" onChange={(event)=>setNewPotez(event.currentTarget.value)}/>
-            <button onClick={async ()=>{await sendMessage("proba",newPotez);}}>Send</button>
-            <button onClick={()=>{console.log(amHost);}}>Log</button><br/>
-            {amHost && <div><button onClick={()=>startGame()}>Start</button></div>}
-            <label style={{color:"red"}}>Remaining time {remainingTime}s</label><br/>
-            <label>Users in room: {countUsersInRoom}/4</label>
             <ul>
                 {usersInRoom.map((el,indeks)=>{
                     return <li>{el} {usersInRoomPoints[indeks]}p</li>
                 })}
             </ul>
-            <div>
-                <ChromePicker
-                color={color}
-                disableAlpha={true}
-                onChange={(updatedColor)=>handleChangeColor(updatedColor)}
-                />
-            </div>
             <div className="kontejnerZaCrtanje">
                 <canvas
                 className="canvasZaCrtanje"
@@ -390,11 +377,11 @@ function Soba()
             </div>
         </div>
     );
-
+    const kategorijaId=trenutnaSoba.kategorija.id;
+    const tokIgreId=tokIgre.tokigreid;
     //TODO Hardokiran izbor reci i dautm, treba da se izmeni da nije hardkodirano
     function startGame()
     {
-        var kategorijaId=trenutnaSoba.kategorija.id;
         latestHost.current=false;
         setAmHost(false);
         fetch("https://localhost:44310/Rec/getThreeWordsFromCategory/"+kategorijaId+"/"+sobaId,{
@@ -413,11 +400,11 @@ function Soba()
     function continueStartGame()
     {
         var date=new Date().toISOString();
-        console.log(date);
+        date=date.split(0,date.length()-1);
         fetch("https://localhost:44310/TokIgre/createTokIgre",{
             method:"POST",
             headers:{"Content-Type":"application/json"},
-            body:JSON.stringify({"pocetakIgre":"2020-12-12T00:00:00","recZaPogadjanjeId":parseInt(chosenWordIdRef.current),"sobaId":parseInt(sobaId.slice(4,sobaId.length))})
+            body:JSON.stringify({"pocetakIgre":"\""+date+"\"","recZaPogadjanjeId":parseInt(chosenWordIdRef.current),"sobaId":parseInt(sobaId.slice(4,sobaId.length))})
         }).then(p=>{
             if(p.ok)
             {
@@ -437,4 +424,4 @@ function Soba()
     }
 }
 
-export default Soba;
+export default MyReplays;
