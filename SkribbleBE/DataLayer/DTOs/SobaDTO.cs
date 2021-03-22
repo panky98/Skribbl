@@ -9,6 +9,7 @@ namespace DataLayer.DTOs
     {
         public int Id { get; set; }
         public string Naziv { get; set; }
+        public bool Status { get; set; }
         public KategorijaDTO Kategorija { get; set; }
         [JsonIgnore]
         public IList<TokIgreDTO> TokoviIgre { get; set; }

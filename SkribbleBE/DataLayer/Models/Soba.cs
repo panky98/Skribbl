@@ -19,6 +19,7 @@ namespace DataLayer.Models
         [Required(ErrorMessage = "Naziv sobe je obavezan")]
         [MinLength(5, ErrorMessage = "Minimalna duzina naziva sobe je 5"), MaxLength(20, ErrorMessage = "Maksimalna duzina naziva sobe je 20")]
         public string Naziv { get; set; }
+        public bool Status { get; set; }
         [ForeignKey("KategorijaId")]
         public Kategorija Kategorija { get; set; }
         [JsonIgnore]

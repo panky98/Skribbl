@@ -39,6 +39,20 @@ namespace SkribbleBE.Controllers
                 return BadRequest(e.ToString());
             }
         }
+        [HttpGet]
+        [Route("getAllPotezByTokIgre/{idTokIgre}")]
+        public async Task<IActionResult> GetAllPotezByTokIgre([FromRoute(Name = "idTokIgre")] int id)
+        {
+            try
+            {
+                IList<PotezDTO> potezi = potezService.GetPotezByTokIgre(id);
+                return new JsonResult(potezi);
+            }
+            catch (Exception e)
+            {
+                return BadRequest(e.ToString());
+            }
+        }
 
         [HttpGet]
         [Route("getOnePotez/{idPoteza}")]

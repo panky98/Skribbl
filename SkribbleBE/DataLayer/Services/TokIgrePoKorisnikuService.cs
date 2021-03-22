@@ -107,5 +107,15 @@ namespace DataLayer.Services
             this.unitOfWork.Commit();
             return val;
         }
+        public IList<TokIgrePoKorisnikuDTO> GetTokIgreByKorisnik(int korisnikId)
+        {
+            IList<TokIgrePoKorisniku> tokoviIgrePoKorisniku = (IList<TokIgrePoKorisniku>)this.unitOfWork.TokIgrePoKorisnikuRepository.VratiTokIgrePoKorisnikuZaKorisnika(korisnikId);
+            IList<TokIgrePoKorisnikuDTO> tokoviIgrePoKorisnikuDTO = new List<TokIgrePoKorisnikuDTO>();
+            foreach (var t in tokoviIgrePoKorisniku)
+            {
+                tokoviIgrePoKorisnikuDTO.Add(new TokIgrePoKorisnikuDTO(t));
+            }
+            return tokoviIgrePoKorisnikuDTO;
+        }
     }
 }

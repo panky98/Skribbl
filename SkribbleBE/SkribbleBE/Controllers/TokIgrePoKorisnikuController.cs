@@ -109,5 +109,20 @@ namespace SkribbleBE.Controllers
                 return BadRequest(e.ToString());
             }
         }
+        [HttpGet]
+        [Route("getTokIgrePoKorisnikuZaKorisnika/{idKorisnik}")]
+        public IActionResult GetTokIgrePoKorisnikuZaKorisnika([FromRoute(Name = "idKorisnik")] int idKorisnik)
+        {
+            try
+            {
+
+                IList<TokIgrePoKorisnikuDTO> tokoviIgre = this.tokIgrePoKorisnikuService.GetTokIgreByKorisnik(idKorisnik);
+                return new JsonResult(tokoviIgre);
+            }
+            catch (Exception e)
+            {
+                return BadRequest(e.ToString());
+            }
+        }
     }
 }

@@ -96,5 +96,15 @@ namespace DataLayer.Services
             this.unitOfWork.PotezRepository.Delete(potez);
             this.unitOfWork.Commit();
         }
+        public IList<PotezDTO> GetPotezByTokIgre(int idTokIgre)
+        {
+            IList<Potez> potezi = (IList<Potez>)this.unitOfWork.PotezRepository.VratiPotezeTokaIgre(idTokIgre);
+            IList<PotezDTO> poteziDTO = new List<PotezDTO>();
+            foreach (var p in potezi)
+            {
+                poteziDTO.Add(new PotezDTO(p));
+            }
+            return poteziDTO;
+        }
     }
 }

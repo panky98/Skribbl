@@ -29,5 +29,15 @@ namespace DataLayer.Repository
             return tokoviIgrePoKorisniku;
                 
         }
+        public IList<TokIgrePoKorisniku> VratiTokIgrePoKorisnikuZaKorisnika(int idKorisnika)
+        {
+            IList<TokIgrePoKorisniku> tokoviIgrePoKorisniku =
+                this.tokoviIgrePoKorisniku.Include(t => t.Korisnik)
+                .Where(t => t.Korisnik.Id == idKorisnika)
+                .ToList();
+
+            return tokoviIgrePoKorisniku;
+
+        }
     }
 }

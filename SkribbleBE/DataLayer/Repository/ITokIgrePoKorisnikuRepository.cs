@@ -8,5 +8,6 @@ namespace DataLayer.Repository
     public interface ITokIgrePoKorisnikuRepository :IRepository<TokIgrePoKorisniku>
     {
         IList<TokIgrePoKorisniku> VratiTokIgrePoKorisnikuZaTokIgre(int idTokaIgre);
+        IList<TokIgrePoKorisniku> VratiTokIgrePoKorisnikuZaKorisnika(int idKorisnika);
     }
 }
