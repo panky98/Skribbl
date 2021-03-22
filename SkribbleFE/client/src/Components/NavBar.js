@@ -46,8 +46,15 @@ function NavBar() {
          
           <Link activeStyle={activeStyle} to="/Leaderboard">
                 Leaderboard
-            </Link>
-            </li> 
+          </Link>
+          </li> 
+            {//window.localStorage.loginToken&&<li>
+            //<Link activeStyle={activeStyle} to="/MyReplays">
+            //      My Replays
+            //  </Link>
+            //  </li>
+              
+              }
         </ul>
       </nav>
       </header>

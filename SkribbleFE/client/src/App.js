@@ -11,6 +11,7 @@ import SignUp from './Components/SignUp.js';
 import Kategorije from './Components/Kategorije';
 import Leaderboard from "./Components/Leaderboard"
 import Logout from "./Components/Logout";
+import MyReplays from "./Components/MyReplays";
 
 function App() {
   return (
@@ -29,6 +30,7 @@ function App() {
       <Route exact path="/Kategorije" component={Kategorije}></Route>
       <Route exact path="/Leaderboard" component={Leaderboard}></Route>
       <Route exact path="/Logout" component={Logout}></Route>
+      <Route exact path="/MyReplays" component={MyReplays}></Route>
       <Route  path="*">
         <Error />
       </Route>

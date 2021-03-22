@@ -25,6 +25,7 @@ function Sobe()
     
 
 renderSobe = currentSobe.map( ( soba, index ) => {
+   console.log(soba)
     return <div key={ index }><Link to={`/Soba/Soba${soba.id}`}  className="resultElement">{ soba.naziv }</Link></div>; });
 
    const handlePageChange = ( pageNumber ) => {
