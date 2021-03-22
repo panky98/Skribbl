@@ -50,7 +50,7 @@ renderSobe = currentSobe.map( ( soba, index ) => {
          </div>
       </div>
             <div>
-                <button onClick={(event)=>{setShowForm(!showForm)}}>Dodaj novu sobu</button>
+                <button className="btn btn-secondary" btn-lg onClick={(event)=>{setShowForm(!showForm)}}>Dodaj novu sobu</button>
                 {showForm && <CreateSobaForm/>}
             </div>
         </div>

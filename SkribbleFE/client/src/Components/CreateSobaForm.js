@@ -2,6 +2,7 @@
 import React, { useState,useEffect,useRef } from 'react';
 import useFetch from "../Services/useFetch"
 import CreateKategorijaForm from './CreateKategorijaForm';
+import ReciDateKategorije from './ReciDateKategorije';
 import Spinner from "./Spinner"
 
 
@@ -20,15 +21,20 @@ function CreateSobaForm()
     return(
         <div>
             {showSpinner && <Spinner/>}
-            <label>Naziv sobe: </label> <input type="text" onChange={(event)=>{setNewNaziv(event.currentTarget.value)}}/>
-            <select onChange={(event)=>setSelectedKategorijaId(event.currentTarget.value)}>
-                <option value={-1}>Izaberi kategoriju sobe</option>
+            <label>Naziv sobe: </label>
+            
+            <input className="form-control" type="text" onChange={(event)=>{setNewNaziv(event.currentTarget.value)}}/>
+            <br/>
+            <br/>
+            <select className="form-control" onChange={(event)=>setSelectedKategorijaId(event.currentTarget.value)}>
+                <option  value={-1}>Izaberi kategoriju sobe</option>
                 {kategorije.map(el=>{
                     return <option value={el.id}>{el.naziv}</option>
                 })}
             </select>
-            <button disabled={selectedKategorijaId!=-1?false:true} onClick={()=>{CreateSoba();}}>Create</button>
-
+            {selectedKategorijaId!=-1 && <ReciDateKategorije kategorijaId={selectedKategorijaId}/>}
+            <button className="btn btn-secondary btn-lg" disabled={selectedKategorijaId!=-1?false:true} onClick={()=>{CreateSoba();}}>Create</button>
+            
             
         </div>
     )
