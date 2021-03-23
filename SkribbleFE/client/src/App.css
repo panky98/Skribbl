@@ -74,7 +74,7 @@
   }
 }
 .divLogin {
-  width: 250px;
+  width: 310px;
   height: 400px;
   padding: 30px;
   border-radius: 25px;
@@ -147,7 +147,7 @@
 }
 .divSignup {
   border-radius: 25px;
-  width: 250px;
+  width: 310px;
   height: 400px;
   padding: 30px;
   padding-top: 150px;
@@ -187,6 +187,7 @@
 /**************************/
 .proba {
   border-radius: 25px;
+  box-sizing: initial;
   width: 310px;
   height: 340px;
   background-color: rgb(242, 93, 89);
@@ -214,6 +215,7 @@
 }
 .proba2 {
   border-radius: 25px;
+  box-sizing: initial;
   width: 310px;
   height: 340px;
   background-color: rgb(242, 93, 89);
@@ -247,7 +249,6 @@
   border-radius: 25px;
   width: 620px;
   height: 500px;
-
   margin: 0 auto;
   padding: 20px;
 }
@@ -259,12 +260,14 @@
   width: 310px;
   height: 500px;
   background-color: rgb(242, 93, 84);
+
 }
 .effect2 {
   border-radius: 25px;
   width: 310px;
   height: 500px;
   background-color: rgb(41, 44, 61);
+
 }
 .aaa {
   width: 310px;

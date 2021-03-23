@@ -48,11 +48,11 @@ function NavBar() {
                 Leaderboard
           </Link>
           </li> 
-            {//window.localStorage.loginToken&&<li>
-            //<Link activeStyle={activeStyle} to="/MyReplays">
-            //      My Replays
-            //  </Link>
-            //  </li>
+            {window.localStorage.loginToken&&<li>
+            <Link activeStyle={activeStyle} to={"/MyReplays/"+localStorage.username} >
+                  My Replays
+              </Link>
+              </li>
               
               }
         </ul>
