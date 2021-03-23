@@ -32,7 +32,7 @@ namespace DataLayer.Repository
         public IList<TokIgrePoKorisniku> VratiTokIgrePoKorisnikuZaKorisnika(int idKorisnika)
         {
             IList<TokIgrePoKorisniku> tokoviIgrePoKorisniku =
-                this.tokoviIgrePoKorisniku.Include(t => t.Korisnik)
+                this.tokoviIgrePoKorisniku.Include(t => t.Korisnik).Include(t => t.TokIgre)
                 .Where(t => t.Korisnik.Id == idKorisnika)
                 .ToList();
 

@@ -65,6 +65,8 @@ function LogIn() {
             setShowSpinner(false);
             p.json().then(data=>{
               localStorage.setItem("loginToken",data.token);
+              console.log(data);
+              localStorage.setItem("username",data.userDetails.id);
               window.location.replace("/Sobe");
             });
         }

@@ -18,7 +18,7 @@ function Logout() {
   
  const yes = ()=>{
    localStorage.removeItem("loginToken");
-
+   localStorage.removeItem("username");
     
     history.push("/Login");
     window.location.reload();
