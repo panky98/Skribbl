@@ -133,5 +133,26 @@ namespace DataLayer.Services
             return null;
         }
 
+        public IList<SobaDTO> getAllByCategoryId(int idCateg)
+        {
+            IList<Soba> sobe = this.unitOfWork.SobaRepository.GetAllRoomByCategoryId(idCateg);
+            IList<SobaDTO> retList = new List<SobaDTO>();
+            if(sobe!=null && sobe.Count>0)
+            {
+                foreach(Soba s in sobe)
+                {
+                   SobaDTO newSoba=new SobaDTO()
+                    {
+                        Id=s.Id,
+                        Naziv=s.Naziv
+                    };
+                    Kategorija kateg = this.unitOfWork.KategorijaRepository.GetOne(s.KategorijaId);
+                    newSoba.Kategorija = new KategorijaDTO(kateg.Id, kateg.Naziv);
+                    retList.Add(newSoba);
+                }
+            }
+            return retList;
+        }
+
     }
 }

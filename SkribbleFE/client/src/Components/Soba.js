@@ -344,6 +344,7 @@ function Soba()
         <div>
             <div>
                 {showWordList && <div><select onChange={(ev)=>{chosenWordIdRef.current=ev.currentTarget.value.split(" ")[0];setChosenWordId(chosenWordIdRef.current);setShowWordList(false);setShowChosenWord(true);chosenWordRef.current=ev.currentTarget.value.split(" ")[1];setChosenWord(chosenWordRef.current);continueStartGame();}}>
+                                    <option value="-1">Chose word</option>
                                     {wordList.map(el=>{
                                         return <option value={el.id+" "+el.naziv}>{el.naziv}</option>
                                     })}
