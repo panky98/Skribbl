@@ -28,7 +28,7 @@ function MyReplays()
     const usersInRoomPointsRef=useState();
     const {userId}=useParams();
     const {data:tokIgre, loading2, error2}=useFetch("TokIgrePoKorisniku/getTokIgrePoKorisnikuZaKorisnika/"+userId);
-    const {data:potezi, loading3, error3}=useFetch("Potez/getAllPotezByTokIgre/"+13);
+    const {data:potezi, loading3, error3}=useFetch("Potez/getAllPotezByTokIgre/"+15);
     console.log(tokIgre);
     console.log(potezi);
     const canvasRef=useRef(null);
@@ -78,6 +78,7 @@ function MyReplays()
         let start=potezi[1];
         let startTime=potezi[0].vremePoteza;
         let startPoint=potezi[1];
+        let moving=0;
         for(let i=2;i<potezi.length;i++){
             let j=i-1;
             while(potezi[j].parametarLinije==null||potezi[j].parametarLinije=="stop")
@@ -98,13 +99,16 @@ function MyReplays()
                 continue;                        
                 
             }
+            setTimeout(function(){
              if(potezi[i].parametarLinije=="stop")
                 {
-                    continue;
+                    console.log("pomeranje");
+                    moving=1;
                 }
+                else{
                 
                
-                    setTimeout(function(){
+                   
                         var parameters=potezi[i].parametarLinije.split(" ");
                         var parametersStart=start.parametarLinije.split(" ");
 
@@ -114,12 +118,17 @@ function MyReplays()
                         
                         const offsetXold=parametersStart[1];
                         const offsetYold=parametersStart[2];
-                        //console.log(offsetXold,offsetYold);
-                        console.log(offsetX);
-                        
+                        if(moving==1)
+                        {
+                            contextRef.current.moveTo(offsetX,offsetY);
+                            console.log("Pomeram se");
+                            moving=0;
+                        }
+                        else{
                         contextRef.current.lineTo(offsetX, offsetY); 
                         contextRef.current.stroke();
-
+                        }
+                    }
                      },  potezi[i].vremePoteza-startTime);
                         
             /* setTimeout(function(){
@@ -169,8 +178,10 @@ function MyReplays()
             <div className="kontejnerZaCrtanje">
                
                 <canvas
-                width="1026" height="754"
                 className="canvasZaCrtanje"
+                width={`${600}px`}
+                height={`${600}px`}
+                
                 ref={canvasRef}
                 />
             </div>
