@@ -87,5 +87,19 @@ namespace SkribbleBE.Controllers
                 return BadRequest(e.ToString());
             }
         }
+
+        [HttpGet]
+        [Route("getAllByCategory/{idKateg}")]
+        public async Task<IActionResult> GetAllByCategoryId([FromRoute(Name ="idKateg")]int idKateg)
+        {
+            try
+            {
+                return new JsonResult(this.sobaService.getAllByCategoryId(idKateg));
+            }
+            catch(Exception e)
+            {
+                return BadRequest(e.ToString());
+            }
+        }
     }
 }
