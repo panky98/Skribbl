@@ -47,7 +47,7 @@ function CreateSobaForm()
         fetch("https://localhost:44310/Soba/createSoba",{
             method:"POST",
             headers:{"Content-Type":"application/json","Authorization":"Bearer "+localStorage.getItem("loginToken")},
-            body: JSON.stringify({"naziv":newNaziv,"kategorija":{"id":parseInt(selectedKategorijaId)}})
+            body: JSON.stringify({"naziv":newNaziv,"kategorija":{"id":parseInt(selectedKategorijaId)},"status":true})
         }).then(p=>{
             if(p.ok){
                 setShowSpinner(false);

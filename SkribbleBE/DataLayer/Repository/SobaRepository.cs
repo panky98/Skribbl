@@ -28,7 +28,7 @@ namespace DataLayer.Repository
         }
         public IList<Soba> GetAllRoomByCategoryId(int idKateg)
         {
-            return this.sobe.Where(x => x.KategorijaId == idKateg).ToList();
+            return this.sobe.Where(x => x.KategorijaId == idKateg&&x.Status==true).ToList();
         }
 
 

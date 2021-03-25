@@ -7,37 +7,32 @@ import Pagination from "react-js-pagination";
 function Sobe()
 {
     const[showForm,setShowForm]=useState(false);
-    const {data:sobe, loading, error}=useFetch("Soba/getAllSoba");
-    const {data:kategorije, loadingKateogorije, errorKategorije}=useFetch("Kategorija/getAllKategorija");
+    const[sobe,setSobe]=useState([]);
     const sobePerPage = 2;
    const [ activePage, setCurrentPage ] = useState( 1 );
    const[showSpinner,setShowSpinner]=useState(false);
-   const niz=sobe;
-    console.log("cekaju se sobe" +sobe);
-    console.log(niz);
+   const[filterSobe,setFilterSobe]=useState(false);
+   const {data:kategorije, loading, error}=useFetch("Kategorija/getAllKategorija");
    // Logic for displaying current todos
- 
-   if(error) throw error;
-   if(loading) return <Spinner/>
    let indexOfLastSoba  = activePage * sobePerPage;
    let indexOfFirstSoba = indexOfLastSoba - sobePerPage;
    let currentSobe;
-   let renderSobe;
-   currentSobe=sobe.slice( indexOfFirstSoba, indexOfLastSoba );
-
-   if(errorKategorije) throw error;
-   if(loadingKateogorije) return <Spinner/>
-    
-
-renderSobe = currentSobe.map( ( soba, index ) => {
-   console.log(soba)
-    return <div key={ index }><Link to={`/Soba/Soba${soba.id}`}  className="resultElement">{ soba.naziv }</Link></div>; });
-
+   const [renderSobe,setRenderSobe]=useState([]);
    const handlePageChange = ( pageNumber ) => {
       console.log( `active page is ${ pageNumber }` );
       setCurrentPage( pageNumber )
+      let indexOfLastSoba  = activePage * sobePerPage;
+      let indexOfFirstSoba = indexOfLastSoba - sobePerPage;
+      currentSobe=sobe.slice( indexOfFirstSoba, indexOfLastSoba );
+      setRenderSobe(currentSobe.map( ( soba, index ) => {
+         return <div key={ index }><Link to={`/Soba/Soba${soba.id}`} className="resultElement">{ soba.naziv }</Link></div>; }));
+        
    };
-    console.log(sobe);
+   if(error) throw error;
+   if(loading) return <Spinner/>
+   console.log(kategorije);
+   console.log(renderSobe);
+   
     return(
         <div>
          {showSpinner && <Spinner/> }
@@ -52,19 +47,23 @@ renderSobe = currentSobe.map( ( soba, index ) => {
                    })
                 }
              </select>
-          </div>
+       </div>
+          {filterSobe&&                    
          <div className="result">
-            { renderSobe }
-         </div>
+            { console.log(renderSobe)}
+            {renderSobe }
+         </div>}
+         {filterSobe&&
          <div className="pagination">
             <Pagination
                activePage={ activePage }
                itemsCountPerPage={ 2 }
-               totalItemsCount={ sobe.length }
+               totalItemsCount={sobe.length }
                pageRangeDisplayed={ 3 }
                onChange={ handlePageChange }
             />
          </div>
+         }
       </div>
             <div>
                 <button className="btn btn-secondary" btn-lg onClick={(event)=>{setShowForm(!showForm)}}>Dodaj novu sobu</button>
@@ -87,10 +86,15 @@ renderSobe = currentSobe.map( ( soba, index ) => {
                if(p.ok)
                {
                   p.json().then(data=>{
+
+                     setSobe(data);
                      setCurrentPage(1);
-                     indexOfLastSoba  = 1 * sobePerPage;
+                     indexOfLastSoba  = activePage * sobePerPage;
                      indexOfFirstSoba = indexOfLastSoba - sobePerPage;
                      currentSobe=data.slice( indexOfFirstSoba, indexOfLastSoba );
+                     setRenderSobe(currentSobe.map( ( soba, index ) => {
+                        return <div key={ index }><Link to={`/Soba/Soba${soba.id}`} className="resultElement">{ soba.naziv }</Link></div>; }));
+                       
                      setShowSpinner(false);
                   })
                }
@@ -109,11 +113,17 @@ renderSobe = currentSobe.map( ( soba, index ) => {
                if(p.ok)
                {
                   p.json().then(data=>{
+                     console.log("ovde sam");
+                     setSobe(data);
                      setCurrentPage(1);
-                     indexOfLastSoba  = 1 * sobePerPage;
+                     indexOfLastSoba  = activePage * sobePerPage;
                      indexOfFirstSoba = indexOfLastSoba - sobePerPage;
-                     currentSobe=data.slice( indexOfFirstSoba, indexOfLastSoba );
+                     currentSobe= data.slice( indexOfFirstSoba, indexOfLastSoba );
+                     setRenderSobe(currentSobe.map( ( soba, index ) => {
+                        return <div key={ index }><Link to={`/Soba/Soba${soba.id}`} className="resultElement">{ soba.naziv } </Link></div>; }));
+                         setFilterSobe(true);
                      setShowSpinner(false);
+                     console.log(renderSobe);
                   })
                }
             }).catch(exc=>{
