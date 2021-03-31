@@ -26,7 +26,8 @@ namespace DataLayer.Services
             {
                 Id = s.Id,
                 Naziv = s.Naziv,
-                Kategorija = this.unitOfWork.KategorijaRepository.GetOne(s.Kategorija.Id)
+                Kategorija = this.unitOfWork.KategorijaRepository.GetOne(s.Kategorija.Id),
+                Status=s.Status
             };
             this.unitOfWork.SobaRepository.Add(soba);
             this.unitOfWork.Commit();

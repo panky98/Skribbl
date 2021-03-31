@@ -295,6 +295,7 @@ function Soba()
         //const {offsetX, offsetY} =nativeEvent;
         const offsetX=nativeEvent.layerX;
         const offsetY=nativeEvent.layerY;
+        console.log(offsetX,offsetY);
         if(offsetX >600 || offsetY >600)
             return;
         contextRef.current.lineTo(offsetX, offsetY);

@@ -30,6 +30,10 @@ namespace DataLayer.Repository
         {
             return this.sobe.Where(x => x.KategorijaId == idKateg&&x.Status==true).ToList();
         }
+        public override ICollection<Soba> GetAll()
+        {
+            return this.sobe.Where(x => x.Status == true).ToList();
+        }
 
 
     }

@@ -28,7 +28,7 @@ function MyReplays()
     const usersInRoomPointsRef=useState();
     const {userId}=useParams();
     const {data:tokIgre, loading2, error2}=useFetch("TokIgrePoKorisniku/getTokIgrePoKorisnikuZaKorisnika/"+userId);
-    const {data:potezi, loading3, error3}=useFetch("Potez/getAllPotezByTokIgre/"+15);
+    const {data:potezi, loading3, error3}=useFetch("Potez/getAllPotezByTokIgre/"+21);
     console.log(tokIgre);
     console.log(potezi);
     const canvasRef=useRef(null);
@@ -70,7 +70,7 @@ function MyReplays()
         const context=canvas.getContext("2d");
         contextRef.current=context; 
         
-        context.scale(2,2);
+       // context.scale(2,2);
         context.lineCap="round";
         context.strokeStyle="#FF0000";
         context.lineWidth=5;
