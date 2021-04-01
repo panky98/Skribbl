@@ -155,5 +155,11 @@ namespace DataLayer.Services
             return retList;
         }
 
+        public void closeSobaById(int idSobe)
+        {
+            this.unitOfWork.SobaRepository.CloseRoomById(idSobe);
+            this.unitOfWork.Commit();
+        }
+
     }
 }

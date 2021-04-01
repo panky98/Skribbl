@@ -35,6 +35,14 @@ namespace DataLayer.Repository
             return this.sobe.Where(x => x.Status == true).ToList();
         }
 
-
+        public void CloseRoomById(int idSobe)
+        {
+            Soba soba = this.GetOne(idSobe);
+            if(soba!=null && soba.Status)
+            {
+                soba.Status = false;
+                this.Update(soba);
+            }
+        }
     }
 }

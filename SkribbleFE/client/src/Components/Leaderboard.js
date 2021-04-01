@@ -18,6 +18,6 @@ function Leaderboard(){
         return content;
       };
       
-    return (<table><thead><tr><td>Place</td><td>Username</td><td>Points</td><td>Games</td><td>Average</td></tr></thead><tbody>{getAnimalsContent(leaderboard)}</tbody></table>);
+    return (<table class="table table-dark table-striped"><thead><tr><td>Place</td><td>Username</td><td>Points</td><td>Games</td><td>Average</td></tr></thead><tbody>{getAnimalsContent(leaderboard)}</tbody></table>);
 }
 export default Leaderboard

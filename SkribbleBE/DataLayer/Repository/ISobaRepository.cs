@@ -10,5 +10,6 @@ namespace DataLayer.Repository
         void DeleteAllByCategoryId(int idKateg);
         IList<Soba> GetAllRoomByCategoryId(int idKateg);
 
+        void CloseRoomById(int idSobe);
     }
 }

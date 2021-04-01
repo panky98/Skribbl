@@ -18,11 +18,13 @@ namespace SkribbleBE.Controllers
     {
         private readonly TokIgreService tokIgreService;
         private readonly CentralCoordinator centralCoordinator;
+        private readonly SobaService sobaService;
 
-        public TokIgreController(ProjekatContext projekatContext, TokIgreService tokIgreService,CentralCoordinator centralCoordinator)
+        public TokIgreController(ProjekatContext projekatContext, TokIgreService tokIgreService,CentralCoordinator centralCoordinator,SobaService sobaService)
         {
             this.tokIgreService = tokIgreService;
             this.centralCoordinator = centralCoordinator;
+            this.sobaService = sobaService;
         }
 
         [HttpPost]
@@ -44,6 +46,8 @@ namespace SkribbleBE.Controllers
         public async Task StartTokIgre([FromRoute(Name ="groupName")] string groupName)
         {
             this.centralCoordinator.GroupName = groupName;
+            int IdSobe = Convert.ToInt32(groupName.Substring(4));
+            this.sobaService.closeSobaById(IdSobe);
             await this.centralCoordinator.StartAsync(System.Threading.CancellationToken.None);
         }
 
