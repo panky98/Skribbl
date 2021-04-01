@@ -8,6 +8,7 @@ using System.Threading.Tasks;
 using Authentication;
 using DataLayer;
 using DataLayer.Models;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
@@ -47,6 +48,13 @@ namespace SkribbleBE.Controllers
                 userDetails = k,
             });
 
+        }
+        [Authorize]
+        [HttpGet]
+        [Route("checkLoginToken")]
+        public async Task<IActionResult> CheckLoginToken()
+        {
+            return Ok();
         }
 
         string GenerateJWTToken(Korisnik userInfo)

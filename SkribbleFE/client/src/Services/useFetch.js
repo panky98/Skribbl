@@ -18,6 +18,7 @@ export default function useFetch(url) {
           const json = await response.json();
           setData(json);
         }else if(response.status==401){
+          localStorage.removeItem("loginToken");
           window.location.replace("/LogIn");
         } 
         else {

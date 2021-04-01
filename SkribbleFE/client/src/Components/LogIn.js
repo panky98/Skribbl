@@ -79,7 +79,6 @@ function LogIn() {
       console.log("Wrong username or password!");
       setShowSpinner(false);
     });
-    
   }
 }
 

@@ -98,6 +98,11 @@ function Sobe()
                      setShowSpinner(false);
                   })
                }
+               else if(p.status==401)
+               {
+                   localStorage.removeItem("loginToken");
+                   window.location.replace("/LogIn");
+               }
             }).catch(exc=>{
                console.log(exc);
             })
@@ -125,6 +130,11 @@ function Sobe()
                      setShowSpinner(false);
                      console.log(renderSobe);
                   })
+               }
+               else if(p.status==401)
+               {
+                   localStorage.removeItem("loginToken");
+                   window.location.replace("/LogIn");
                }
             }).catch(exc=>{
                console.log(exc);

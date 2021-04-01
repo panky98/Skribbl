@@ -146,6 +146,11 @@ function Soba()
                                 if(p.ok){
                                     alert("Replay succesfly saved");
                                 }
+                                else if(p.status==401)
+                                {
+                                    localStorage.removeItem("loginToken");
+                                    window.location.replace("/LogIn");
+                                }
                                 else
                                 {
                                     console.log("Replay isn't saved : "+p.status);

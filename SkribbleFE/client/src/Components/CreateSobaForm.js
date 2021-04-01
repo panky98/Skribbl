@@ -53,6 +53,11 @@ function CreateSobaForm()
                 setShowSpinner(false);
                 window.location.reload();
             }
+            else if(p.status==401)
+            {
+                localStorage.removeItem("loginToken");
+                window.location.replace("/LogIn");
+            }
         }).catch(exc=>{
             console.log("EXCP:" +exc);
             setShowSpinner(false);

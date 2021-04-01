@@ -69,9 +69,18 @@ function CreateKategorijaForm() {
                                         })})
                                         window.location.reload();
                                     });
-                    
-                                    
-                                }});
+                                }
+                                else if(p2.status==401)
+                                {
+                                    localStorage.removeItem("loginToken");
+                                    window.location.replace("/LogIn");
+                                }
+                            });
+                        }
+                        else if(p.status==401)
+                        {
+                            localStorage.removeItem("loginToken");
+                            window.location.replace("/LogIn");
                         }
                 }).catch(ex=>{
                     console.log("EX:"+ex);
