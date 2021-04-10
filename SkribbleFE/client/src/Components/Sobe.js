@@ -4,6 +4,7 @@ import Spinner from "./Spinner"
 import {Link} from 'react-router-dom'
 import CreateSobaForm from './CreateSobaForm';
 import Pagination from "react-js-pagination";
+import {Dialog,DialogTitle,DialogContent} from "@material-ui/core";
 function Sobe()
 {
     const[showForm,setShowForm]=useState(false);
@@ -39,7 +40,8 @@ function Sobe()
        <div>
        <div className="filterPart">
              <label>Filter by category </label>
-             <select onChange={(ev)=>Filter(ev.currentTarget.value)}>
+             <select onChange={(ev)=>Filter(ev.currentTarget.value)} required>
+             <option value="" disabled selected hidden>Select your option</option>
                 <option value="-1">All categories</option>
                 {
                    kategorije.map((el)=>{
@@ -48,12 +50,12 @@ function Sobe()
                 }
              </select>
        </div>
-          {filterSobe&&                    
+          {                    
          <div className="result">
             { console.log(renderSobe)}
             {renderSobe }
          </div>}
-         {filterSobe&&
+         {
          <div className="pagination">
             <Pagination
                activePage={ activePage }
