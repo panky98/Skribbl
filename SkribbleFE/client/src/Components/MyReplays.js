@@ -28,7 +28,7 @@ function MyReplays()
     const usersInRoomPointsRef=useState();
     const {userId}=useParams();
     const {data:tokIgre, loading2, error2}=useFetch("TokIgrePoKorisniku/getTokIgrePoKorisnikuZaKorisnika/"+userId);
-    const {data:potezi, loading3, error3}=useFetch("Potez/getAllPotezByTokIgre/"+21);
+    const {data:potezi, loading3, error3}=useFetch("Potez/getAllPotezByTokIgre/"+32);
     console.log(tokIgre);
     console.log(potezi);
     const canvasRef=useRef(null);
@@ -39,7 +39,7 @@ function MyReplays()
     let text=[];
     latestChat.current = chat;
     usersInRoomRef.current=usersInRoom;
-
+    
 
     useEffect(()=>{
         
@@ -66,13 +66,13 @@ function MyReplays()
     }, [])
 
     const startDrawing = ()=>{
-        const canvas=canvasRef.current;
-        const context=canvas.getContext("2d");
+        let canvas=canvasRef.current;
+        let context=canvas.getContext("2d");
         contextRef.current=context; 
         
        // context.scale(2,2);
         context.lineCap="round";
-        context.strokeStyle="#FF0000";
+        //context.strokeStyle="#FF0000";
         context.lineWidth=5;
         contextRef.current.beginPath();
         let start=potezi[1];
@@ -88,7 +88,7 @@ function MyReplays()
             start=potezi[j];
             if(potezi[i].parametarLinije==null)
             {
-                
+                contextRef.current.beginPath();
                 var node = document.createElement("LI");                 
                 setTimeout(function(){
                     var node1 = document.createElement("LI");   
@@ -102,8 +102,10 @@ function MyReplays()
             setTimeout(function(){
              if(potezi[i].parametarLinije=="stop")
                 {
+                    contextRef.current.beginPath();
                     console.log("pomeranje");
                     moving=1;
+
                 }
                 else{
                 
@@ -115,7 +117,10 @@ function MyReplays()
                         
                         const offsetX=parseInt(parameters[1]);
                         const offsetY=parseInt(parameters[2]);
-                        
+                        console.log(parameters[0]);
+
+                        context.strokeStyle=parameters[0];
+                        console.log(context.strokeStyle);
                         const offsetXold=parametersStart[1];
                         const offsetYold=parametersStart[2];
                         if(moving==1)
@@ -125,9 +130,11 @@ function MyReplays()
                             moving=0;
                         }
                         else{
+
                         contextRef.current.lineTo(offsetX, offsetY); 
                         contextRef.current.stroke();
                         }
+                       
                     }
                      },  potezi[i].vremePoteza-startTime);
                         
