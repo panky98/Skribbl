@@ -27,6 +27,7 @@ function Soba()
     const [usersInRoomPoints,setUsersInRoomPoints]=useState([]);
     const usersInRoomPointsRef=useState();
     const {sobaId}=useParams();
+    const [canDraw,setCanDraw]=useState(false);
 
     const {data:trenutnaSoba, loading, error}=useFetch("Soba/getOneSoba/"+sobaId.slice(4));
     console.log(trenutnaSoba);
@@ -65,8 +66,14 @@ function Soba()
                         updatedChat.push(message);
                         if(message==="HostMessage")
                         {
+
                             latestHost.current=true;
                             setAmHost(true);
+                            setCanDraw(true);
+                            var canvas = document.getElementById("canvas");
+                            var ctx = canvas.getContext("2d");
+                            ctx.clearRect(0, 0, canvas.width, canvas.height); 
+            ctx.beginPath();         
                         }
                         setChat(updatedChat);
                     });
@@ -118,7 +125,6 @@ function Soba()
                         usersInRoomPointsRef.current=usersInRoomPointsUpdate;
                     });
                     connection.on('GussedWord', message => {
-                        //pogodjena rec
                         const updatedChat = [...latestChat.current];
                         updatedChat.push(message);
                         alert("You have guessed the word! Congratulations");
@@ -134,8 +140,10 @@ function Soba()
                         setRemainingTime(message);
                     });
                     connection.on('SaveReplay', message => {
+                       
                         //poruka o cuvanju replaya, sam tekst poruke je id toka igre za koji se pita da li se cuva:
-                        if (window.confirm('Are you want to save replay from previous round of game?')) {
+                        if (window.confirm('Do you want to save the replay of the previous round?')) {
+                           
                             fetch("https://localhost:44310/TokIgrePoKorisniku/createTokIgrePoKorisniku",{
                                 method:"POST",
                                 headers:{"Content-Type":"application/json",
@@ -144,7 +152,7 @@ function Soba()
                                 body:JSON.stringify({"tokIgre":parseInt(message),"Korisnik":parseInt(-1)})
                             }).then(p=>{
                                 if(p.ok){
-                                    alert("Replay succesfly saved");
+                                    alert("Replay successfully saved");
                                 }
                                 else if(p.status==401)
                                 {
@@ -160,6 +168,7 @@ function Soba()
                                 console.log("Replay isn't saved : "+exc);
                             })
                           } else {
+                            
                             // Do nothing!
                           }
                     });
@@ -202,7 +211,7 @@ function Soba()
                     });
                     connection.on('YourTurn', message => {
                         //obavestenje igracu koji je sada na redu da objasnjava rec
-                        alert("Your turn, press start and chose WORD!")
+                        alert("Your turn, press start and chose a word!")
                     });
                     connection.on('SwitchedTurn', message => {
                         //obavestenje svim ostalima ko je sada na potezu!
@@ -210,6 +219,11 @@ function Soba()
                         updatedChat.push(message);
                         setChat(updatedChat);
                         setAmHost(false);
+                        setCanDraw(false);
+                        var canvas = document.getElementById("canvas");
+                        var ctx = canvas.getContext("2d");
+                        ctx.clearRect(0, 0, canvas.width, canvas.height); 
+                        ctx.beginPath();         
                         setShowChosenWord(false);
                     });
                     connection.on('UpdatePoints', message => {
@@ -294,6 +308,8 @@ function Soba()
     }
 
      const draw = async ({nativeEvent})=>{
+         if(!canDraw)
+            return;
         if(!isDrawing)
             return;
 
@@ -389,6 +405,7 @@ function Soba()
                 className="canvasZaCrtanje"
                 onMouseDown={startDrawing}
                 onMouseUp={finishDrawing}
+                id="canvas"
                 onMouseMove={draw}
                 width={`${600}px`}
                 height={`${600}px`}
@@ -404,6 +421,10 @@ function Soba()
         var kategorijaId=trenutnaSoba.kategorija.id;
         latestHost.current=false;
         setAmHost(false);
+        var canvas = document.getElementById("canvas");
+                        var ctx = canvas.getContext("2d");
+                        ctx.clearRect(0, 0, canvas.width, canvas.height); 
+        ctx.beginPath();         
         fetch("https://localhost:44310/Rec/getThreeWordsFromCategory/"+kategorijaId+"/"+sobaId,{
             method:"GET"
         }).then(p=>{

@@ -4,7 +4,6 @@ import Spinner from "./Spinner"
 import {Link} from 'react-router-dom'
 import CreateSobaForm from './CreateSobaForm';
 import Pagination from "react-js-pagination";
-import {Dialog,DialogTitle,DialogContent} from "@material-ui/core";
 function Sobe()
 {
     const[showForm,setShowForm]=useState(false);

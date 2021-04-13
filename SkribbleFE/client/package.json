@@ -10,6 +10,7 @@
     "bootstrap": "^4.6.0",
     "hex-rgb": "^4.2.0",
     "react": "^17.0.1",
+    "react-chat-elements": "^10.14.0",
     "react-color": "^2.19.3",
     "react-dom": "^17.0.1",
     "react-js-pagination": "^3.0.3",

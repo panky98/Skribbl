@@ -38,12 +38,12 @@ namespace DataLayer.SignalR
             {
                 if(redis.Get<string>("groupTokIgre:"+groupName)!=null)
                 {
-                    redis.EnqueueItemOnList("groupMessages:" + groupName, dtOffset.ToUnixTimeMilliseconds().ToString()+"-"+ idClaim.Value+"-"+ime.Value + "has gussed the word!");
+                    redis.EnqueueItemOnList("groupMessages:" + groupName, dtOffset.ToUnixTimeMilliseconds().ToString()+"-"+ idClaim.Value+"-"+ime.Value + " has guessed the word!");
                 }
 
 
-                await Clients.OthersInGroup(groupName).SendAsync("ReceiveMessage", ime.Value + "has gussed the word!");
-                await Clients.Caller.SendAsync("GussedWord", "You have gussed the word!");
+                await Clients.OthersInGroup(groupName).SendAsync("ReceiveMessage", ime.Value + " has guessed the word!");
+                await Clients.Caller.SendAsync("GussedWord", "You have guessed the word!");
                 
                 //dodavanje poena
                 int poeniNovi = 50 * Convert.ToInt32(redis.Get<int>("groupTimer:" + groupName)) / 30;
