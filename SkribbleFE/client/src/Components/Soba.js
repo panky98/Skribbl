@@ -5,6 +5,8 @@ import {ChromePicker} from 'react-color';
 import hexRgb from 'hex-rgb';
 import useFetch from "../Services/useFetch";
 import Spinner from "./Spinner";
+import Dialog from "rc-dialog";
+import "rc-dialog/assets/index.css";
 function Soba()
 {    
     const [ connection, setConnection ] = useState(null);
@@ -28,6 +30,12 @@ function Soba()
     const usersInRoomPointsRef=useState();
     const {sobaId}=useParams();
     const [canDraw,setCanDraw]=useState(false);
+    const [dialogVisible,setdialogVisibility]=useState(false);
+    const[dialogTitle,setDialogTitle]=useState("");
+    const[hasButtons,setHasButtons]=useState(false);
+    const[buttonValue,setbuttonValue]=useState(false);
+    const [replayParameter,setReplayParameter]=useState("test");
+   
 
     const {data:trenutnaSoba, loading, error}=useFetch("Soba/getOneSoba/"+sobaId.slice(4));
     console.log(trenutnaSoba);
@@ -66,14 +74,13 @@ function Soba()
                         updatedChat.push(message);
                         if(message==="HostMessage")
                         {
-
-                            latestHost.current=true;
+                               latestHost.current=true;
                             setAmHost(true);
                             setCanDraw(true);
                             var canvas = document.getElementById("canvas");
                             var ctx = canvas.getContext("2d");
                             ctx.clearRect(0, 0, canvas.width, canvas.height); 
-            ctx.beginPath();         
+                        ctx.beginPath();         
                         }
                         setChat(updatedChat);
                     });
@@ -127,46 +134,27 @@ function Soba()
                     connection.on('GussedWord', message => {
                         const updatedChat = [...latestChat.current];
                         updatedChat.push(message);
-                        alert("You have guessed the word! Congratulations");
+                        setDialogTitle("Congratulations, you have guessed the word!");
+                        setdialogVisibility(true); 
                         setChat(updatedChat);
                     });
                     connection.on('FinishedGame', message => {
                         //kraj igre, prosle sve runde
-                        alert("Game has finished!");
+                        setDialogTitle("Game has finished! Do you want to save the replay of the previous round?");
+                                    setdialogVisibility(true); 
                     });
                     connection.on('Timer', message => {
                         //primanje tajmera u rundi
                         console.log(message);
                         setRemainingTime(message);
                     });
-                    connection.on('SaveReplay', message => {
-                       
-                        //poruka o cuvanju replaya, sam tekst poruke je id toka igre za koji se pita da li se cuva:
-                        if (window.confirm('Do you want to save the replay of the previous round?')) {
-                           
-                            fetch("https://localhost:44310/TokIgrePoKorisniku/createTokIgrePoKorisniku",{
-                                method:"POST",
-                                headers:{"Content-Type":"application/json",
-                                         "Authorization":"Bearer "+localStorage.getItem("loginToken")
-                                        },
-                                body:JSON.stringify({"tokIgre":parseInt(message),"Korisnik":parseInt(-1)})
-                            }).then(p=>{
-                                if(p.ok){
-                                    alert("Replay successfully saved");
-                                }
-                                else if(p.status==401)
-                                {
-                                    localStorage.removeItem("loginToken");
-                                    window.location.replace("/LogIn");
-                                }
-                                else
-                                {
-                                    console.log("Replay isn't saved : "+p.status);
+                    connection.on('SaveReplay', message => {   
+                        setReplayParameter(message);                    
+                        setHasButtons(true);
+                        setDialogTitle("Do you want to save the replay of the previous round?");
+                        setdialogVisibility(true);                   
+                        if (buttonValue==true) {
 
-                                }
-                            }).catch(exc=>{
-                                console.log("Replay isn't saved : "+exc);
-                            })
                           } else {
                             
                             // Do nothing!
@@ -211,7 +199,8 @@ function Soba()
                     });
                     connection.on('YourTurn', message => {
                         //obavestenje igracu koji je sada na redu da objasnjava rec
-                        alert("Your turn, press start and chose a word!")
+                        setDialogTitle("Your turn, press start and choose a word!");
+                                    setdialogVisibility(true); 
                     });
                     connection.on('SwitchedTurn', message => {
                         //obavestenje svim ostalima ko je sada na potezu!
@@ -357,7 +346,8 @@ function Soba()
             }
         }
         else {
-            alert('No connection to server yet.');
+            setDialogTitle("No connection to the server.");
+            setdialogVisibility(true); 
         }
     }
 
@@ -374,6 +364,47 @@ function Soba()
                                 </div>}
                 {showChosenWord &&<h1>{chosenWord}</h1>}
             </div>
+           
+                    <Dialog visible={dialogVisible} title={dialogTitle}>
+                    { !hasButtons&&<button onClick={()=>{setbuttonValue(true);
+                         setdialogVisibility(false);
+                         setHasButtons(false);}}>OK</button>}
+                       { hasButtons&&<button onClick={()=>{setbuttonValue(true);
+
+                        console.log(replayParameter) ;  
+                         fetch("https://localhost:44310/TokIgrePoKorisniku/createTokIgrePoKorisniku",{
+                            method:"POST",
+                            headers:{"Content-Type":"application/json",
+                                     "Authorization":"Bearer "+localStorage.getItem("loginToken")
+                                    },
+                            body:JSON.stringify({"tokIgre":parseInt(replayParameter),"Korisnik":parseInt(-1)})
+                        }).then(p=>{
+                            if(p.ok){
+                                setdialogVisibility(false); 
+                                setDialogTitle("Replay successfully saved!");
+                                setdialogVisibility(true); 
+                            }
+                            else if(p.status==401)
+                            {
+                                localStorage.removeItem("loginToken");
+                                window.location.replace("/LogIn");
+                            }
+                            else
+                            {
+                                console.log("Replay isn't saved : "+p.status);
+
+                            }
+                        }).catch(exc=>{
+                            console.log("Replay isn't saved : "+exc);
+                        });
+                        setdialogVisibility(false);
+                        setHasButtons(false); }}>Yes</button>}
+
+                       { hasButtons&&<button onClick={()=>{setbuttonValue(false);
+                         setdialogVisibility(false);
+                         setHasButtons(false);}}>No</button>}
+                    </Dialog>
+           
             <h1>Potezi:</h1>
             <ul>
                 {chat.map((el=>{

@@ -5,6 +5,7 @@ import {ChromePicker} from 'react-color';
 import hexRgb from 'hex-rgb';
 import useFetch from "../Services/useFetch";
 import Spinner from "./Spinner";
+import TextField from "@material-ui/core/TextField";
 function Replay()
 {    
     const [ connection, setConnection ] = useState(null);
@@ -37,7 +38,8 @@ function Replay()
     let text=[];
     latestChat.current = chat;
     usersInRoomRef.current=usersInRoom;
-    
+    const [messages,setMessages]=useState("");
+    let messagesT="";
 
     useEffect(()=>{
         
@@ -93,9 +95,9 @@ function Replay()
                 setTimeout(function(){
                     var node1 = document.createElement("LI");   
                     const sec = Math.floor((potezi[i].vremePoteza-startTime)/1000);              
-                var textnode1 = document.createTextNode(""+sec+ ": "+potezi[i].tekstPoruke);   
-
-                node1.appendChild(textnode1); document.getElementById("Reci").appendChild(node1); }, potezi[i].vremePoteza-startTime); 
+                messagesT= messagesT+"\n"+sec+ ": "+potezi[i].tekstPoruke;
+                setMessages(messagesT);
+}, potezi[i].vremePoteza-startTime); 
                 continue;                        
                 
             }
@@ -166,18 +168,16 @@ function Replay()
         <div>
             <div>
             </div>
-            <h1>Potezi:</h1>
-            <ul>
-                {chat.map((el=>{
-                    return <li>{el}</li>
-                }))}
-            </ul>
-            
-            <ul id="Reci">
-                {usersInRoom.map((el,indeks)=>{
-                    return <li>{el} {usersInRoomPoints[indeks]}p</li>
-                })}
-            </ul>
+            <h1>Potezi:</h1>  
+            <TextField
+          id="outlined-multiline-static"
+          multiline
+          rows={6}
+          defaultValue={messages}
+          variant="outlined"
+          disabled
+        />        
+
             <button onClick={startDrawing}>Klikni me</button>
             <div className="kontejnerZaCrtanje">
                

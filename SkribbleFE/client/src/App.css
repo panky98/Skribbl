@@ -370,3 +370,7 @@ a{
 .resultElement{
   color:red;
 }
+#outlined-multiline-static{
+  color: aliceblue;
+  width:300px;
+}

@@ -4,12 +4,12 @@ import {Link} from 'react-router-dom';
 import { Redirect } from "react-router-dom";
 
 
+
 function LogIn() {
     
     const [username, setUsername] = useState("");
     const [password, setPassword] = useState("");
     const [showSpinner,setShowSpinner] = useState(false);
-
 
     return (
         <div>
@@ -49,7 +49,7 @@ function LogIn() {
           </Link>
         
       </div>
-
+ 
     </div>
         </div>
     )
