@@ -16,6 +16,8 @@ namespace DataLayer.DTOs
 
         public int RecZaPogadjanjeId { get; set; }
 
+        public string Naziv { get; set; }
+
         public TokIgreDTO()
         {
 
@@ -27,6 +29,7 @@ namespace DataLayer.DTOs
                 SobaId = tokIgre.Soba.Id;
             Id = tokIgre.Id;
             PocetakIgre = tokIgre.PocetakIgre;
+            Naziv = tokIgre.Naziv;
             if(tokIgre.RecZaPogadjanje!=null)
                 RecZaPogadjanjeId = tokIgre.RecZaPogadjanje.Id;
         }

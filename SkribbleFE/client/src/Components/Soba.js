@@ -44,7 +44,7 @@ function Soba()
     const canvasRef=useRef(null);
     const contextRef=useRef(null);
     const [isDrawing, setIsDrawing]=useState(false);
-    const [color, setColor]=useState('#ffffff');
+    const [color, setColor]=useState('#000000');
     const firstDrawing=useRef(true);
 
 
@@ -198,8 +198,10 @@ function Soba()
 
                     });
                     connection.on('YourTurn', message => {
+                        
+
                         //obavestenje igracu koji je sada na redu da objasnjava rec
-                        setDialogTitle("Your turn, press start and choose a word!");
+                        setDialogTitle("Your turn, press start and choose a word!Do you want to save the replay of the previous round?");
                                     setdialogVisibility(true); 
                     });
                     connection.on('SwitchedTurn', message => {
@@ -476,7 +478,7 @@ function Soba()
         fetch("https://localhost:44310/TokIgre/createTokIgre",{
             method:"POST",
             headers:{"Content-Type":"application/json"},
-            body:JSON.stringify({"pocetakIgre":"2020-12-12T00:00:00","recZaPogadjanjeId":parseInt(chosenWordIdRef.current),"sobaId":parseInt(sobaId.slice(4,sobaId.length))})
+            body:JSON.stringify({"pocetakIgre":date,"naziv":""+date+" "+newPotez+" "+sobaId,"recZaPogadjanjeId":parseInt(chosenWordIdRef.current),"sobaId":parseInt(sobaId.slice(4,sobaId.length))})
         }).then(p=>{
             if(p.ok)
             {

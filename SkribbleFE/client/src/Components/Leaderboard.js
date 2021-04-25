@@ -12,7 +12,7 @@ function Leaderboard(){
         let content = [];
         for (let i = 0; i < leaderboard.length; i++) {
           const item = leaderboard[i];
-          content.push(<tr key={i}><td>{i+1}</td><td>{item.username}</td><td>{item.id}</td><td>{item.password}</td><td>{item.id/item.password}</td></tr>);
+          content.push(<tr key={i}><td>{i+1}</td><td>{item.username}</td><td>{item.id}</td><td>{item.password}</td><td>{( item.id/item.password).toFixed(2)}</td></tr>);
         }
         console.log(content);
         return content;

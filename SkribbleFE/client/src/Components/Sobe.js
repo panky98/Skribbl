@@ -95,7 +95,7 @@ function Sobe()
                      currentSobe=data.slice( indexOfFirstSoba, indexOfLastSoba );
                      setRenderSobe(currentSobe.map( ( soba, index ) => {
                         return <div key={ index }><Link to={`/Soba/Soba${soba.id}`} className="resultElement">{ soba.naziv }</Link></div>; }));
-                       
+                       console.log(renderSobe);
                      setShowSpinner(false);
                   })
                }

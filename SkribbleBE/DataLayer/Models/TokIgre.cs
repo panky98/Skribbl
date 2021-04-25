@@ -23,6 +23,8 @@ namespace DataLayer.Models
         //[JsonIgnore]
         public Rec RecZaPogadjanje { get; set; }
 
+        public string Naziv { get; set; }
+
         [JsonIgnore]
         public IList<Potez> Potezi { get; set; }
 
@@ -40,6 +42,7 @@ namespace DataLayer.Models
         {
             Id = tokIgreDTO.Id;
             PocetakIgre = tokIgreDTO.PocetakIgre;
+            Naziv = tokIgreDTO.Naziv;
 
             //nema potrebe, pre se poziva ctor
             /*
