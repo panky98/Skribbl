@@ -7,6 +7,7 @@ import useFetch from "../Services/useFetch";
 import Spinner from "./Spinner";
 import Dialog from "rc-dialog";
 import "rc-dialog/assets/index.css";
+import TextField from "@material-ui/core/TextField";
 function Soba()
 {    
     const [ connection, setConnection ] = useState(null);
@@ -35,8 +36,6 @@ function Soba()
     const[hasButtons,setHasButtons]=useState(false);
     const[buttonValue,setbuttonValue]=useState(false);
     const [replayParameter,setReplayParameter]=useState("test");
-   
-
     const {data:trenutnaSoba, loading, error}=useFetch("Soba/getOneSoba/"+sobaId.slice(4));
     console.log(trenutnaSoba);
 
@@ -72,6 +71,7 @@ function Soba()
                     connection.on('ReceiveMessage', message => {
                         const updatedChat = [...latestChat.current];
                         updatedChat.push(message);
+                        updatedChat.push("\n");
                         if(message==="HostMessage")
                         {
                                latestHost.current=true;
@@ -103,6 +103,7 @@ function Soba()
                         //korisnik se prikljucio sobi
                         const updatedChat = [...latestChat.current];
                         updatedChat.push(message);
+                        updatedChat.push("\n");
                         setChat(updatedChat);
                         const updatedListOfUsers=[...usersInRoomRef.current];
                         updatedListOfUsers.push(message.split(" ")[0]);
@@ -118,6 +119,7 @@ function Soba()
                         //korisnik napustio sobu
                         const updatedChat = [...latestChat.current];
                         updatedChat.push(message);
+                        updatedChat.push("\n");
                         setChat(updatedChat);
 
                         const updatedListOfUsers=[...usersInRoomRef.current];
@@ -134,6 +136,7 @@ function Soba()
                     connection.on('GussedWord', message => {
                         const updatedChat = [...latestChat.current];
                         updatedChat.push(message);
+                        updatedChat.push("\n");
                         setDialogTitle("Congratulations, you have guessed the word!");
                         setdialogVisibility(true); 
                         setChat(updatedChat);
@@ -208,6 +211,7 @@ function Soba()
                         //obavestenje svim ostalima ko je sada na potezu!
                         const updatedChat = [...latestChat.current];
                         updatedChat.push(message);
+                        updatedChat.push("\n");
                         setChat(updatedChat);
                         setAmHost(false);
                         setCanDraw(false);
@@ -340,6 +344,7 @@ function Soba()
             try {
                 const updatedChat = [...latestChat.current];
                 updatedChat.push(message);
+                updatedChat.push("\n");
                 setChat(updatedChat);
                 await connection.send('SendMessage',sobaId,chatMessage);
             }
@@ -406,33 +411,39 @@ function Soba()
                          setdialogVisibility(false);
                          setHasButtons(false);}}>No</button>}
                     </Dialog>
-           
-            <h1>Potezi:</h1>
-            <ul>
-                {chat.map((el=>{
-                    return <li>{el}</li>
-                }))}
-            </ul>
-            
-            <h1>Enter message:</h1>
-            <input type="text" onChange={(event)=>setNewPotez(event.currentTarget.value)}/>
-            <button onClick={async ()=>{await sendMessage("proba",newPotez);}}>Send</button>
-            <button onClick={()=>{console.log(amHost);}}>Log</button><br/>
-            {amHost && <div><button onClick={()=>startGame()}>Start</button></div>}
-            <label style={{color:"red"}}>Remaining time {remainingTime}s</label><br/>
-            <label>Users in room: {countUsersInRoom}/4</label>
-            <ul>
-                {usersInRoom.map((el,indeks)=>{
-                    return <li>{el} {usersInRoomPoints[indeks]}p</li>
-                })}
-            </ul>
-            <div>
+          <div className="mainDiv">
+              <div className="childDiv">
+             
                 <ChromePicker
                 color={color}
                 disableAlpha={true}
                 onChange={(updatedColor)=>handleChangeColor(updatedColor)}
                 />
-            </div>
+           
+         <br/>
+         <TextField
+          id="outlined-multiline-static"
+          multiline
+          rows={10}
+          defaultValue={chat}
+          variant="outlined"
+          disabled
+        />
+        <br/>
+            <input type="text" onChange={(event)=>setNewPotez(event.currentTarget.value)}/>
+            <button onClick={async ()=>{await sendMessage("proba",newPotez);}}>Send</button>
+            <br/>
+            {amHost && <div><button onClick={()=>startGame()}>Start</button></div>}
+            <h5 style={{color:"red"}}>Remaining time {remainingTime}s</h5><br/>
+            <h5>Users in room: {countUsersInRoom}/4</h5>
+            <ul>
+                {usersInRoom.map((el,indeks)=>{
+                    return <li>{el} {usersInRoomPoints[indeks]}p</li>
+                })}
+            </ul>
+            <br/> <br/> <br/> <br/> <br/> <br/> <br/>
+            </div> 
+            <div className="childDiv">
             <div className="kontejnerZaCrtanje">
                 <canvas
                 className="canvasZaCrtanje"
@@ -444,6 +455,8 @@ function Soba()
                 height={`${600}px`}
                 ref={canvasRef}
                 />
+            </div>
+            </div> 
             </div>
         </div>
     );

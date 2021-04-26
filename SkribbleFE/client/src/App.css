@@ -372,5 +372,13 @@ a{
 }
 #outlined-multiline-static{
   color: aliceblue;
-  width:300px;
+  width:400px;
+}
+.mainDiv{
+  display: inline-block;
+
+}
+.childDiv{
+  display: inline-block;
+
 }

@@ -18,6 +18,7 @@ function MyReplays()
     let indexOfFirstReplay = indexOfLastReplay - replaysPerPage;
     let currentReplays;
     let renderReplays;
+    const [loading, setLoading] = useState(true);
     let test=[];
   
      const handlePageChange = ( pageNumber ) => {
@@ -27,7 +28,7 @@ function MyReplays()
          indexOfFirstReplay = indexOfLastReplay - replaysPerPage;
          currentReplays     = data.slice( indexOfFirstReplay, indexOfLastReplay );
          renderReplays = currentReplays.map(t=>{
-             <li><Link to={`/Replay/${t.id}`} className="resultElement">{t.naziv}</Link></li>
+             <div><Link to={`/Replay/${t.id}`} className="resultElement">{t.naziv}</Link></div>
         });
      };
 
@@ -56,16 +57,14 @@ function MyReplays()
          {
              const jsonResponse= await response2.json();
              test.push(jsonResponse);
-             renderReplays.push( <li key={jsonResponse.id}><Link to={`/Replay/${jsonResponse.id}`}>{jsonResponse.naziv}</Link> </li>)
+             console.log(test);
              setData(test);
          }else if(response2.status==401){
             localStorage.removeItem("loginToken");
             window.location.replace("/LogIn");
           } 
 
-          currentReplays     = data.slice( indexOfFirstReplay, indexOfLastReplay );
-     renderReplays = currentReplays.map(t=>{
-         <li><Link to={`/Replay/${t.id}`} className="resultElement">{t.naziv}</Link></li>});
+        
             };
 
             
@@ -77,26 +76,28 @@ function MyReplays()
         catch (e) {
            
           } finally {
+
+            setLoading(false);
             
           }
     }
     init();
      }, []);
      console.log(data);
-
-     currentReplays     = data.slice( indexOfFirstReplay, indexOfLastReplay );
-     
+  currentReplays     = data.slice( indexOfFirstReplay, indexOfLastReplay );
      renderReplays = currentReplays.map(t=>{
-         <li><Link to={`/Replay/${t.id}`} className="resultElement">{t.naziv}</Link></li>});
-
+         <div><Link to={`/Replay/${t.id}`} className="resultElement">{t.naziv}</Link></div>});
    console.log(currentReplays);
     console.log(renderReplays);
     return( 
         
         <div>
-            <ul className="list-group">
-                {data.length!=0&&renderReplays}
-            </ul>
+                    <div>
+         {loading && <Spinner/> }
+</div>
+            <div >
+                {renderReplays}
+            </div>
             <div className="pagination">
             <Pagination
                activePage={ activePage }
