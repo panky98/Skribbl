@@ -19,7 +19,7 @@ function MyReplays()
     let currentReplays;
     let renderReplays;
     const [loading, setLoading] = useState(true);
-    let test=[];
+    //let test=[];
   
      const handlePageChange = ( pageNumber ) => {
         console.log( `active page is ${ pageNumber }` );
@@ -28,7 +28,7 @@ function MyReplays()
          indexOfFirstReplay = indexOfLastReplay - replaysPerPage;
          currentReplays     = data.slice( indexOfFirstReplay, indexOfLastReplay );
          renderReplays = currentReplays.map(t=>{
-             <div><Link to={`/Replay/${t.id}`} className="resultElement">{t.naziv}</Link></div>
+             <div><Link to={`/Replay/${t.id}`}>{t.naziv}</Link></div>
         });
      };
 
@@ -46,6 +46,7 @@ function MyReplays()
          });
          if (response1.ok) {
             const json = await response1.json();
+            let test=[];
             for(let i=0;i<json.length;i++){
                 const response2=await fetch("https://localhost:44310/TokIgre/getOneTokIgre/"+json[i].tokIgre,{
             method:"GET",
@@ -86,7 +87,7 @@ function MyReplays()
      console.log(data);
   currentReplays     = data.slice( indexOfFirstReplay, indexOfLastReplay );
      renderReplays = currentReplays.map(t=>{
-         <div><Link to={`/Replay/${t.id}`} className="resultElement">{t.naziv}</Link></div>});
+         <div><Link to={`/Replay/Replay/${t.id}`} >{t.naziv}</Link></div>});
    console.log(currentReplays);
     console.log(renderReplays);
     return( 
@@ -96,7 +97,7 @@ function MyReplays()
          {loading && <Spinner/> }
 </div>
             <div >
-                {renderReplays}
+                {currentReplays.map(t=><div className="card"  ><Link to={`/Replay/${t.id}`}>{"Naziv:" +t.naziv}</Link></div>)}
             </div>
             <div className="pagination">
             <Pagination
