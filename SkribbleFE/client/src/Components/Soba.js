@@ -38,7 +38,9 @@ function Soba()
     const [replayParameter,setReplayParameter]=useState("test");
     const {data:trenutnaSoba, loading, error}=useFetch("Soba/getOneSoba/"+sobaId.slice(4));
     console.log(trenutnaSoba);
-
+    const latestMessage = useRef(null);
+    const [messages,setMessages]=useState("");
+    let messagesT="";
     //
     const canvasRef=useRef(null);
     const contextRef=useRef(null);
@@ -51,6 +53,7 @@ function Soba()
     
     console.log(sobaId);
     latestChat.current = chat;
+    latestMessage.current=messages;
     usersInRoomRef.current=usersInRoom;
 
 
@@ -71,6 +74,9 @@ function Soba()
                     connection.on('ReceiveMessage', message => {
                         const updatedChat = [...latestChat.current];
                         updatedChat.push(message);
+                        messagesT=[latestMessage.current];
+                        messagesT=messagesT+"\n"+message;
+                        setMessages(messagesT);
                         updatedChat.push("\n");
                         if(message==="HostMessage")
                         {
@@ -102,6 +108,9 @@ function Soba()
                     connection.on('UserIn', message => {
                         //korisnik se prikljucio sobi
                         const updatedChat = [...latestChat.current];
+                        messagesT=[latestMessage.current];
+                        messagesT=messagesT+"\n"+message;
+                        setMessages(messagesT);
                         updatedChat.push(message);
                         updatedChat.push("\n");
                         setChat(updatedChat);
@@ -118,6 +127,9 @@ function Soba()
                     connection.on('UserOut', message => {
                         //korisnik napustio sobu
                         const updatedChat = [...latestChat.current];
+                        messagesT=[latestMessage.current];
+                        messagesT=messagesT+"\n"+message;
+                        setMessages(messagesT);
                         updatedChat.push(message);
                         updatedChat.push("\n");
                         setChat(updatedChat);
@@ -135,6 +147,9 @@ function Soba()
                     });
                     connection.on('GussedWord', message => {
                         const updatedChat = [...latestChat.current];
+                        messagesT=[latestMessage.current];
+                        messagesT=messagesT+"\n"+message;
+                        setMessages(messagesT);
                         updatedChat.push(message);
                         updatedChat.push("\n");
                         setDialogTitle("Congratulations, you have guessed the word!");
@@ -210,6 +225,9 @@ function Soba()
                     connection.on('SwitchedTurn', message => {
                         //obavestenje svim ostalima ko je sada na potezu!
                         const updatedChat = [...latestChat.current];
+                        messagesT=[latestMessage.current];
+                        messagesT=messagesT+"\n"+message;
+                        setMessages(messagesT);
                         updatedChat.push(message);
                         updatedChat.push("\n");
                         setChat(updatedChat);
@@ -343,6 +361,9 @@ function Soba()
         if (connection.connectionStarted) {
             try {
                 const updatedChat = [...latestChat.current];
+                messagesT=[latestMessage.current];
+                messagesT=messagesT+"\n"+message;
+                setMessages(messagesT);
                 updatedChat.push(message);
                 updatedChat.push("\n");
                 setChat(updatedChat);
@@ -425,7 +446,7 @@ function Soba()
           id="outlined-multiline-static"
           multiline
           rows={10}
-          defaultValue={chat}
+          defaultValue={messages}
           variant="outlined"
           disabled
         />
@@ -491,7 +512,7 @@ function Soba()
         fetch("https://localhost:44310/TokIgre/createTokIgre",{
             method:"POST",
             headers:{"Content-Type":"application/json"},
-            body:JSON.stringify({"pocetakIgre":date,"naziv":""+date+" "+newPotez+" "+sobaId,"recZaPogadjanjeId":parseInt(chosenWordIdRef.current),"sobaId":parseInt(sobaId.slice(4,sobaId.length))})
+            body:JSON.stringify({"pocetakIgre":date,"naziv":""+date+" "+sobaId,"recZaPogadjanjeId":parseInt(chosenWordIdRef.current),"sobaId":parseInt(sobaId.slice(4,sobaId.length))})
         }).then(p=>{
             if(p.ok)
             {

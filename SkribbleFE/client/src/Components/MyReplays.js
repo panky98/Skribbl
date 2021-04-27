@@ -97,7 +97,7 @@ function MyReplays()
          {loading && <Spinner/> }
 </div>
             <div >
-                {currentReplays.map(t=><div className="card"  ><Link to={`/Replay/${t.id}`}>{"Naziv:" +t.naziv}</Link></div>)}
+                {currentReplays.map(t=><div className="card"  ><Link to={`/Replay/${t.id}`}>{t.naziv}</Link></div>)}
             </div>
             <div className="pagination">
             <Pagination
