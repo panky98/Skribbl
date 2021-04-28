@@ -21,13 +21,13 @@ function CreateSobaForm()
     return(
         <div>
             {showSpinner && <Spinner/>}
-            <label>Naziv sobe: </label>
+            <label>Name: </label>
             
             <input className="form-control" type="text" onChange={(event)=>{setNewNaziv(event.currentTarget.value)}}/>
             <br/>
             <br/>
             <select className="form-control" onChange={(event)=>setSelectedKategorijaId(event.currentTarget.value)}>
-                <option  value={-1}>Izaberi kategoriju sobe</option>
+                <option  value={-1}>Choose category of the room</option>
                 {kategorije.map(el=>{
                     return <option value={el.id}>{el.naziv}</option>
                 })}

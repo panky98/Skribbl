@@ -8,19 +8,19 @@ import Spinner from './Spinner.js';
 
 
 function Kategorije() {
-    const [dugmeKategorija, setDugmeKategorija]=useState('Napravi novu kategoriju');
+    const [dugmeKategorija, setDugmeKategorija]=useState('Create new category');
     const [showKategorijaForm, setShowKategorijaForm]=useState(false);
 
     const onClickNovaKategorija =(ev)=>
     {
-        if(dugmeKategorija==='Zatvori')
+        if(dugmeKategorija==='Close')
         {
-            setDugmeKategorija('Napravi novu kategoriju');
+            setDugmeKategorija('Create new category');
             setShowKategorijaForm(false);
         }
         else
         {
-            setDugmeKategorija('Zatvori');
+            setDugmeKategorija('Close');
             setShowKategorijaForm(true);
         }
     }

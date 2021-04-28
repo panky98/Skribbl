@@ -6,6 +6,7 @@ import hexRgb from 'hex-rgb';
 import useFetch from "../Services/useFetch";
 import Spinner from "./Spinner";
 import TextField from "@material-ui/core/TextField";
+import {AiFillPlayCircle} from "react-icons/ai";
 function Replay()
 {    
     const [ connection, setConnection ] = useState(null);
@@ -83,11 +84,26 @@ function Replay()
         let moving=0;
         for(let i=2;i<potezi.length;i++){
             let j=i-1;
-            while(potezi[j].parametarLinije==null||potezi[j].parametarLinije=="stop")
+            while(j>=0 &&(potezi[j].parametarLinije==null||potezi[j].parametarLinije=="stop"))
             {
                 j--;
             }
-            start=potezi[j];
+
+            if(j<0)
+            {
+                j=i;
+                while(j<potezi.length &&(potezi[j].parametarLinije==null||potezi[j].parametarLinije=="stop"))
+                {
+                    j++;
+                }
+                start=potezi[j];
+            }
+            else{
+                start=potezi[j];
+            }
+
+            
+
             if(potezi[i].parametarLinije==null)
             {
                 contextRef.current.beginPath();
@@ -96,7 +112,12 @@ function Replay()
                     var node1 = document.createElement("LI");   
                     const sec = Math.floor((potezi[i].vremePoteza-startTime)/1000);              
                 messagesT= messagesT+"\n"+sec+ ": "+potezi[i].tekstPoruke;
-                setMessages(messagesT);
+                setMessages(messagesT);            
+                if(i==potezi.length-1)
+                {
+                    messagesT= messagesT+"\n"+"The end";
+                    setMessages(messagesT);
+                }
 }, potezi[i].vremePoteza-startTime); 
                 continue;                        
                 
@@ -138,6 +159,11 @@ function Replay()
                         }
                        
                     }
+                    if(i==potezi.length-1)
+                    {
+                        messagesT= messagesT+"\n"+"The end";
+                        setMessages(messagesT);
+                    }
                      },  potezi[i].vremePoteza-startTime);
                         
             /* setTimeout(function(){
@@ -168,7 +194,7 @@ function Replay()
         <div>
             <div>
             </div>
-            <h1>Potezi:</h1>  
+            <h1>Chat:</h1>  
             <TextField
           id="outlined-multiline-static"
           multiline
@@ -178,7 +204,7 @@ function Replay()
           disabled
         />        
 
-            <button onClick={startDrawing}>Klikni me</button>
+            <button onClick={startDrawing} style={{width:"100px"}}><AiFillPlayCircle/>Play</button>
             <div className="kontejnerZaCrtanje">
                
                 <canvas

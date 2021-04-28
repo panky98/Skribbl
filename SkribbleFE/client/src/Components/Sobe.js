@@ -8,7 +8,7 @@ function Sobe()
 {
     const[showForm,setShowForm]=useState(false);
     const[sobe,setSobe]=useState([]);
-    const sobePerPage = 2;
+    const sobePerPage = 5;
    const [ activePage, setCurrentPage ] = useState( 1 );
    const[showSpinner,setShowSpinner]=useState(false);
    const[filterSobe,setFilterSobe]=useState(false);
@@ -21,7 +21,7 @@ function Sobe()
    const handlePageChange = ( pageNumber ) => {
       console.log( `active page is ${ pageNumber }` );
       setCurrentPage( pageNumber )
-      let indexOfLastSoba  = activePage * sobePerPage;
+      let indexOfLastSoba  = pageNumber * sobePerPage;
       let indexOfFirstSoba = indexOfLastSoba - sobePerPage;
       currentSobe=sobe.slice( indexOfFirstSoba, indexOfLastSoba );
       setRenderSobe(currentSobe.map( ( soba, index ) => {
@@ -39,7 +39,7 @@ function Sobe()
        <div>
        <div className="filterPart">
              <label>Filter by category </label>
-             <select onChange={(ev)=>Filter(ev.currentTarget.value)} required>
+             <select className="form-control" onChange={(ev)=>Filter(ev.currentTarget.value)} required>
              <option value="" disabled selected hidden>Select your option</option>
                 <option value="-1">All categories</option>
                 {
@@ -58,7 +58,7 @@ function Sobe()
          <div className="pagination">
             <Pagination
                activePage={ activePage }
-               itemsCountPerPage={ 2 }
+               itemsCountPerPage={ 5 }
                totalItemsCount={sobe.length }
                pageRangeDisplayed={ 3 }
                onChange={ handlePageChange }
@@ -67,7 +67,7 @@ function Sobe()
          }
       </div>
             <div>
-                <button className="btn btn-secondary" btn-lg onClick={(event)=>{setShowForm(!showForm)}}>Dodaj novu sobu</button>
+                <button className="btn btn-secondary" btn-lg onClick={(event)=>{setShowForm(!showForm)}}>Create new room</button>
                 {showForm && <CreateSobaForm/>}
             </div>
         </div>

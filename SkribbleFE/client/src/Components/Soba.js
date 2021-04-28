@@ -368,6 +368,7 @@ function Soba()
                 updatedChat.push("\n");
                 setChat(updatedChat);
                 await connection.send('SendMessage',sobaId,chatMessage);
+                setNewPotez("");
             }
             catch(e) {
                 console.log(e);
@@ -451,12 +452,12 @@ function Soba()
           disabled
         />
         <br/>
-            <input type="text" onChange={(event)=>setNewPotez(event.currentTarget.value)}/>
+            <input disabled={canDraw} type="text" value={newPotez} onChange={(event)=>setNewPotez(event.currentTarget.value)}/>
             <button onClick={async ()=>{await sendMessage("proba",newPotez);}}>Send</button>
             <br/>
             {amHost && <div><button onClick={()=>startGame()}>Start</button></div>}
             <h5 style={{color:"red"}}>Remaining time {remainingTime}s</h5><br/>
-            <h5>Users in room: {countUsersInRoom}/4</h5>
+            <h5>Users in room: {countUsersInRoom}</h5>
             <ul>
                 {usersInRoom.map((el,indeks)=>{
                     return <li>{el} {usersInRoomPoints[indeks]}p</li>

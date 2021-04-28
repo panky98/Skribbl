@@ -96,20 +96,20 @@ function CreateKategorijaForm() {
         <form>
             {showSpinner && <Spinner/>}
             <br/>
-            <input className="form-control" type="text" placeholder="Naziv nove kategorije"
+            <input className="form-control" type="text" placeholder="Name of the new category"
              value={kategorija} onChange={(ev)=>setKategorija(ev.target.value)}/>
 
              <br/>
-            {alertKategorija && <p style={{color:"red", display:"inline"}}>*Unesite kategoriju!</p>}
+            {alertKategorija && <p style={{color:"red", display:"inline"}}>*Enter category!</p>}
             
-            <div><label>Unesite novu rec</label> </div>
+            <div><label>Enter the new word</label> </div>
             <input className="form-control" type="text" value={novaRec} onChange={(ev)=>setNovaRec(ev.target.value)}/>
-            <div><button className="btn btn-secondary" onClick={(ev)=>dodajNovuRec(ev)}>Dodaj novu rec</button></div>
+            <div><button className="btn btn-secondary" onClick={(ev)=>dodajNovuRec(ev)}>Enter the new word</button></div>
             
 
             <textarea className="form-control" rows="5"  value={sveReci} readOnly/>
-            {alertReci && <p style={{color:"red", display:"inline"}}>*Unesite rec za kategoriju {kategorija}!</p>}
-            <div><button className="btn btn-secondary" onClick={(ev)=>napraviKategoriju(ev)}>Napravi</button></div>
+            {alertReci && <p style={{color:"red", display:"inline"}}>*Enter the word for new category {kategorija}!</p>}
+            <div><button className="btn btn-secondary" onClick={(ev)=>napraviKategoriju(ev)}>Create</button></div>
         </form>
     )
 }

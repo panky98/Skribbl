@@ -11,7 +11,7 @@ function ReciDateKategorije({kategorijaId}) {
     if(loading) return <Spinner/>
     return (
         <div>
-            Reci date kategorije su:
+            Words of selected category:
             <ul className="list-group">
                 {reci.map(r=>{
                     return(
